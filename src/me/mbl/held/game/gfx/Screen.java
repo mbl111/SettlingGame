@@ -8,7 +8,6 @@ public class Screen extends Bitmap {
 	public BufferedImage img;
 	private int xOff = 0;
 	private int yOff = 0;
-	private int transparentColor;
 
 	public static final int BIT_MIRROR_X = 0x01;
 	public static final int BIT_MIRROR_Y = 0x02;
@@ -66,10 +65,6 @@ public class Screen extends Bitmap {
 
 	public void drawIso(Bitmap bitmap, int x, int y) {
 		super.drawIso(bitmap, x - xOff, y - yOff);
-	}
-
-	public void setTransparent(int i) {
-		this.transparentColor = i;
 	}
 
 	public void setPixel(int x, int y, int color) {

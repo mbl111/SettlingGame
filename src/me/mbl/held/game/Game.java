@@ -73,8 +73,8 @@ public class Game extends GameBase {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		int ww = WIDTH * SCALE;
 		int hh = HEIGHT * SCALE;
-		int xo = (getWidth() - ww) / 2;
-		int yo = (getHeight() - hh) / 2;
+		int xo = (getWidth() - ww) >> 1;
+		int yo = (getHeight() - hh) >> 1;
 		g.drawImage(screen.img, xo, yo, ww, hh, null);
 		g.dispose();
 		bs.show();

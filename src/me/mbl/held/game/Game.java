@@ -34,6 +34,8 @@ public class Game extends GameBase {
 
 	@Override
 	protected void render() {
+		// We need to start using LWJGL! The isometric rendering you have is awsome but will be troublsesome later on.
+		// I've added the LWJGL libraries and will be trying to convert :p
 
 		BufferStrategy bs = this.getBufferStrategy();
 		if (bs == null) {

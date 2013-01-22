@@ -15,6 +15,8 @@ public class Game extends GameBase {
 	private int posX = min;
 	private int posY = min;
 
+	private int[] level;
+
 	@Override
 	protected void tick() {
 		if (gameTicks % 2 == 0) return;
@@ -45,20 +47,22 @@ public class Game extends GameBase {
 		// }
 		screen.clear(0xFF000000);
 		screen.setOffset(posX, posY);
-		for (int x = 0; x < 22; x++) {
-			for (int y = 0; y < 22; y++) {
-
-				int tileSize = 16;
+		int tileSize = 16;
+		for (int x = 0; x < 16; x++) {
+			for (int y = 0; y < 16; y++) {
 
 				int xx = WIDTH / 2 + x * (tileSize) - y * (tileSize);
 				int yy = x * (tileSize / 2) + y * (tileSize / 2) - 30;
 
-				screen.drawIso(Art.tiles[0][0], xx, yy);// , 0xFF000000 | ((x +
-														// 1) * (255 / 23)) <<
-														// 16 | ((y + 1) * (255
-														// / 23)) << 8 | 0xFF);
+				screen.drawIso(Art.tiles[level[x + y * 16]][0], xx, yy);
+				// , 0xFF000000 | ((x +
+				// 1) * (255 / 23)) <<
+				// 16 | ((y + 1) * (255
+				// / 23)) << 8 | 0xFF);
 			}
 		}
+
+		screen.draw(Art.tiles[2][0], 50, 50);
 
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
@@ -75,6 +79,11 @@ public class Game extends GameBase {
 	@Override
 	public void init() {
 		screen = new Screen(WIDTH, HEIGHT);
+		level = new int[16 * 16];
+		for (int i = 0; i < level.length; i++) {
+			level[i] = 0;
+			if (ran.nextInt(5) == 0) level[i] = 1;
+		}
 	}
 
 	public static void main(String[] args) {

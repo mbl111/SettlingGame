@@ -84,7 +84,7 @@ public class Bitmap {
 	}
 
 	public void drawIsoRect(int x, int y, int color) {
-		int tileWidth = 16;
+		int tileWidth = 32;
 		// int rh = tileWidth;
 		//
 		// int tp = (int) tileWidth / 2 - 1;

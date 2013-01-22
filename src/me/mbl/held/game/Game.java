@@ -43,6 +43,8 @@ public class Game extends GameBase {
 		// :/
 		// I just don't feel very comfortable with the way it's all running
 		// right now.
+		
+		// Also, see lwjgl branch!
 
 		BufferStrategy bs = this.getBufferStrategy();
 		if (bs == null) {

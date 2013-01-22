@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
 import me.mbl.held.game.gfx.Art;
+import me.mbl.held.game.gfx.Font;
 import me.mbl.held.game.gfx.Screen;
 
 public class Game extends GameBase {
@@ -64,17 +65,32 @@ public class Game extends GameBase {
 			}
 		}
 
-		screen.draw(Art.tiles[2][0], 50, 50);
+		screen.draw(Art.tiles[2][0], 100, 100);
 
 		screen.setOffset(0, 0);
 
-		screen.draw(Art.font[0][0], 0, 0);
+		Font.draw("Good morning", screen, 0, 0, 0xFF00FF00);
+		Font.drawWithShadow("remind you of minecraft with the shadow??", screen, 0, 8, 0xFFFFFFFF);
+		Font.drawWithShadow("&aremind &byou &cof &dminecraft &ewith &fthe shadow??", screen, 0, 8 * 2, 0xFFFFFFFF);
+
+		// Slightly annoying that there is no alpha support... yet ;)
+		screen.drawColor(0, screen.h - 32 - 2 - 8, 196, 16 + 4, 0xFF222222);
+
+		Font.drawWithShadow("[T]", screen, 0, screen.h - 32, 0xFFFF0000);
+		Font.drawWithShadow("mbl:", screen, 16, screen.h - 32, 0xFF33AAFF);
+		Font.drawWithShadow(" Hey!!", screen, 16 + 27, screen.h - 32, 0xFFFFFFFF);
+
+		Font.drawWithShadow("[Supop]", screen, 0, screen.h - 32 - 9, 0xFF00FFFF);
+		Font.drawWithShadow("heldplayer:", screen, 48, screen.h - 32 - 9, 0xFF33AAFF);
+		Font.drawWithShadow(" Hi mbl", screen, 48 + 83, screen.h - 32 - 9, 0xFFFFFFFF);
+
+		Font.draw("abcdefghijklmnopqrstuvwxyz[]:?!", screen, 0, 8 * 4, 0xFF00FFFF);
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
 		int ww = WIDTH * SCALE;
 		int hh = HEIGHT * SCALE;
-		int xo = (getWidth() - ww) / 2;
-		int yo = (getHeight() - hh) / 2;
+		int xo = (getWidth() - ww) >> 1;
+		int yo = (getHeight() - hh) >> 1;
 		g.drawImage(screen.img, xo, yo, ww, hh, null);
 		g.dispose();
 		bs.show();
@@ -92,9 +108,9 @@ public class Game extends GameBase {
 
 	public static void main(String[] args) {
 		Game game = new Game();
-		game.setSize(400);
+		game.setSize(480);
 		game.setName("Isometric Render");
-		game.SCALE = 3;
+		game.SCALE = 2;
 		game.createWindow();
 		game.start();
 	}

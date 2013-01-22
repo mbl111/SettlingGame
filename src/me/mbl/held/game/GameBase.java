@@ -52,6 +52,7 @@ public abstract class GameBase extends Canvas implements Runnable {
 		int frames = 0;
 		int ticks = 0;
 
+		baseInit();
 		init();
 		requestFocus();
 		playing = true;
@@ -73,12 +74,13 @@ public abstract class GameBase extends Canvas implements Runnable {
 					unprocessed -= 1;
 					shouldRender = true;
 				}
-//I am in 2 minds about this. We shall see how things go. But down the track this should not be needed
-//				try {
-//					Thread.sleep(1L);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
+				// I am in 2 minds about this. We shall see how things go. But
+				// down the track this should not be needed
+				// try {
+				// Thread.sleep(1L);
+				// } catch (InterruptedException e) {
+				// e.printStackTrace();
+				// }
 
 				if (shouldRender) {
 					render();
@@ -124,7 +126,7 @@ public abstract class GameBase extends Canvas implements Runnable {
 			throw new UnsupportedOperationException("Game is already started!!");
 		}
 		running = true;
-		Thread t = new Thread(this);
+		Thread t = new Thread(this, "Settling Main Thread");
 		t.setPriority(Thread.MAX_PRIORITY);
 		t.start();
 	}
@@ -139,7 +141,7 @@ public abstract class GameBase extends Canvas implements Runnable {
 		this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		this.setSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		frame.pack();
-		//frame.setLocationRelativeTo(null);
+		// frame.setLocationRelativeTo(null);
 	}
 
 	public void stop() {

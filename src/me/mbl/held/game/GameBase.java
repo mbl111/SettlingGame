@@ -73,12 +73,12 @@ public abstract class GameBase extends Canvas implements Runnable {
 					unprocessed -= 1;
 					shouldRender = true;
 				}
-
-				try {
-					Thread.sleep(1L);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+//I am in 2 minds about this. We shall see how things go. But down the track this should not be needed
+//				try {
+//					Thread.sleep(1L);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
 
 				if (shouldRender) {
 					render();

@@ -47,12 +47,14 @@ public class Game extends GameBase {
 		// }
 		screen.clear(0xFF000000);
 		screen.setOffset(posX, posY);
-		int tileSize = 16;
+		int tileSize = 32;
 		for (int x = 0; x < 16; x++) {
 			for (int y = 0; y < 16; y++) {
 
-				int xx = WIDTH / 2 + x * (tileSize) - y * (tileSize);
-				int yy = x * (tileSize / 2) + y * (tileSize / 2) - 30;
+				// 4/2 == 4 >> 1. However the bitshifting is faster. Just be
+				// sure to bracket it!
+				int xx = (WIDTH >> 1) + x * (tileSize) - y * (tileSize);
+				int yy = x * (tileSize >> 1) + y * (tileSize >> 1) - 30;
 
 				screen.drawIso(Art.tiles[level[x + y * 16]][0], xx, yy);
 				// , 0xFF000000 | ((x +
@@ -64,6 +66,9 @@ public class Game extends GameBase {
 
 		screen.draw(Art.tiles[2][0], 50, 50);
 
+		screen.setOffset(0, 0);
+
+		screen.draw(Art.font[0][0], 0, 0);
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
 		int ww = WIDTH * SCALE;
@@ -73,7 +78,6 @@ public class Game extends GameBase {
 		g.drawImage(screen.img, xo, yo, ww, hh, null);
 		g.dispose();
 		bs.show();
-
 	}
 
 	@Override
@@ -88,7 +92,7 @@ public class Game extends GameBase {
 
 	public static void main(String[] args) {
 		Game game = new Game();
-		game.setSize(300);
+		game.setSize(400);
 		game.setName("Isometric Render");
 		game.SCALE = 3;
 		game.createWindow();

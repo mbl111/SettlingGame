@@ -113,8 +113,8 @@ public class Bitmap {
 		for (int xx = 0; xx < tileWidth; xx++) {
 			for (int yy = 0; yy < tileWidth; yy++) {
 
-				int px = (xx * (2) - yy * (2)) / 2 + x;
-				int py = (xx + yy) / 2 + 1 + y;
+				int px = ((xx * (2) - yy * (2)) >> 1) + x;
+				int py = ((xx + yy) >> 1) + 1 + y;
 				if (px < w && px >= 0 && py < h && py >= 0) {
 					pixels[px + py * w] = color;
 				}
@@ -125,12 +125,12 @@ public class Bitmap {
 	}
 
 	public void drawIso(Bitmap bitmap, int x, int y) {
-		int tileWidth = 16;
+		int tileWidth = 32;
 		for (int yy = 0; yy < tileWidth; yy++) {
 			for (int xx = 0; xx < tileWidth; xx++) {
 
-				int px = (xx * (2) - yy * (2)) / 2 + x;
-				int py = (xx + yy) / 2 + 1 + y;
+				int px = ((xx * (2) - yy * (2)) >> 1) + x;
+				int py = ((xx + yy) >> 1) + 1 + y;
 				if (px < w && px >= 0 && py < h && py >= 0) {
 					pixels[px + py * w] = bitmap.pixels[xx + yy * bitmap.w];
 				}

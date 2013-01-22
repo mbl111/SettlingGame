@@ -9,7 +9,8 @@ import me.mbl.held.game.Game;
 
 public class Art {
 
-	public static final Bitmap[][] tiles = cut("/tiles.png", 16, 16);
+	public static final Bitmap[][] tiles = cut("/tiles.png", 32, 32);
+	public static final Bitmap[][] font = cut("/font.png", 8, 8);
 	
 	private static Bitmap[][] cut(String path, int w, int h, int bx, int by) {
 		try {

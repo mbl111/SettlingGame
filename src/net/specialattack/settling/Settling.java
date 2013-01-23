@@ -63,7 +63,7 @@ public class Settling implements Runnable {
 
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
-			GL11.glOrtho(0, displayWidth, displayHeight, 0, 10, -10);
+			GL11.glOrtho(0, displayWidth, displayHeight, 0, 100, -100);
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 			GL11.glBegin(GL11.GL_QUADS);

@@ -17,7 +17,6 @@ public class SettlingApplet extends Applet {
 	@Override
 	public void init() {
 		this.canvas = new SettlingCanvas(this);
-
 		this.setLayout(new BorderLayout());
 		this.add(this.canvas, "Center");
 		this.canvas.setFocusable(true);

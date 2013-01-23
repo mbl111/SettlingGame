@@ -1,84 +1,158 @@
+
 package net.specialattack.settling;
 
 import java.awt.Canvas;
+import java.awt.image.BufferedImage;
+
+import net.specialattack.settling.texture.StitchedTexture;
+import net.specialattack.settling.texture.SubTexture;
+import net.specialattack.settling.texture.TextureRegistry;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.OpenGLException;
 
 public class Settling implements Runnable {
-	public static Settling instance;
-	private boolean running = false;
-	private boolean shuttingDown = false;
-	private Canvas canvas;
-	private int displayWidth;
-	private int displayHeight;
+    public static Settling instance;
+    private boolean running = false;
+    private boolean shuttingDown = false;
+    private Canvas canvas;
+    private int displayWidth;
+    private int displayHeight;
 
-	protected Settling() {
-		if (instance != null) {
-			throw new IllegalStateException("An instance is already running!");
-		}
+    protected Settling() {
+        if (instance != null) {
+            throw new IllegalStateException("An instance is already running!");
+        }
 
-		instance = this;
-	}
+        instance = this;
+    }
 
-	public void attemptShutdown() {
-		this.shuttingDown = true;
-	}
+    public void attemptShutdown() {
+        this.shuttingDown = true;
+    }
 
-	public void setCanvas(Canvas canvas) {
-		this.canvas = canvas;
-	}
+    public void setCanvas(Canvas canvas) {
+        this.canvas = canvas;
+    }
 
-	@Override
-	public void run() {
-		if (this.running) {
-			return;
-		}
+    public void resize(int width, int height) {
+        this.displayWidth = width <= 0 ? 1 : width;
+        this.displayHeight = height <= 0 ? 1 : height;
+    }
 
-		this.running = true;
+    @Override
+    public void run() {
+        if (this.running) {
+            return;
+        }
 
-		try {
-			Display.setParent(this.canvas);
-			Display.create();
-		} catch (LWJGLException ex) {
-			this.running = false;
-			ex.printStackTrace();
-		}
+        this.running = true;
 
-		this.displayWidth = Display.getWidth();
-		this.displayHeight = Display.getHeight();
+        try {
+            Display.setParent(this.canvas);
+            Display.create();
+        }
+        catch (LWJGLException ex) {
+            this.running = false;
+            ex.printStackTrace();
+        }
 
-		GL11.glColor3f(1.0F, 1.0F, 1.0F);
+        this.displayWidth = Display.getWidth();
+        this.displayHeight = Display.getHeight();
 
-		while (this.running) {
-			if (this.shuttingDown) {
-				this.running = false;
-			}
+        GL11.glColor3f(1.0F, 1.0F, 1.0F);
+        GL11.glShadeModel(GL11.GL_SMOOTH);
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, 1000.0D, -1000.0D);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-			if (this.displayWidth != this.canvas.getWidth() || this.displayHeight != this.canvas.getHeight()) {
-				this.displayWidth = this.canvas.getWidth();
-				this.displayHeight = this.canvas.getHeight();
-			}
+        BufferedImage base = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
 
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glOrtho(0, displayWidth, displayHeight, 0, 100, -100);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        StitchedTexture texture = new StitchedTexture(GL11.glGenTextures(), base, 256, 256);
 
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex3f(0, 0, -11);
-			GL11.glVertex3f(displayWidth, 0, 11);
-			GL11.glVertex3f(displayWidth, displayHeight, 0);
-			GL11.glVertex3f(0, displayHeight, 0);
-			GL11.glEnd();
+        texture.bindTexture();
 
-			Display.sync(60);
-			Display.update();
-		}
+        BufferedImage image = TextureRegistry.openResource("/grass.png");
 
-		Display.destroy();
+        SubTexture text = null;
+        try {
+            text = texture.loadTexture(image, "grass", image.getWidth(), image.getHeight());
+        }
+        catch (OpenGLException ex) {
+            ex.printStackTrace();
 
-		this.running = false;
-	}
+            text = new SubTexture(texture, image, 0, 0, 16, 16);
+        }
+
+        text.bindTexture();
+
+        while (this.running) {
+            if (this.shuttingDown || Display.isCloseRequested()) {
+                this.running = false;
+                break;
+            }
+
+            if (this.displayWidth != this.canvas.getWidth() || this.displayHeight != this.canvas.getHeight()) {
+                this.resize(this.canvas.getWidth(), this.canvas.getHeight());
+
+                GL11.glViewport(0, 0, this.displayWidth, this.displayHeight);
+
+                GL11.glMatrixMode(GL11.GL_PROJECTION);
+                GL11.glLoadIdentity();
+                GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, 1000.0D, -1000.0D);
+                GL11.glMatrixMode(GL11.GL_MODELVIEW);
+            }
+
+            GL11.glPushMatrix();
+
+            //GL11.glTranslatef((float) this.displayWidth / 2.0F, (float) this.displayHeight / 2.0F, 0.0F);
+            //GL11.glRotatef(45.0F, 0.0F, 0.0F, 1.0F);
+            //GL11.glRotatef(45.0F, 1.0F, 1.0F, 0.0F);
+            //GL11.glScalef(3.0F, 3.0F, 0.0F);
+
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    GL11.glPushMatrix();
+
+                    GL11.glTranslatef((float) x * 25.0F, (float) z * 25.0F + (x % 2) * 12.5F, 0.0F);
+
+                    GL11.glBegin(GL11.GL_QUADS);
+
+                    float startU = 1.0F * (float) text.getStartU() / (float) text.getParent().getWidth();
+                    float startV = 1.0F * (float) text.getStartV() / (float) text.getParent().getHeight();
+                    float endU = 1.0F * (float) text.getEndU() / (float) text.getParent().getWidth();
+                    float endV = 1.0F * (float) text.getEndV() / (float) text.getParent().getHeight();
+
+                    GL11.glTexCoord2f(startU, startV);
+                    GL11.glVertex3f(25.0F, 0.0F, 0.0F);
+
+                    GL11.glTexCoord2f(endU, startV);
+                    GL11.glVertex3f(50.0F, 12.5F, 0.0F);
+
+                    GL11.glTexCoord2f(endU, endV);
+                    GL11.glVertex3f(25.5F, 25.0F, 0.0F);
+
+                    GL11.glTexCoord2f(startU, endV);
+                    GL11.glVertex3f(0.0F, 12.5F, 0.0F);
+
+                    GL11.glEnd();
+
+                    GL11.glPopMatrix();
+                }
+            }
+
+            GL11.glPopMatrix();
+
+            Display.sync(60);
+            Display.update();
+        }
+
+        Display.destroy();
+
+        this.running = false;
+    }
 }

@@ -1,60 +1,74 @@
+
 package net.specialattack.settling;
 
 import java.applet.Applet;
 import java.awt.BorderLayout;
 
 public class SettlingApplet extends Applet {
-	private static final long serialVersionUID = -887417069382703883L;
-	private SettlingCanvas canvas;
-	private Thread instanceThread;
-	private Settling settling;
+    private static final long serialVersionUID = -887417069382703883L;
+    private SettlingCanvas canvas;
+    private Thread instanceThread;
+    private Settling settling;
 
-	@Override
-	public void destroy() {
-		super.destroy();
-	}
+    @Override
+    public void destroy() {
+        super.destroy();
+    }
 
-	@Override
-	public void init() {
-		this.canvas = new SettlingCanvas(this);
-		this.setLayout(new BorderLayout());
-		this.add(this.canvas, "Center");
-		this.canvas.setFocusable(true);
-		this.canvas.setFocusTraversalKeysEnabled(false);
-		this.validate();
+    @Override
+    public void init() {
+        this.canvas = new SettlingCanvas(this);
 
-		this.settling = new Settling();
+        this.setLayout(new BorderLayout());
+        this.add(this.canvas, "Center");
+        this.canvas.setFocusable(true);
+        this.canvas.setFocusTraversalKeysEnabled(false);
+        this.validate();
 
-		this.settling.setCanvas(canvas);
-	}
+        this.settling = new Settling();
 
-	@Override
-	public void start() {
-		startSettling();
-	}
+        this.settling.setCanvas(this.canvas);
+    }
 
-	@Override
-	public void stop() {
-		shutdown();
-	}
+    @Override
+    public void start() {
+        this.startSettling();
+    }
 
-	public void startSettling() {
-		if (this.settling != null && this.instanceThread == null) {
-			this.instanceThread = new Thread(this.settling, "Settling Main Thread");
-			this.instanceThread.start();
-		}
-	}
+    @Override
+    public void stop() {
+        this.shutdown();
+    }
 
-	public void shutdown() {
-		if (this.instanceThread != null) {
-			settling.attemptShutdown();
+    @Override
+    public boolean requestFocusInWindow() {
+        if (super.requestFocusInWindow()) {
+            this.canvas.requestFocusInWindow();
 
-			try {
-				instanceThread.join(10000L);
-			} catch (InterruptedException e) {
-			} finally {
-				instanceThread = null;
-			}
-		}
-	}
+            return true;
+        }
+
+        return false;
+    }
+
+    public void startSettling() {
+        if (this.settling != null && this.instanceThread == null) {
+            this.instanceThread = new Thread(this.settling, "Settling Main Thread");
+            this.instanceThread.start();
+        }
+    }
+
+    public void shutdown() {
+        if (this.instanceThread != null) {
+            this.settling.attemptShutdown();
+
+            try {
+                this.instanceThread.join(10000L);
+            }
+            catch (InterruptedException e) {}
+            finally {
+                this.instanceThread = null;
+            }
+        }
+    }
 }

@@ -95,6 +95,8 @@ public class Settling implements Runnable {
                 this.running = false;
                 break;
             }
+            
+            tick();
 
             if (this.displayWidth != this.canvas.getWidth() || this.displayHeight != this.canvas.getHeight()) {
                 this.resize(this.canvas.getWidth(), this.canvas.getHeight());
@@ -155,4 +157,8 @@ public class Settling implements Runnable {
 
         this.running = false;
     }
+
+	private void tick() {
+		
+	}
 }

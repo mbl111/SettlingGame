@@ -13,6 +13,7 @@ import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
@@ -31,6 +32,13 @@ public class SettlingClient extends Settling {
     public void resize(int width, int height) {
         this.displayWidth = width <= 0 ? 1 : width;
         this.displayHeight = height <= 0 ? 1 : height;
+
+        GL11.glViewport(0, 0, this.displayWidth, this.displayHeight);
+
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, 1000.0D, -1000.0D);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
     }
 
     @Override
@@ -76,6 +84,18 @@ public class SettlingClient extends Settling {
         // 1000.0D, -1000.0D);
         // GL11.glMatrixMode(GL11.GL_MODELVIEW);
         // GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+        try {
+            Mouse.create();
+            Mouse.setGrabbed(true);
+        }
+
+        catch (LWJGLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        this.player = new PlayerView();
 
         return true;
     }
@@ -145,13 +165,6 @@ public class SettlingClient extends Settling {
     private void render() {
         if (this.displayWidth != this.canvas.getWidth() || this.displayHeight != this.canvas.getHeight()) {
             this.resize(this.canvas.getWidth(), this.canvas.getHeight());
-
-            GL11.glViewport(0, 0, this.displayWidth, this.displayHeight);
-
-            GL11.glMatrixMode(GL11.GL_PROJECTION);
-            GL11.glLoadIdentity();
-            GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, 1000.0D, -1000.0D);
-            GL11.glMatrixMode(GL11.GL_MODELVIEW);
         }
         float scale = 1F;
         GL11.glScalef(scale, scale, scale);

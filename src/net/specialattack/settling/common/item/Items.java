@@ -12,6 +12,4 @@ public class Items {
     static {
         Settling.getInstance().finishItems();
     }
-
-    public static void dummyMethod() {}
 }

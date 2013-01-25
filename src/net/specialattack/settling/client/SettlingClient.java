@@ -179,18 +179,18 @@ public class SettlingClient extends Settling {
 	}
 
 	private void render() {
-		// if (this.displayWidth != this.canvas.getWidth() || this.displayHeight
-		// != this.canvas.getHeight()) {
-		// this.resize(this.canvas.getWidth(), this.canvas.getHeight());
-		//
-		// GL11.glViewport(0, 0, this.displayWidth, this.displayHeight);
-		//
-		// GL11.glMatrixMode(GL11.GL_PROJECTION);
-		// GL11.glLoadIdentity();
-		// GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D,
-		// 1000.0D, -1000.0D);
-		// GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		// }
+		 if (this.displayWidth != this.canvas.getWidth() || this.displayHeight
+		 != this.canvas.getHeight()) {
+		 this.resize(this.canvas.getWidth(), this.canvas.getHeight());
+		
+		 GL11.glViewport(0, 0, this.displayWidth, this.displayHeight);
+		
+		 GL11.glMatrixMode(GL11.GL_PROJECTION);
+		 GL11.glLoadIdentity();
+		 GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D,
+		 1000.0D, -1000.0D);
+		 GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		 }
 		float scale = 1F;
 		GL11.glScalef(scale, scale, scale);
 		clearGL();

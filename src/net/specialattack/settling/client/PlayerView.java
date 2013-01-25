@@ -8,8 +8,8 @@ import org.lwjgl.opengl.GL11;
 public class PlayerView {
 
 	public Location location;
-	public float vSpeed = 1.0F;
-	public float hSpeed = 1.0F;
+	public float vSpeed = 4.0F;
+	public float hSpeed = 10.0F;
 	
 	public PlayerView() {
 		location = new Location(0, 0, 0, 0F, 90 + 45F);

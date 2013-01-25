@@ -1,9 +1,11 @@
 
-package net.specialattack.settling.texture;
+package net.specialattack.settling.client.texture;
 
 import java.awt.image.BufferedImage;
 
-public class SubTexture {
+import net.specialattack.settling.common.ISubTexture;
+
+public class SubTexture implements ISubTexture {
 
     protected StitchedTexture parent;
     protected BufferedImage imageData;
@@ -21,34 +23,42 @@ public class SubTexture {
         this.endV = endV;
     }
 
+    @Override
     public int getStartU() {
         return this.startU;
     }
 
+    @Override
     public int getStartV() {
         return this.startV;
     }
 
+    @Override
     public int getEndU() {
         return this.endU;
     }
 
+    @Override
     public int getEndV() {
         return this.endV;
     }
 
+    @Override
     public int getWidth() {
         return this.endU - this.startU;
     }
 
+    @Override
     public int getHeight() {
         return this.endV - this.startV;
     }
 
+    @Override
     public StitchedTexture getParent() {
         return this.parent;
     }
 
+    @Override
     public void bindTexture() {
         this.parent.bindTexture();
     }

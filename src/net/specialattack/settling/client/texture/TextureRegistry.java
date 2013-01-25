@@ -1,6 +1,8 @@
 
-package net.specialattack.settling.texture;
+package net.specialattack.settling.client.texture;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -17,6 +19,35 @@ public class TextureRegistry {
 
     private static HashMap<String, Texture> loadedTextures = new HashMap<String, Texture>();
     private static HashMap<String, StitchedTexture> stitchedTextures = new HashMap<String, StitchedTexture>();
+    protected static HashMap<String, SubTexture> subTextures = new HashMap<String, SubTexture>();
+
+    protected static SubTexture textureNotFound;
+    public static StitchedTexture items;
+    public static StitchedTexture tiles;
+
+    static {
+        BufferedImage base = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics graphics = base.getGraphics();
+        graphics.setColor(Color.white);
+        graphics.fillRect(0, 0, 256, 256);
+        graphics.dispose();
+
+        items = new StitchedTexture(GL11.glGenTextures(), base, 256, 256);
+        tiles = new StitchedTexture(GL11.glGenTextures(), base, 256, 256);
+
+        BufferedImage image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+
+        graphics = image.getGraphics();
+
+        graphics.setColor(Color.white);
+        graphics.fillRect(0, 0, 32, 32);
+        graphics.setColor(Color.black);
+        graphics.drawString("missingno", 1, 10);
+        graphics.dispose();
+
+        textureNotFound = new ErrorSubTexture(image, GL11.glGenTextures());
+    }
 
     public static BufferedImage openResource(String path) {
         URL url = TextureRegistry.class.getResource(path);
@@ -66,6 +97,14 @@ public class TextureRegistry {
         }
 
         return null;
+    }
+
+    public static SubTexture getSubTexture(String name) {
+        if (subTextures.containsKey(name)) {
+            return subTextures.get(name);
+        }
+
+        return TextureRegistry.textureNotFound;
     }
 
     public static void addStitchedTexture(String name, StitchedTexture texture) {

@@ -1,5 +1,5 @@
 
-package net.specialattack.settling.texture;
+package net.specialattack.settling.client.texture;
 
 import java.awt.image.BufferedImage;
 

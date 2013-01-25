@@ -1,5 +1,5 @@
 
-package net.specialattack.settling;
+package net.specialattack.settling.client;
 
 import java.awt.Canvas;
 

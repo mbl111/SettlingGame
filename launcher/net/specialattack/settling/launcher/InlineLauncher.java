@@ -3,7 +3,7 @@ package net.specialattack.settling.launcher;
 
 import java.applet.Applet;
 
-import net.specialattack.settling.SettlingApplet;
+import net.specialattack.settling.client.SettlingApplet;
 
 public class InlineLauncher extends LauncherStub {
 

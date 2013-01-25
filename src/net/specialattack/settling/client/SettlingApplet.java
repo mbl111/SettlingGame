@@ -1,5 +1,5 @@
 
-package net.specialattack.settling;
+package net.specialattack.settling.client;
 
 import java.applet.Applet;
 import java.awt.BorderLayout;
@@ -8,7 +8,7 @@ public class SettlingApplet extends Applet {
     private static final long serialVersionUID = -887417069382703883L;
     private SettlingCanvas canvas;
     private Thread instanceThread;
-    private Settling settling;
+    private SettlingClient settling;
 
     @Override
     public void destroy() {
@@ -25,7 +25,7 @@ public class SettlingApplet extends Applet {
         this.canvas.setFocusTraversalKeysEnabled(false);
         this.validate();
 
-        this.settling = new Settling();
+        this.settling = new SettlingClient();
 
         this.settling.setCanvas(this.canvas);
     }
@@ -38,6 +38,8 @@ public class SettlingApplet extends Applet {
     @Override
     public void stop() {
         this.shutdown();
+
+        System.exit(0);
     }
 
     @Override

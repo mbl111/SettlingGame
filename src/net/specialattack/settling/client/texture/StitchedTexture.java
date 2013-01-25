@@ -1,18 +1,19 @@
 
-package net.specialattack.settling.texture;
+package net.specialattack.settling.client.texture;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
+import net.specialattack.settling.common.IStitchedTexture;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-public class StitchedTexture extends Texture {
+public class StitchedTexture extends Texture implements IStitchedTexture {
 
     private HashMap<String, SubTexture> textures;
-    private static HashMap<String, SubTexture> globalTextures = new HashMap<String, SubTexture>();
     private int availableSlots;
     private boolean[] slots;
     private int slotsU;
@@ -64,8 +65,9 @@ public class StitchedTexture extends Texture {
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, imageData.getWidth(), imageData.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
     }
 
+    @Override
     public SubTexture loadTexture(BufferedImage imageData, String name, int width, int height) {
-        if (availableSlots <= 0) {
+        if (this.availableSlots <= 0) {
             throw new RuntimeException("No more texture slots available");
         }
 
@@ -73,17 +75,17 @@ public class StitchedTexture extends Texture {
             width -= width & 0xf;
             height -= height & 0xf;
 
-            int startSlot = findNextSizedSlotAndPopulate(width >> 4, height >> 4);
+            int startSlot = this.findNextSizedSlotAndPopulate(width >> 4, height >> 4);
 
             if (startSlot < 0) {
                 throw new RuntimeException("No more texture slots available");
             }
 
-            SubTexture texture = new SubTexture(this, imageData, startSlot % slotsU, startSlot / slotsU, startSlot % slotsU + width, startSlot / slotsU + height);
+            SubTexture texture = new SubTexture(this, imageData, startSlot % this.slotsU, startSlot / this.slotsU, startSlot % this.slotsU + width, startSlot / this.slotsU + height);
 
             registerTexture(name, texture);
 
-            availableSlots -= (width >> 4) * (height >> 4);
+            this.availableSlots -= (width >> 4) * (height >> 4);
 
             BufferedImage image = texture.imageData;
 
@@ -104,7 +106,11 @@ public class StitchedTexture extends Texture {
 
             buffer.flip();
 
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
+
             GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, texture.startU, texture.startV, texture.endU - texture.startU, texture.endV - texture.startV, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+            this.textures.put(name, texture);
 
             return texture;
         }
@@ -113,13 +119,13 @@ public class StitchedTexture extends Texture {
     }
 
     private int findNextSizedSlotAndPopulate(int width, int height) {
-        for (int u1 = 0; u1 < slotsU - width; u1++) {
-            for (int v1 = 0; v1 < slotsV - height; v1++) {
+        for (int u1 = 0; u1 < this.slotsU - width; u1++) {
+            for (int v1 = 0; v1 < this.slotsV - height; v1++) {
                 boolean empty = true;
 
                 for (int u2 = u1; u2 < u1 + width; u2++) {
                     for (int v2 = v1; v2 < v1 + height; v2++) {
-                        if (slots[u2 + v2 * slotsU] == true) {
+                        if (this.slots[u2 + v2 * this.slotsU] == true) {
                             empty = false;
                         }
                     }
@@ -128,11 +134,11 @@ public class StitchedTexture extends Texture {
                 if (empty) {
                     for (int u2 = u1; u2 < u1 + width; u2++) {
                         for (int v2 = v1; v2 < v1 + height; v2++) {
-                            slots[u2 + v2 * slotsU] = true;
+                            this.slots[u2 + v2 * this.slotsU] = true;
                         }
                     }
 
-                    return u1 + v1 * slotsU;
+                    return u1 + v1 * this.slotsU;
                 }
             }
         }
@@ -140,25 +146,18 @@ public class StitchedTexture extends Texture {
         return -1;
     }
 
+    @Override
     public SubTexture getSubTexture(String name) {
         if (this.textures.containsKey(name)) {
             return this.textures.get(name);
         }
 
-        return null;
-    }
-
-    public static SubTexture getTexture(String name) {
-        if (globalTextures.containsKey(name)) {
-            return globalTextures.get(name);
-        }
-
-        return null;
+        return TextureRegistry.textureNotFound;
     }
 
     public static void registerTexture(String name, SubTexture texture) {
-        if (!globalTextures.containsKey(name)) {
-            globalTextures.put(name, texture);
+        if (!TextureRegistry.subTextures.containsKey(name)) {
+            TextureRegistry.subTextures.put(name, texture);
         }
     }
 

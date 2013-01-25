@@ -2,6 +2,7 @@
 package net.specialattack.settling.common;
 
 import net.specialattack.settling.common.item.CommonItemDelegate;
+import net.specialattack.settling.common.item.Items;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -41,6 +42,14 @@ public abstract class Settling implements Runnable {
         }
 
         this.startup();
+
+        try {
+            Items.class.getName();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            this.attemptShutdown();
+        }
 
         this.running = true;
 
@@ -89,5 +98,4 @@ public abstract class Settling implements Runnable {
 
         this.shutdown();
     }
-
 }

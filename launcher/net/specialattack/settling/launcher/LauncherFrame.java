@@ -51,7 +51,7 @@ public class LauncherFrame extends Frame {
 
         p.add(button);
 
-        p.setPreferredSize(new Dimension(480, 360));
+        p.setPreferredSize(new Dimension(854, 480));
 
         this.setLayout(new BorderLayout());
         this.add(p, "Center");

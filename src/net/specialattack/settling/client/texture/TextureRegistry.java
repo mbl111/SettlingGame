@@ -24,6 +24,7 @@ public class TextureRegistry {
     protected static SubTexture textureNotFound;
     public static StitchedTexture items;
     public static StitchedTexture tiles;
+    private static BufferedImage missingTexture;
 
     static {
         BufferedImage base = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
@@ -36,17 +37,17 @@ public class TextureRegistry {
         items = new StitchedTexture(GL11.glGenTextures(), base, 256, 256);
         tiles = new StitchedTexture(GL11.glGenTextures(), base, 256, 256);
 
-        BufferedImage image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+        missingTexture = new BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB);
 
-        graphics = image.getGraphics();
+        graphics = missingTexture.getGraphics();
 
         graphics.setColor(Color.white);
-        graphics.fillRect(0, 0, 32, 32);
+        graphics.fillRect(0, 0, 128, 128);
         graphics.setColor(Color.black);
-        graphics.drawString("missingno", 1, 10);
+        graphics.drawString("missingno", 32, 54);
         graphics.dispose();
 
-        textureNotFound = new ErrorSubTexture(image, GL11.glGenTextures());
+        textureNotFound = new ErrorSubTexture(missingTexture, GL11.glGenTextures());
     }
 
     public static BufferedImage openResource(String path) {
@@ -58,6 +59,8 @@ public class TextureRegistry {
         }
         catch (IOException e) {
             e.printStackTrace();
+
+            image = missingTexture;
         }
 
         return image;
@@ -77,7 +80,7 @@ public class TextureRegistry {
             catch (IOException e) {
                 e.printStackTrace();
 
-                return null;
+                image = missingTexture;
             }
 
             int id = GL11.glGenTextures(); // Generate texture Id if it doesn't exist!

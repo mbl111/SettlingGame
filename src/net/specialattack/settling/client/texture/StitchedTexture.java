@@ -81,7 +81,7 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
                 throw new RuntimeException("No more texture slots available");
             }
 
-            SubTexture texture = new SubTexture(this, imageData, startSlot % this.slotsU, startSlot / this.slotsU, startSlot % this.slotsU + width, startSlot / this.slotsU + height);
+            SubTexture texture = new SubTexture(this, imageData, (startSlot % this.slotsU) * 16, (startSlot / this.slotsU) * 16, (startSlot % this.slotsU) * 16 + width, (startSlot / this.slotsU) * 16 + height);
 
             registerTexture(name, texture);
 

@@ -13,7 +13,7 @@ public class ErrorSubTexture extends SubTexture {
     private final int textureId;
 
     public ErrorSubTexture(BufferedImage imageData, int textureId) {
-        super(new StitchedTextureDummy(32, 32), imageData, 0, 0, 32, 32);
+        super(new StitchedTextureDummy(imageData.getWidth(), imageData.getHeight()), imageData, 0, 0, imageData.getWidth(), imageData.getHeight());
 
         this.textureId = textureId;
 

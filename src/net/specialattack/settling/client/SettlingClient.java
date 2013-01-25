@@ -2,13 +2,9 @@
 package net.specialattack.settling.client;
 
 import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 import net.specialattack.settling.client.item.ClientItemDelegate;
-import net.specialattack.settling.client.texture.StitchedTexture;
-import net.specialattack.settling.client.texture.SubTexture;
+import net.specialattack.settling.client.rendering.TileRenderer;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.item.CommonItemDelegate;
@@ -17,10 +13,8 @@ import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.util.glu.GLU;
 
 public class SettlingClient extends Settling {
@@ -82,42 +76,6 @@ public class SettlingClient extends Settling {
         // 1000.0D, -1000.0D);
         // GL11.glMatrixMode(GL11.GL_MODELVIEW);
         // GL11.glEnable(GL11.GL_TEXTURE_2D);
-
-        BufferedImage base = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics graphics = base.getGraphics();
-        graphics.setColor(Color.white);
-        graphics.fillRect(0, 0, 256, 256);
-        graphics.dispose();
-
-        StitchedTexture texture = new StitchedTexture(GL11.glGenTextures(), base, 256, 256);
-
-        texture.bindTexture();
-
-        BufferedImage image = TextureRegistry.openResource("/grass.png");
-
-        SubTexture text = null;
-        try {
-            text = texture.loadTexture(image, "grass", image.getWidth(), image.getHeight());
-        }
-        catch (OpenGLException ex) {
-            ex.printStackTrace();
-
-            text = new SubTexture(texture, image, 0, 0, 16, 16);
-        }
-
-        text.bindTexture();
-
-        try {
-            Mouse.create();
-            Mouse.setGrabbed(true);
-        }
-        catch (LWJGLException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        this.player = new PlayerView();
 
         return true;
     }
@@ -257,28 +215,12 @@ public class SettlingClient extends Settling {
         //For this you would get X chunks around the player and render it based on local co-ords.
         //We need to use chunks as a help in rendering
         //Each chunk would be in a display list rather than rendering every visable block every time
-        SubTexture text = TextureRegistry.getSubTexture("grass");
+
+        ItemTile grass = Items.grass;
+
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                GL11.glBegin(GL11.GL_QUADS);
-
-                float startU = 1.0F * (float) text.getStartU() / (float) text.getParent().getWidth();
-                float startV = 1.0F * (float) text.getStartV() / (float) text.getParent().getHeight();
-                float endU = 1.0F * (float) text.getEndU() / (float) text.getParent().getWidth();
-                float endV = 1.0F * (float) text.getEndV() / (float) text.getParent().getHeight();
-
-                GL11.glTexCoord2f(startU, startV);
-                GL11.glVertex3f(x * 50.0F, 0.0F, z * 50.0F);
-
-                GL11.glTexCoord2f(endU, startV);
-                GL11.glVertex3f((x + 1) * 50.0F, 0.0F, z * 50.0F);
-
-                GL11.glTexCoord2f(endU, endV);
-                GL11.glVertex3f((x + 1) * 50.0F, 0.0F, (z + 1) * 50.0F);
-
-                GL11.glTexCoord2f(startU, endV);
-                GL11.glVertex3f(x * 50.0F, 0.0F, (z + 1) * 50.0F);
-                GL11.glEnd();
+                TileRenderer.renderTileFloor(grass, x, 0, z);
             }
         }
 

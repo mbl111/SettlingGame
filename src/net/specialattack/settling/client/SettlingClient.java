@@ -118,8 +118,8 @@ public class SettlingClient extends Settling {
             }
 
             this.timer.update();
-            
-            for(int i = 0; i < timer.remainingTicks; i++){
+
+            for (int i = 0; i < timer.remainingTicks; i++) {
                 ticks++;
                 this.tick();
             }
@@ -184,7 +184,7 @@ public class SettlingClient extends Settling {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
 
-        GLU.gluPerspective(90.0F, this.displayWidth / this.displayHeight, 1.0F, 2000.0F);
+        GLU.gluPerspective(90.0F, (float) this.displayWidth / (float) this.displayHeight, 1.0F, 2000.0F);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);

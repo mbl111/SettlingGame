@@ -196,7 +196,8 @@ public class SettlingClient extends Settling {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
 
-        GLU.gluPerspective((float) 90, Display.getWidth() / Display.getHeight(), 0.001f, 2000);
+        //idk.. but 1.5 works
+        GLU.gluPerspective((float) 90, 1.5F, 1f, 2000);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);

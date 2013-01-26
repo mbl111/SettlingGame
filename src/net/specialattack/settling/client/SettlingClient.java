@@ -119,7 +119,7 @@ public class SettlingClient extends Settling {
 
             this.timer.update();
 
-            for (int i = 0; i < timer.remainingTicks; i++) {
+            for (int i = 0; i < this.timer.remainingTicks; i++) {
                 ticks++;
                 this.tick();
             }
@@ -171,7 +171,7 @@ public class SettlingClient extends Settling {
     private void render3D() {
         this.initGL3();
         GL11.glPushMatrix();
-        this.player.lookThrough();
+        this.player.lookThrough(this.timer.renderPartialTicks);
         // This would go to the world/level class
         this.levelRender();
 

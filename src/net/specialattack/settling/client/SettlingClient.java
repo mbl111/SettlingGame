@@ -11,6 +11,7 @@ import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
 import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
+import net.specialattack.settling.common.util.TickTimer;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
@@ -22,7 +23,7 @@ public class SettlingClient extends Settling {
     private Canvas canvas;
     private int displayWidth;
     private int displayHeight;
-    private int fps;
+    private TickTimer timer = new TickTimer(20.0F);
     private PlayerView player;
 
     public void setCanvas(Canvas canvas) {
@@ -80,9 +81,8 @@ public class SettlingClient extends Settling {
         GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        // GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D,
-        // 1000.0D, -1000.0D);
-        // GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, 1000.0D, -1000.0D);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
         // GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         try {
@@ -109,27 +109,19 @@ public class SettlingClient extends Settling {
 
     @Override
     protected void runGameLoop() {
-        long lastTime = System.nanoTime();
-        double unprocessed = 0;
-        double nsPerTick = 1000000000.0 / 60.0;
         int frames = 0;
         int ticks = 0;
         long lastTimer1 = System.currentTimeMillis();
         while (this.isRunning() && !this.isShuttingDown()) {
-            long now = System.nanoTime();
-            unprocessed += (now - lastTime) / nsPerTick;
-            lastTime = now;
-            boolean shouldRender = false;
-
             if (Display.isCloseRequested()) {
-                this.shutdown();
+                this.attemptShutdown();
             }
 
-            while (unprocessed >= 1) {
+            this.timer.update();
+            
+            for(int i = 0; i < timer.remainingTicks; i++){
                 ticks++;
                 this.tick();
-                unprocessed -= 1;
-                shouldRender = true;
             }
 
             try {
@@ -139,23 +131,19 @@ public class SettlingClient extends Settling {
                 e.printStackTrace();
             }
 
-            {
-                if (shouldRender) {
-                    frames++;
-                    this.render();
-                    Display.update();
-                }
-            }
+            frames++;
+            this.render();
+            Display.update();
+
+            Display.sync(60);
 
             if (System.currentTimeMillis() - lastTimer1 > 1000) {
                 lastTimer1 += 1000;
-                this.fps = frames;
                 System.out.println(ticks + " ticks - " + frames + " fps");
                 frames = 0;
                 ticks = 0;
             }
         }
-        Display.sync(60);
     }
 
     private void tick() {
@@ -196,7 +184,7 @@ public class SettlingClient extends Settling {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
 
-        GLU.gluPerspective((float) 90, Display.getWidth() / Display.getHeight(), 0.001f, 2000);
+        GLU.gluPerspective(90.0F, this.displayWidth / this.displayHeight, 1.0F, 2000.0F);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -205,14 +193,14 @@ public class SettlingClient extends Settling {
         GL11.glClearDepth(1.0f);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
-        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+        //GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
     }
 
     // 2d rendering (For GUI and stuff)
     public void initGL2() {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        GL11.glOrtho(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
+        GL11.glOrtho(0, this.displayWidth, this.displayHeight, 0, -1, 1);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
     }

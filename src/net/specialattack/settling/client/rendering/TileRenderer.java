@@ -28,19 +28,19 @@ public class TileRenderer {
 
         GL11.glTexCoord2f(startU, startV);
         //GL11.glVertex3f(25.0F, 0.0F, 0.0F);
-        GL11.glVertex3f(startX, startZ, startY);
+        GL11.glVertex3f(startX, startY, startZ);
 
         GL11.glTexCoord2f(endU, startV);
         //GL11.glVertex3f(50.0F, 12.5F, 0.0F);
-        GL11.glVertex3f(endX, startZ, startY);
+        GL11.glVertex3f(endX, startY, startZ);
 
         GL11.glTexCoord2f(endU, endV);
         //GL11.glVertex3f(25.5F, 25.2F, 0.0F); // 25.2F to prevent borders
-        GL11.glVertex3f(endX, endZ, startY);
+        GL11.glVertex3f(endX, startY, endZ);
 
         GL11.glTexCoord2f(startU, endV);
         //GL11.glVertex3f(0.0F, 12.5F, 0.0F);
-        GL11.glVertex3f(startX, endZ, startY);
+        GL11.glVertex3f(startX, startY, endZ);
 
         GL11.glEnd();
     }

@@ -1,4 +1,3 @@
-
 package net.specialattack.settling.common;
 
 import net.specialattack.settling.common.item.CommonItemDelegate;

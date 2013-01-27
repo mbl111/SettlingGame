@@ -4,6 +4,7 @@ package net.specialattack.settling.client;
 import java.awt.Canvas;
 
 import net.specialattack.settling.client.item.ClientItemDelegate;
+import net.specialattack.settling.client.rendering.ShaderLoader;
 import net.specialattack.settling.client.rendering.TileRenderer;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.common.Settling;
@@ -17,6 +18,8 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.glu.GLU;
 
 public class SettlingClient extends Settling {
@@ -25,6 +28,7 @@ public class SettlingClient extends Settling {
     private int displayHeight;
     private TickTimer timer = new TickTimer(20.0F);
     private PlayerView player;
+    private int shader;
 
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
@@ -96,6 +100,16 @@ public class SettlingClient extends Settling {
         }
 
         this.player = new PlayerView();
+
+        this.shader = ShaderLoader.createProgram("grayscale");
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL20.glUseProgram(this.shader);
+
+        TextureRegistry.tiles.bindTexture();
+
+        int loc = GL20.glGetUniformLocation(this.shader, "texture1");
+        GL20.glUniform1i(loc, 0);
 
         return true;
     }
@@ -217,6 +231,8 @@ public class SettlingClient extends Settling {
         //We need to use chunks as a help in rendering
         //Each chunk would be in a display list rather than rendering every visable block every time
 
+        GL20.glUseProgram(this.shader);
+
         ItemTile grass = Items.grass;
 
         for (int x = 0; x < 16; x++) {
@@ -224,6 +240,8 @@ public class SettlingClient extends Settling {
                 TileRenderer.renderTileFloor(grass, x, 0, z);
             }
         }
+
+        GL20.glUseProgram(0);
 
     }
 

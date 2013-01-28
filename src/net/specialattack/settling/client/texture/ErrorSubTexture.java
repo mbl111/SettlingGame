@@ -47,8 +47,9 @@ public class ErrorSubTexture extends SubTexture {
     }
 
     @Override
-    public void bindTexture() {
+    public int bindTexture() {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
+        return this.textureId;
     }
 
 }

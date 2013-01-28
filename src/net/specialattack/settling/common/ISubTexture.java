@@ -16,5 +16,5 @@ public interface ISubTexture {
 
     public abstract IStitchedTexture getParent();
 
-    public abstract void bindTexture();
+    public abstract int bindTexture();
 }

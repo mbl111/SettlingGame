@@ -43,29 +43,35 @@ public class PlayerView {
             this.location.pitch = 89.0F;
         }
 
+        float mod = 1.0F;
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            mod = 10.0F;
+        }
+
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-            this.location.x += Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed;
-            this.location.z += -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed;
+            this.location.x += Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+            this.location.z += -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-            this.location.x -= Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed;
-            this.location.z -= -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed;
+            this.location.x -= Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+            this.location.z -= -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-            this.location.x += Math.sin((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed;
-            this.location.z += -Math.cos((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed;
+            this.location.x += Math.sin((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+            this.location.z += -Math.cos((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-            this.location.x += Math.sin((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed;
-            this.location.z += -Math.cos((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed;
+            this.location.x += Math.sin((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+            this.location.z += -Math.cos((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-            this.location.y += this.vSpeed;
+            this.location.y += this.vSpeed * mod;
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-            this.location.y -= this.vSpeed;
+            this.location.y -= this.vSpeed * mod;
         }
 
     }

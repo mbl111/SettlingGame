@@ -59,8 +59,8 @@ public class SubTexture implements ISubTexture {
     }
 
     @Override
-    public void bindTexture() {
-        this.parent.bindTexture();
+    public int bindTexture() {
+        return this.parent.bindTexture();
     }
 
 }

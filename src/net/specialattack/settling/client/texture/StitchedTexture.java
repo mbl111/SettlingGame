@@ -119,8 +119,8 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
     }
 
     private int findNextSizedSlotAndPopulate(int width, int height) {
-        for (int u1 = 0; u1 < this.slotsU - width; u1++) {
-            for (int v1 = 0; v1 < this.slotsV - height; v1++) {
+        for (int u1 = 0; u1 < this.slotsU - width + 1; u1++) {
+            for (int v1 = 0; v1 < this.slotsV - height + 1; v1++) {
                 boolean empty = true;
 
                 for (int u2 = u1; u2 < u1 + width; u2++) {
@@ -154,11 +154,18 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
 
         return TextureRegistry.textureNotFound;
     }
+    
+
+    @Override
+    public int getTextureId() {
+        return this.textureId;
+    }
 
     public static void registerTexture(String name, SubTexture texture) {
         if (!TextureRegistry.subTextures.containsKey(name)) {
             TextureRegistry.subTextures.put(name, texture);
         }
     }
+
 
 }

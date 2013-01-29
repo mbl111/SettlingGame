@@ -285,6 +285,10 @@ public class SettlingClient extends Settling {
 
         TileRenderer.resetTexture();
 
+        //GL20.glUseProgram(this.shader);
+
+        TileRenderer.resetTexture();
+
         ItemTile grass = Items.grass;
         // TileRenderer.renderTileFloor(grass, 0, 0, 0);
 

@@ -18,8 +18,10 @@ public class Texture {
         this.imageData = imageData;
     }
 
-    public void bindTexture() {
+    public int bindTexture() {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
+
+        return this.textureId;
     }
 
     public int getWidth() {
@@ -28,5 +30,9 @@ public class Texture {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public int getTextureId() {
+        return this.textureId;
     }
 }

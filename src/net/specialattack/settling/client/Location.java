@@ -64,4 +64,13 @@ public class Location {
     public void setYaw(float yaw) {
         this.yaw = yaw;
     }
+
+    public void clone(Location loc) {
+        this.x = loc.x;
+        this.y = loc.y;
+        this.z = loc.z;
+        this.yaw = loc.yaw;
+        this.pitch = loc.pitch;
+    }
+
 }

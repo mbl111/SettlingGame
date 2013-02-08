@@ -225,6 +225,7 @@ public class SettlingClient extends Settling {
             //GL11.glScalef(25.0F, 25.0F, 25.0F);
         }
         // This would go to the world/level class
+
         this.levelRender();
 
         GL11.glPopMatrix();
@@ -237,7 +238,7 @@ public class SettlingClient extends Settling {
             GL11.glMatrixMode(GL11.GL_PROJECTION);
             GL11.glLoadIdentity();
 
-            GLU.gluPerspective(90.0F, (float) this.displayWidth / (float) this.displayHeight, 0.0F, 2000.0F);
+            GLU.gluPerspective(90.0F, (float) this.displayWidth / (float) this.displayHeight, 0.5F, 2000.0F);
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
         }
         else {
@@ -249,8 +250,8 @@ public class SettlingClient extends Settling {
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
-        GL11.glClearDepth(1.0f);
+        GL11.glClearColor(0.0F, 0.0F, 0.0F, 0.5F);
+        GL11.glClearDepth(1.0D);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
         //GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);

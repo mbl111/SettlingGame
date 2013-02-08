@@ -27,6 +27,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.glu.GLU;
 
 public class SettlingClient extends Settling {
+
     private Canvas canvas;
     private int displayWidth;
     private int displayHeight;
@@ -222,7 +223,7 @@ public class SettlingClient extends Settling {
 
             GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
             GL11.glRotatef(60.0F, 1.0F, 1.0F, 0.0F);
-            //GL11.glScalef(25.0F, 25.0F, 25.0F);
+            // GL11.glScalef(25.0F, 25.0F, 25.0F);
         }
         // This would go to the world/level class
 
@@ -254,7 +255,7 @@ public class SettlingClient extends Settling {
         GL11.glClearDepth(1.0D);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
-        //GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+        // GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
     }
 
     // 2d rendering (For GUI and stuff)
@@ -274,16 +275,23 @@ public class SettlingClient extends Settling {
     }
 
     private void levelRender() {
-        //For this you would get X chunks around the player and render it based on local co-ords.
-        //We need to use chunks as a help in rendering
-        //Each chunk would be in a display list rather than rendering every visable block every time
+        // For this you would get X chunks around the player and render it based
+        // on local co-ords.
+        // We need to use chunks as a help in rendering
+        // Each chunk would be in a display list rather than rendering every
+        // visable block every time
+        // Muahahahahaha, no spell checking!
+
+        // GL20.glUseProgram(this.shader);
+
+        TileRenderer.resetTexture();
 
         //GL20.glUseProgram(this.shader);
 
         TileRenderer.resetTexture();
 
         ItemTile grass = Items.grass;
-        //TileRenderer.renderTileFloor(grass, 0, 0, 0);
+        // TileRenderer.renderTileFloor(grass, 0, 0, 0);
 
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
@@ -297,7 +305,7 @@ public class SettlingClient extends Settling {
             }
         }
 
-        //GL20.glUseProgram(0);
+        // GL20.glUseProgram(0);
 
     }
 

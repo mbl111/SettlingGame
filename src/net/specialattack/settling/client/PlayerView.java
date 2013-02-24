@@ -1,6 +1,8 @@
 
 package net.specialattack.settling.client;
 
+import net.specialattack.settling.common.world.World;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -9,12 +11,15 @@ public class PlayerView {
 
     public Location location;
     public Location prevLocation;
-    public float vSpeed = 4.0F;
-    public float hSpeed = 10.0F;
+    private final World world;
+    public float vSpeed = 0.2F;
+    public float hSpeed = 0.2F;
 
-    public PlayerView() {
+    public PlayerView(World world) {
         this.location = new Location(0.0F, 0.0F, 0.0F, 0.0F, 90.0F);
         this.prevLocation = new Location(0.0F, 0.0F, 0.0F, 0.0F, 90.0F);
+
+        this.world = world;
     }
 
     public void tick() {
@@ -74,20 +79,19 @@ public class PlayerView {
             this.location.y -= this.vSpeed * mod;
         }
 
-        if (this.location.x * -1 / 50 > 64) {
-            this.location.x = 64 * -50;
+        if (this.location.x > this.world.getMaxXBorder()) {
+            this.location.x = this.world.getMaxXBorder();
         }
-        if (this.location.z * -1 / 50 > 64) {
-            this.location.z = 64 * -50;
+        if (this.location.z > this.world.getMaxZBorder()) {
+            this.location.z = this.world.getMaxZBorder();
         }
-        if (this.location.x * -1 / 50 < -64) {
-            this.location.x = 64 * 50;
+        if (this.location.x < this.world.getMinXBorder()) {
+            this.location.x = this.world.getMinXBorder();
         }
-        if (this.location.z * -1 / 50 < -64) {
-            this.location.z = 64 * 50;
+        if (this.location.z < this.world.getMinZBorder()) {
+            this.location.z = this.world.getMinZBorder();
         }
 
-        
     }
 
     public void lookThrough(float partialTicks) {

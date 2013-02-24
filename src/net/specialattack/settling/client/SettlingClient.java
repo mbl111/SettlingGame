@@ -109,8 +109,6 @@ public class SettlingClient extends Settling {
             return false;
         }
 
-        this.player = new PlayerView();
-
         this.shader = ShaderLoader.createProgram("sepia");
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -138,6 +136,8 @@ public class SettlingClient extends Settling {
         }
 
         TextureRegistry.items.loadTexture(img, "test", img.getWidth(), img.getHeight());
+
+        this.player = new PlayerView(this.currentWorld);
 
         return true;
     }
@@ -192,29 +192,29 @@ public class SettlingClient extends Settling {
         if (firstPerson) {
             this.player.tick();
         }
-        
-        if (Keyboard.isKeyDown(Keyboard.KEY_F1)){
-            
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_F1)) {
+
             int xb = (int) (player.location.x / 50) * -1;
             int zb = (int) (player.location.z / 50) * -1;
 
             int xc = xb / 16;
             int zc = zb / 16;
-            
+
             int minChunkXBorder = this.currentWorld.getMinXBorder() / 16;
             int minChunkZBorder = this.currentWorld.getMinZBorder() / 16;
             int maxChunkXBorder = this.currentWorld.getMaxXBorder() / 16;
             int maxChunkZBorder = this.currentWorld.getMaxZBorder() / 16;
-            
+
             int renderChunkRadius = 10;
-            
+
             for (int x = minChunkXBorder < renderChunkRadius - xc ? minChunkXBorder : renderChunkRadius - xc; x < (maxChunkXBorder < renderChunkRadius + xc ? maxChunkXBorder : renderChunkRadius + xc); x++) {
                 for (int z = minChunkZBorder < renderChunkRadius - zc ? minChunkZBorder : renderChunkRadius - zc; z < (maxChunkZBorder < renderChunkRadius + zc ? maxChunkZBorder : renderChunkRadius + zc); z++) {
                     this.currentWorld.getChunkAtTile(x * 16, z * 16).tileUpdate();
                 }
             }
         }
-        
+
     }
 
     private void render() {
@@ -312,7 +312,6 @@ public class SettlingClient extends Settling {
 
         //GL20.glUseProgram(this.shader);
 
-
         ItemTile grass = Items.grass;
         // TileRenderer.renderTileFloor(grass, 0, 0, 0);
 
@@ -322,11 +321,11 @@ public class SettlingClient extends Settling {
             }
         }
 
-//        for (int x = this.currentWorld.getMinXBorder(); x < this.currentWorld.getMaxXBorder(); x++) {
-//            for (int z = this.currentWorld.getMinZBorder(); z < this.currentWorld.getMaxZBorder(); z++) {
-//                TileRenderer.renderTileFloor(grass, x, this.currentWorld.getChunkAtTile(x, z).getHeight(x % 16, z % 16), z);
-//            }
-//        }
+        //        for (int x = this.currentWorld.getMinXBorder(); x < this.currentWorld.getMaxXBorder(); x++) {
+        //            for (int z = this.currentWorld.getMinZBorder(); z < this.currentWorld.getMaxZBorder(); z++) {
+        //                TileRenderer.renderTileFloor(grass, x, this.currentWorld.getChunkAtTile(x, z).getHeight(x % 16, z % 16), z);
+        //            }
+        //        }
 
         //Seems to be the formula to get the 'block co-cords'
         int xb = (int) (player.location.x / 50) * -1;
@@ -334,21 +333,21 @@ public class SettlingClient extends Settling {
 
         int xc = xb / 16;
         int zc = zb / 16;
-        
+
         int minChunkXBorder = this.currentWorld.getMinXBorder() / 16;
         int minChunkZBorder = this.currentWorld.getMinZBorder() / 16;
         int maxChunkXBorder = this.currentWorld.getMaxXBorder() / 16;
         int maxChunkZBorder = this.currentWorld.getMaxZBorder() / 16;
-        
+
         int renderChunkRadius = 3;
-        
+
         for (int x = minChunkXBorder < renderChunkRadius - xc ? minChunkXBorder : renderChunkRadius - xc; x < (maxChunkXBorder < renderChunkRadius + xc ? maxChunkXBorder : renderChunkRadius + xc); x++) {
             for (int z = minChunkZBorder < renderChunkRadius - zc ? minChunkZBorder : renderChunkRadius - zc; z < (maxChunkZBorder < renderChunkRadius + zc ? maxChunkZBorder : renderChunkRadius + zc); z++) {
                 this.currentWorld.getChunkAtTile(x * 16, z * 16).render();
                 //TileRenderer.renderTileFloor(grass, x * 16, this.currentWorld.getChunkAtTile(x * 16, z * 16).getHeight(x % 16, z % 16), z * 16);
             }
         }
-        
+
         //GL11.glCallList(list);
 
         // GL20.glUseProgram(0);

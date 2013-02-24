@@ -30,11 +30,11 @@ public class TileRenderer {
         float endU = 1.0F * (float) texture.getEndU() / (float) texture.getParent().getWidth();
         float endV = 1.0F * (float) texture.getEndV() / (float) texture.getParent().getHeight();
 
-        float startX = (float) posX * 50.0F;
-        float startY = (float) posY * 50.0F;
-        float startZ = (float) posZ * 50.0F;
-        float endX = startX + 50.0F;
-        float endZ = startZ + 50.0F;
+        float startX = (float) posX;
+        float startY = (float) posY;
+        float startZ = (float) posZ;
+        float endX = startX + 1.0F;
+        float endZ = startZ + 1.0F;
         float endY = startY;
 
         if (!SettlingClient.firstPerson) {

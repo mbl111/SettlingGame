@@ -323,7 +323,7 @@ public class SettlingClient extends Settling {
         // Muahahahahaha, no spell checking!
 
         TileRenderer.resetTexture();
-
+        fontRenderer.renderString("H", 0, 0, 0xFFFFFF);
         //GL20.glUseProgram(this.shader);
 
         ItemTile grass = Items.grass;

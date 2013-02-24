@@ -74,6 +74,20 @@ public class PlayerView {
             this.location.y -= this.vSpeed * mod;
         }
 
+        if (this.location.x * -1 / 50 > 64) {
+            this.location.x = 64 * -50;
+        }
+        if (this.location.z * -1 / 50 > 64) {
+            this.location.z = 64 * -50;
+        }
+        if (this.location.x * -1 / 50 < -64) {
+            this.location.x = 64 * 50;
+        }
+        if (this.location.z * -1 / 50 < -64) {
+            this.location.z = 64 * 50;
+        }
+
+        
     }
 
     public void lookThrough(float partialTicks) {

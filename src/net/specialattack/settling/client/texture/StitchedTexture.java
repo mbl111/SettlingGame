@@ -154,7 +154,6 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
 
         return TextureRegistry.textureNotFound;
     }
-    
 
     @Override
     public int getTextureId() {
@@ -166,6 +165,5 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
             TextureRegistry.subTextures.put(name, texture);
         }
     }
-
 
 }

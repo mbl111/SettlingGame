@@ -31,7 +31,7 @@ public class Chunk {
             tileZ = tileZ + 16;
         }
 
-        return heights[tileX + tileZ * 16];
+        return this.heights[tileX + tileZ * 16];
     }
 
     public void populateHeight(short[] heights) {
@@ -42,7 +42,9 @@ public class Chunk {
         return null;
     }
 
+
     public void tick() {
 
     }
+
 }

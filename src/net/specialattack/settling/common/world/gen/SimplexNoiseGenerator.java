@@ -133,9 +133,9 @@ public class SimplexNoiseGenerator extends PerlinNoiseGenerator {
 
     @Override
     public double noise(double xin, double yin, double zin) {
-        xin += offsetX;
-        yin += offsetY;
-        zin += offsetZ;
+        xin += this.offsetX;
+        yin += this.offsetY;
+        zin += this.offsetZ;
 
         double n0, n1, n2, n3; // Noise contributions from the four corners
 
@@ -228,10 +228,10 @@ public class SimplexNoiseGenerator extends PerlinNoiseGenerator {
         int ii = i & 255;
         int jj = j & 255;
         int kk = k & 255;
-        int gi0 = perm[ii + perm[jj + perm[kk]]] % 12;
-        int gi1 = perm[ii + i1 + perm[jj + j1 + perm[kk + k1]]] % 12;
-        int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
-        int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
+        int gi0 = this.perm[ii + this.perm[jj + this.perm[kk]]] % 12;
+        int gi1 = this.perm[ii + i1 + this.perm[jj + j1 + this.perm[kk + k1]]] % 12;
+        int gi2 = this.perm[ii + i2 + this.perm[jj + j2 + this.perm[kk + k2]]] % 12;
+        int gi3 = this.perm[ii + 1 + this.perm[jj + 1 + this.perm[kk + 1]]] % 12;
 
         // Calculate the contribution from the four corners
         double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
@@ -277,8 +277,8 @@ public class SimplexNoiseGenerator extends PerlinNoiseGenerator {
 
     @Override
     public double noise(double xin, double yin) {
-        xin += offsetX;
-        yin += offsetY;
+        xin += this.offsetX;
+        yin += this.offsetY;
 
         double n0, n1, n2; // Noise contributions from the three corners
 
@@ -317,9 +317,9 @@ public class SimplexNoiseGenerator extends PerlinNoiseGenerator {
         // Work out the hashed gradient indices of the three simplex corners
         int ii = i & 255;
         int jj = j & 255;
-        int gi0 = perm[ii + perm[jj]] % 12;
-        int gi1 = perm[ii + i1 + perm[jj + j1]] % 12;
-        int gi2 = perm[ii + 1 + perm[jj + 1]] % 12;
+        int gi0 = this.perm[ii + this.perm[jj]] % 12;
+        int gi1 = this.perm[ii + i1 + this.perm[jj + j1]] % 12;
+        int gi2 = this.perm[ii + 1 + this.perm[jj + 1]] % 12;
 
         // Calculate the contribution from the three corners
         double t0 = 0.5 - x0 * x0 - y0 * y0;
@@ -369,9 +369,9 @@ public class SimplexNoiseGenerator extends PerlinNoiseGenerator {
      * @return Noise at given location, from range -1 to 1
      */
     public double noise(double x, double y, double z, double w) {
-        x += offsetX;
-        y += offsetY;
-        z += offsetZ;
+        x += this.offsetX;
+        y += this.offsetY;
+        z += this.offsetZ;
         w += offsetW;
 
         double n0, n1, n2, n3, n4; // Noise contributions from the five corners
@@ -463,11 +463,11 @@ public class SimplexNoiseGenerator extends PerlinNoiseGenerator {
         int kk = k & 255;
         int ll = l & 255;
 
-        int gi0 = perm[ii + perm[jj + perm[kk + perm[ll]]]] % 32;
-        int gi1 = perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] % 32;
-        int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] % 32;
-        int gi3 = perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] % 32;
-        int gi4 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32;
+        int gi0 = this.perm[ii + this.perm[jj + this.perm[kk + this.perm[ll]]]] % 32;
+        int gi1 = this.perm[ii + i1 + this.perm[jj + j1 + this.perm[kk + k1 + this.perm[ll + l1]]]] % 32;
+        int gi2 = this.perm[ii + i2 + this.perm[jj + j2 + this.perm[kk + k2 + this.perm[ll + l2]]]] % 32;
+        int gi3 = this.perm[ii + i3 + this.perm[jj + j3 + this.perm[kk + k3 + this.perm[ll + l3]]]] % 32;
+        int gi4 = this.perm[ii + 1 + this.perm[jj + 1 + this.perm[kk + 1 + this.perm[ll + 1]]]] % 32;
 
         // Calculate the contribution from the five corners
         double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;

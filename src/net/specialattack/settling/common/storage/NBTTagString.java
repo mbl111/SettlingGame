@@ -26,7 +26,7 @@ public class NBTTagString extends NBTTag {
 
     @Override
     public void write(DataOutputStream output) throws IOException {
-        output.writeUTF(value);
+        output.writeUTF(this.value);
     }
 
 }

@@ -26,7 +26,7 @@ public class NBTTagLong extends NBTTag {
 
     @Override
     public void write(DataOutputStream output) throws IOException {
-        output.writeLong(value);
+        output.writeLong(this.value);
     }
 
 }

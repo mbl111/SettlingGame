@@ -44,7 +44,7 @@ public class SimplexOctaveGenerator extends OctaveGenerator {
     @Override
     public void setScale(double scale) {
         super.setScale(scale);
-        setWScale(scale);
+        this.setWScale(scale);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SimplexOctaveGenerator extends OctaveGenerator {
      * @return W scale
      */
     public double getWScale() {
-        return wScale;
+        return this.wScale;
     }
 
     /**
@@ -63,7 +63,7 @@ public class SimplexOctaveGenerator extends OctaveGenerator {
      *        New W scale
      */
     public void setWScale(double scale) {
-        wScale = scale;
+        this.wScale = scale;
     }
 
     /**
@@ -85,7 +85,7 @@ public class SimplexOctaveGenerator extends OctaveGenerator {
      * @return Resulting noise
      */
     public double noise(double x, double y, double z, double w, double frequency, double amplitude) {
-        return noise(x, y, z, w, frequency, amplitude, false);
+        return this.noise(x, y, z, w, frequency, amplitude, false);
     }
 
     /**
@@ -114,12 +114,12 @@ public class SimplexOctaveGenerator extends OctaveGenerator {
         double freq = 1;
         double max = 0;
 
-        x *= xScale;
-        y *= yScale;
-        z *= zScale;
-        w *= wScale;
+        x *= this.xScale;
+        y *= this.yScale;
+        z *= this.zScale;
+        w *= this.wScale;
 
-        for (NoiseGenerator octave : octaves) {
+        for (NoiseGenerator octave : this.octaves) {
             result += ((SimplexNoiseGenerator) octave).noise(x * freq, y * freq, z * freq, w * freq) * amp;
             max += amp;
             freq *= frequency;

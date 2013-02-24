@@ -15,6 +15,7 @@ import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
 import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
+import net.specialattack.settling.common.util.MathHelper;
 import net.specialattack.settling.common.util.TickTimer;
 import net.specialattack.settling.common.world.World;
 
@@ -327,9 +328,8 @@ public class SettlingClient extends Settling {
         //            }
         //        }
 
-        //Seems to be the formula to get the 'block co-cords'
-        int xb = (int) (player.location.x / 50) * -1;
-        int zb = (int) (player.location.z / 50) * -1;
+        int xb = (int) player.location.x * -1;
+        int zb = (int) player.location.z * -1;
 
         int xc = xb / 16;
         int zc = zb / 16;
@@ -341,8 +341,8 @@ public class SettlingClient extends Settling {
 
         int renderChunkRadius = 3;
 
-        for (int x = minChunkXBorder < renderChunkRadius - xc ? minChunkXBorder : renderChunkRadius - xc; x < (maxChunkXBorder < renderChunkRadius + xc ? maxChunkXBorder : renderChunkRadius + xc); x++) {
-            for (int z = minChunkZBorder < renderChunkRadius - zc ? minChunkZBorder : renderChunkRadius - zc; z < (maxChunkZBorder < renderChunkRadius + zc ? maxChunkZBorder : renderChunkRadius + zc); z++) {
+        for (int x = MathHelper.max(minChunkXBorder, xc - renderChunkRadius); x < MathHelper.min(maxChunkXBorder, xc + renderChunkRadius); x++) {
+            for (int z = MathHelper.max(minChunkZBorder, zc - renderChunkRadius); z < MathHelper.min(maxChunkZBorder, zc + renderChunkRadius); z++) {
                 this.currentWorld.getChunkAtTile(x * 16, z * 16).render();
                 //TileRenderer.renderTileFloor(grass, x * 16, this.currentWorld.getChunkAtTile(x * 16, z * 16).getHeight(x % 16, z % 16), z * 16);
             }

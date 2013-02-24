@@ -211,7 +211,7 @@ public class SettlingClient extends Settling {
 
             for (int x = minChunkXBorder < renderChunkRadius - xc ? minChunkXBorder : renderChunkRadius - xc; x < (maxChunkXBorder < renderChunkRadius + xc ? maxChunkXBorder : renderChunkRadius + xc); x++) {
                 for (int z = minChunkZBorder < renderChunkRadius - zc ? minChunkZBorder : renderChunkRadius - zc; z < (maxChunkZBorder < renderChunkRadius + zc ? maxChunkZBorder : renderChunkRadius + zc); z++) {
-                    this.currentWorld.getChunkAtTile(x * 16, z * 16).tileUpdate();
+                    //this.currentWorld.getChunkAtTile(x * 16, z * 16).tileUpdate();
                 }
             }
         }
@@ -343,7 +343,7 @@ public class SettlingClient extends Settling {
 
         for (int x = MathHelper.max(minChunkXBorder, xc - renderChunkRadius); x < MathHelper.min(maxChunkXBorder, xc + renderChunkRadius); x++) {
             for (int z = MathHelper.max(minChunkZBorder, zc - renderChunkRadius); z < MathHelper.min(maxChunkZBorder, zc + renderChunkRadius); z++) {
-                this.currentWorld.getChunkAtTile(x * 16, z * 16).render();
+                this.currentWorld.getChunkAt(x, z, false);
                 //TileRenderer.renderTileFloor(grass, x * 16, this.currentWorld.getChunkAtTile(x * 16, z * 16).getHeight(x % 16, z % 16), z * 16);
             }
         }

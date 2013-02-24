@@ -13,8 +13,6 @@ public class Chunk {
     public final int chunkX;
     public final int chunkZ;
 
-    private int chunkRenderList;
-
     public Chunk(World world, int chunkX, int chunkZ) {
         this.sections = new Section[world.getWorldHeight() >> 4];
 
@@ -38,30 +36,13 @@ public class Chunk {
 
     public void populateHeight(short[] heights) {
         this.heights = heights;
-        tileUpdate();
     }
 
     public Section getSection(int section) {
         return null;
     }
 
-    public void tileUpdate() {
-        ItemTile grass = Items.grass;
-        chunkRenderList = GL11.glGenLists(1);
-        GL11.glNewList(chunkRenderList, GL11.GL_COMPILE);
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                TileRenderer.renderTileFloor(grass, chunkX * 16 + x - 16, getHeight(chunkX * 16 + x, chunkZ * 16 + z),chunkZ * 16 + z - 16);
-            }
-        }
-        GL11.glEndList();
-    }
-
     public void tick() {
 
-    }
-
-    public void render() {
-        GL11.glCallList(chunkRenderList);
     }
 }

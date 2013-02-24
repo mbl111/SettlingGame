@@ -307,11 +307,9 @@ public class SettlingClient extends Settling {
         // visable block every time
         // Muahahahahaha, no spell checking!
 
-        // GL20.glUseProgram(this.shader);
-
         TileRenderer.resetTexture();
 
-        //GL20.glUseProgram(this.shader);
+        GL20.glUseProgram(this.shader);
 
         ItemTile grass = Items.grass;
         // TileRenderer.renderTileFloor(grass, 0, 0, 0);
@@ -350,7 +348,7 @@ public class SettlingClient extends Settling {
 
         //GL11.glCallList(list);
 
-        // GL20.glUseProgram(0);
+        GL20.glUseProgram(0);
 
     }
 

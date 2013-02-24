@@ -61,7 +61,7 @@ public class WorldDemo extends World {
 
     @Override
     public Chunk getChunkAt(int chunkX, int chunkZ, boolean generateIfMissing) {
-        return chunks[(chunkX + 4) + (chunkZ + 4) * 8];
+        return this.chunks[(chunkX + 4) + (chunkZ + 4) * 8];
     }
 
     @Override

@@ -30,9 +30,9 @@ public abstract class OctaveGenerator {
      *        New value to scale each coordinate by
      */
     public void setScale(double scale) {
-        setXScale(scale);
-        setYScale(scale);
-        setZScale(scale);
+        this.setXScale(scale);
+        this.setYScale(scale);
+        this.setZScale(scale);
     }
 
     /**
@@ -41,7 +41,7 @@ public abstract class OctaveGenerator {
      * @return X scale
      */
     public double getXScale() {
-        return xScale;
+        return this.xScale;
     }
 
     /**
@@ -51,7 +51,7 @@ public abstract class OctaveGenerator {
      *        New X scale
      */
     public void setXScale(double scale) {
-        xScale = scale;
+        this.xScale = scale;
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class OctaveGenerator {
      * @return Y scale
      */
     public double getYScale() {
-        return yScale;
+        return this.yScale;
     }
 
     /**
@@ -70,7 +70,7 @@ public abstract class OctaveGenerator {
      *        New Y scale
      */
     public void setYScale(double scale) {
-        yScale = scale;
+        this.yScale = scale;
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class OctaveGenerator {
      * @return Z scale
      */
     public double getZScale() {
-        return zScale;
+        return this.zScale;
     }
 
     /**
@@ -89,7 +89,7 @@ public abstract class OctaveGenerator {
      *        New Z scale
      */
     public void setZScale(double scale) {
-        zScale = scale;
+        this.zScale = scale;
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class OctaveGenerator {
      * @return Clone of the individual octaves
      */
     public NoiseGenerator[] getOctaves() {
-        return octaves.clone();
+        return this.octaves.clone();
     }
 
     /**
@@ -114,7 +114,7 @@ public abstract class OctaveGenerator {
      * @return Resulting noise
      */
     public double noise(double x, double frequency, double amplitude) {
-        return noise(x, 0, 0, frequency, amplitude);
+        return this.noise(x, 0, 0, frequency, amplitude);
     }
 
     /**
@@ -132,7 +132,7 @@ public abstract class OctaveGenerator {
      * @return Resulting noise
      */
     public double noise(double x, double frequency, double amplitude, boolean normalized) {
-        return noise(x, 0, 0, frequency, amplitude, normalized);
+        return this.noise(x, 0, 0, frequency, amplitude, normalized);
     }
 
     /**
@@ -150,7 +150,7 @@ public abstract class OctaveGenerator {
      * @return Resulting noise
      */
     public double noise(double x, double y, double frequency, double amplitude) {
-        return noise(x, y, 0, frequency, amplitude);
+        return this.noise(x, y, 0, frequency, amplitude);
     }
 
     /**
@@ -170,7 +170,7 @@ public abstract class OctaveGenerator {
      * @return Resulting noise
      */
     public double noise(double x, double y, double frequency, double amplitude, boolean normalized) {
-        return noise(x, y, 0, frequency, amplitude, normalized);
+        return this.noise(x, y, 0, frequency, amplitude, normalized);
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class OctaveGenerator {
      * @return Resulting noise
      */
     public double noise(double x, double y, double z, double frequency, double amplitude) {
-        return noise(x, y, z, frequency, amplitude, false);
+        return this.noise(x, y, z, frequency, amplitude, false);
     }
 
     /**
@@ -217,11 +217,11 @@ public abstract class OctaveGenerator {
         double freq = 1;
         double max = 0;
 
-        x *= xScale;
-        y *= yScale;
-        z *= zScale;
+        x *= this.xScale;
+        y *= this.yScale;
+        z *= this.zScale;
 
-        for (NoiseGenerator octave : octaves) {
+        for (NoiseGenerator octave : this.octaves) {
             result += octave.noise(x * freq, y * freq, z * freq) * amp;
             max += amp;
             freq *= frequency;

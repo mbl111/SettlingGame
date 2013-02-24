@@ -26,7 +26,7 @@ public class NBTTagInteger extends NBTTag {
 
     @Override
     public void write(DataOutputStream output) throws IOException {
-        output.writeInt(value);
+        output.writeInt(this.value);
     }
 
 }

@@ -33,12 +33,12 @@ public class Chunk {
             tileZ = tileZ + 16;
         }
 
-        return heights[tileX + tileZ * 16];
+        return this.heights[tileX + tileZ * 16];
     }
 
     public void populateHeight(short[] heights) {
         this.heights = heights;
-        tileUpdate();
+        this.tileUpdate();
     }
 
     public Section getSection(int section) {
@@ -47,11 +47,11 @@ public class Chunk {
 
     public void tileUpdate() {
         ItemTile grass = Items.grass;
-        chunkRenderList = GL11.glGenLists(1);
-        GL11.glNewList(chunkRenderList, GL11.GL_COMPILE);
+        this.chunkRenderList = GL11.glGenLists(1);
+        GL11.glNewList(this.chunkRenderList, GL11.GL_COMPILE);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                TileRenderer.renderTileFloor(grass, chunkX * 16 + x - 16, getHeight(chunkX * 16 + x, chunkZ * 16 + z),chunkZ * 16 + z - 16);
+                TileRenderer.renderTileFloor(grass, this.chunkX * 16 + x - 16, this.getHeight(this.chunkX * 16 + x, this.chunkZ * 16 + z), this.chunkZ * 16 + z - 16);
             }
         }
         GL11.glEndList();
@@ -62,6 +62,6 @@ public class Chunk {
     }
 
     public void render() {
-        GL11.glCallList(chunkRenderList);
+        GL11.glCallList(this.chunkRenderList);
     }
 }

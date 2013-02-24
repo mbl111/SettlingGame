@@ -26,7 +26,7 @@ public class NBTTagShort extends NBTTag {
 
     @Override
     public void write(DataOutputStream output) throws IOException {
-        output.writeShort(value);
+        output.writeShort(this.value);
     }
 
 }

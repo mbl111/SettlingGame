@@ -35,4 +35,11 @@ public class Texture {
     public int getTextureId() {
         return this.textureId;
     }
+
+    public float[] getPixelLocations(int indexU, int indexV) {
+        float u = (float) indexU / (float) this.width;
+        float v = (float) indexV / (float) this.height;
+
+        return new float[] { u, v };
+    }
 }

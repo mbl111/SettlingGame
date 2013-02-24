@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import net.specialattack.settling.client.item.ClientItemDelegate;
+import net.specialattack.settling.client.rendering.FontRenderer;
 import net.specialattack.settling.client.rendering.ShaderLoader;
 import net.specialattack.settling.client.rendering.TileRenderer;
 import net.specialattack.settling.client.texture.TextureRegistry;
@@ -38,6 +39,7 @@ public class SettlingClient extends Settling {
     private int shader;
     public static final boolean firstPerson = true;
     public World currentWorld;
+    public FontRenderer fontRenderer;
 
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
@@ -138,6 +140,8 @@ public class SettlingClient extends Settling {
 
         TextureRegistry.items.loadTexture(img, "test", img.getWidth(), img.getHeight());
 
+        this.fontRenderer = new FontRenderer();
+
         this.player = new PlayerView(this.currentWorld);
 
         return true;
@@ -234,6 +238,15 @@ public class SettlingClient extends Settling {
         this.initGL2();
         GL11.glLoadIdentity();
 
+        GL11.glEnable(GL11.GL_BLEND);
+
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        this.fontRenderer.renderStringWithShadow("Location: (" + this.player.location.x + ", " + this.player.location.y + ", " + this.player.location.z + ")", 0, 16, 0xFF00FFFF);
+        this.fontRenderer.renderStringWithShadow("Pitch: " + this.player.location.pitch, 0, 34, 0xFF00FFFF);
+        this.fontRenderer.renderStringWithShadow("Yaw: " + this.player.location.yaw, 0, 52, 0xFF00FFFF);
+
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
     private void render3D() {
@@ -297,6 +310,8 @@ public class SettlingClient extends Settling {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         // GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
         GL11.glLoadIdentity();
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     private void levelRender() {

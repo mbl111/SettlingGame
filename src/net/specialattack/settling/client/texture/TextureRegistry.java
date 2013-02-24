@@ -71,7 +71,7 @@ public class TextureRegistry {
             return loadedTextures.get(name);
         }
         else {
-            URL url = TextureRegistry.class.getResource("/tiles.png");
+            URL url = TextureRegistry.class.getResource(name);
             BufferedImage image = null;
 
             try {

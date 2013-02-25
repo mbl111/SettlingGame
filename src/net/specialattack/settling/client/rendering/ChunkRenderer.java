@@ -10,15 +10,22 @@ import org.lwjgl.opengl.GL11;
 public class ChunkRenderer {
 
     public int glCallList = -1;
+    public boolean dirty = true;
     public final Chunk chunk;
 
     public ChunkRenderer(Chunk chunk) {
         this.chunk = chunk;
     }
 
+    public void markDirty() {
+        dirty = true;
+    }
+
     public void createGlChunk() {
         ItemTile grass = Items.grass;
-        glCallList = GL11.glGenLists(1);
+        if (glCallList < 0) {
+            glCallList = GL11.glGenLists(1);
+        }
         GL11.glNewList(glCallList, GL11.GL_COMPILE);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
@@ -26,10 +33,12 @@ public class ChunkRenderer {
             }
         }
         GL11.glEndList();
+
+        dirty = false;
     }
 
     public void renderChunk() {
-        if (glCallList > 0) {
+        if (glCallList > 0 && !dirty) {
             GL11.glCallList(glCallList);
         }
     }

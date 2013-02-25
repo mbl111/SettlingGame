@@ -18,13 +18,13 @@ public class WorldDemo extends World {
 
         this.generator = new WorldGenerator(100L);
 
-        this.chunks = new Chunk[64];
+        this.chunks = new Chunk[265];
 
-        for (int x = 0; x < 8; x++) {
-            for (int z = 0; z < 8; z++) {
-                this.chunks[x + z * 8] = new Chunk(this, x - 3, z - 3);
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                this.chunks[x + z * 16] = new Chunk(this, x - 7, z - 7);
 
-                this.chunks[x + z * 8].populateHeight(this.generator.getHeights(x - 3, z - 3));
+                this.chunks[x + z * 16].populateHeight(this.generator.getHeights(x - 7, z - 7));
             }
         }
     }
@@ -36,22 +36,22 @@ public class WorldDemo extends World {
 
     @Override
     public int getMinXBorder() {
-        return -64;
+        return -128;
     }
 
     @Override
     public int getMaxXBorder() {
-        return 64;
+        return 128;
     }
 
     @Override
     public int getMinZBorder() {
-        return -64;
+        return -128;
     }
 
     @Override
     public int getMaxZBorder() {
-        return 64;
+        return 128;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class WorldDemo extends World {
 
     @Override
     public Chunk getChunkAt(int chunkX, int chunkZ, boolean generateIfMissing) {
-        return this.chunks[(chunkX + 4) + (chunkZ + 4) * 8];
+        return this.chunks[(chunkX + 8) + (chunkZ + 8) * 16];
     }
 
     @Override

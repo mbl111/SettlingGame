@@ -15,7 +15,7 @@ public class WorldGenerator {
 
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
-                result[x + y * 16] = (short) (this.noiseGenerator.noise((x * 0.0625D + chunkX) * 0.5D, (y * 0.0625D + chunkZ) * 0.5D) * 8.0D + 32.0D);
+                result[x + y * 16] = (short) (this.noiseGenerator.noise((x * 0.0625D + chunkX) * 0.5D, (y * 0.0625D + chunkZ) * 0.5D) * 4.0D + 5.0D);
             }
         }
 

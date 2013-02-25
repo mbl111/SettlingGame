@@ -18,7 +18,6 @@ import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
 import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
-import net.specialattack.settling.common.util.MathHelper;
 import net.specialattack.settling.common.util.TickTimer;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.World;
@@ -138,7 +137,11 @@ public class SettlingClient extends Settling {
 
         for (int x = this.currentWorld.getMinXBorder() / 16; x < this.currentWorld.getMaxXBorder() / 16; x++) {
             for (int z = this.currentWorld.getMinZBorder() / 16; z < this.currentWorld.getMaxZBorder() / 16; z++) {
-                this.dirtyChunks.add(this.currentWorld.getChunkAt(x, z, false));
+                Chunk chunk = this.currentWorld.getChunkAt(x, z, false);
+
+                if (!this.dirtyChunks.contains(chunk)) {
+                    this.dirtyChunks.add(chunk);
+                }
             }
         }
 
@@ -169,6 +172,7 @@ public class SettlingClient extends Settling {
             for (int i = 0; i < this.timer.remainingTicks; i++) {
                 ticks++;
                 this.tick();
+                updateChunks();
             }
 
             try {
@@ -184,12 +188,11 @@ public class SettlingClient extends Settling {
 
             //Display.sync(60);
 
-            if (System.currentTimeMillis() - lastTimer1 > 500) {
-                lastTimer1 += 500;
-                //System.out.println(ticks + " ticks - " + frames + " fps");
+            if (System.currentTimeMillis() - lastTimer1 > 1000) {
+                lastTimer1 += 1000;
+                System.out.println(ticks + " ticks - " + frames + " fps");
                 frames = 0;
                 ticks = 0;
-                updateChunks();
             }
         }
     }
@@ -240,14 +243,21 @@ public class SettlingClient extends Settling {
         GL11.glLoadIdentity();
 
         GL11.glEnable(GL11.GL_BLEND);
-
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         this.fontRenderer.renderStringWithShadow("Location: (" + this.player.location.x + ", " + this.player.location.y + ", " + this.player.location.z + ")", 0, 16, 0xFF00FFFF);
         this.fontRenderer.renderStringWithShadow("Pitch: " + this.player.location.pitch, 0, 34, 0xFF00FFFF);
         this.fontRenderer.renderStringWithShadow("Yaw: " + this.player.location.yaw, 0, 52, 0xFF00FFFF);
         this.fontRenderer.renderStringWithShadow("Dirty chunks: " + this.dirtyChunks.size(), 0, 70, 0xFF00FFFF);
-        this.fontRenderer.renderStringWithShadow("Rendered chunks: " + this.renderedChunks.size(), 0, 88, 0xFF00FFFF);
+
+        int renderedChunks = 0;
+        for (ChunkRenderer chunkRenderer : this.renderedChunks) {
+            if (!chunkRenderer.dirty) {
+                renderedChunks++;
+            }
+        }
+
+        this.fontRenderer.renderStringWithShadow("Rendered chunks: " + renderedChunks, 0, 88, 0xFF00FFFF);
 
         GL11.glDisable(GL11.GL_BLEND);
     }
@@ -289,6 +299,9 @@ public class SettlingClient extends Settling {
             GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, 1000.0D, -1000.0D);
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
         }
+
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
@@ -336,11 +349,23 @@ public class SettlingClient extends Settling {
             this.dirtyChunks.remove(toRender);
 
             if (toRender != null) {
-                ChunkRenderer chunkRenderer = new ChunkRenderer(toRender);
+                ChunkRenderer chunkRenderer;
+                boolean isRenderedAlready = false;
+
+                if (chunkList.containsKey(toRender)) {
+                    chunkRenderer = chunkList.get(toRender);
+                    isRenderedAlready = true;
+                }
+                else {
+                    chunkRenderer = new ChunkRenderer(toRender);
+                }
+
                 chunkRenderer.createGlChunk();
 
-                this.chunkList.put(toRender, chunkRenderer);
-                this.renderedChunks.add(chunkRenderer);
+                if (!isRenderedAlready) {
+                    this.chunkList.put(toRender, chunkRenderer);
+                    this.renderedChunks.add(chunkRenderer);
+                }
             }
         }
     }
@@ -357,9 +382,7 @@ public class SettlingClient extends Settling {
         fontRenderer.renderString("Heldplayer", 0, 0, 0xFFFFFFFF);
         //GL20.glUseProgram(this.shader);
 
-        ItemTile grass = Items.grass;
-
-        int renderChunkRadius = 3;
+        int renderChunkRadius = 16;
 
         for (ChunkRenderer chunkRenderer : this.renderedChunks) {
             float distance = (-this.player.location.x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX) * (-this.player.location.x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX);

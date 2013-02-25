@@ -2,10 +2,12 @@
 package net.specialattack.settling.client;
 
 import java.awt.Canvas;
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.specialattack.settling.client.item.ClientItemDelegate;
+import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
 import net.specialattack.settling.client.rendering.ShaderLoader;
 import net.specialattack.settling.client.rendering.TileRenderer;
@@ -18,6 +20,7 @@ import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.util.MathHelper;
 import net.specialattack.settling.common.util.TickTimer;
+import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.World;
 
 import org.lwjgl.LWJGLException;
@@ -40,6 +43,9 @@ public class SettlingClient extends Settling {
     public static final boolean firstPerson = true;
     public World currentWorld;
     public FontRenderer fontRenderer;
+    private HashMap<Chunk, ChunkRenderer> chunkList;
+    private ArrayList<Chunk> dirtyChunks;
+    private ArrayList<ChunkRenderer> renderedChunks;
 
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
@@ -124,23 +130,17 @@ public class SettlingClient extends Settling {
 
         GL20.glUseProgram(0);
 
-        BufferedImage img = new BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB);
-
         this.currentWorld = new WorldDemo(new File("./demo/"));
+        this.fontRenderer = new FontRenderer();
+        this.chunkList = new HashMap<Chunk, ChunkRenderer>();
+        this.dirtyChunks = new ArrayList<Chunk>();
+        this.renderedChunks = new ArrayList<ChunkRenderer>();
 
-        for (int x = 0; x < img.getWidth(); x++) {
-            for (int y = 0; y < img.getHeight(); y++) {
-                int value = this.currentWorld.getChunkAtTile(x - 64, y - 64).getHeight(x % 16, y % 16);
-
-                int color = value - 128;
-
-                img.setRGB(x, y, color | color << 8 | color << 16);
+        for (int x = this.currentWorld.getMinXBorder() / 16; x < this.currentWorld.getMaxXBorder() / 16; x++) {
+            for (int z = this.currentWorld.getMinZBorder() / 16; z < this.currentWorld.getMaxZBorder() / 16; z++) {
+                this.dirtyChunks.add(this.currentWorld.getChunkAt(x, z, false));
             }
         }
-
-        TextureRegistry.items.loadTexture(img, "test", img.getWidth(), img.getHeight());
-
-        this.fontRenderer = new FontRenderer();
 
         this.player = new PlayerView(this.currentWorld);
 
@@ -184,11 +184,12 @@ public class SettlingClient extends Settling {
 
             //Display.sync(60);
 
-            if (System.currentTimeMillis() - lastTimer1 > 1000) {
-                lastTimer1 += 1000;
-                System.out.println(ticks + " ticks - " + frames + " fps");
+            if (System.currentTimeMillis() - lastTimer1 > 500) {
+                lastTimer1 += 500;
+                //System.out.println(ticks + " ticks - " + frames + " fps");
                 frames = 0;
                 ticks = 0;
+                updateChunks();
             }
         }
     }
@@ -245,6 +246,8 @@ public class SettlingClient extends Settling {
         this.fontRenderer.renderStringWithShadow("Location: (" + this.player.location.x + ", " + this.player.location.y + ", " + this.player.location.z + ")", 0, 16, 0xFF00FFFF);
         this.fontRenderer.renderStringWithShadow("Pitch: " + this.player.location.pitch, 0, 34, 0xFF00FFFF);
         this.fontRenderer.renderStringWithShadow("Yaw: " + this.player.location.yaw, 0, 52, 0xFF00FFFF);
+        this.fontRenderer.renderStringWithShadow("Dirty chunks: " + this.dirtyChunks.size(), 0, 70, 0xFF00FFFF);
+        this.fontRenderer.renderStringWithShadow("Rendered chunks: " + this.renderedChunks.size(), 0, 88, 0xFF00FFFF);
 
         GL11.glDisable(GL11.GL_BLEND);
     }
@@ -298,6 +301,7 @@ public class SettlingClient extends Settling {
 
     // 2d rendering (For GUI and stuff)
     public void initGL2() {
+        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
         GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, -1.0D, 1.0D);
@@ -314,6 +318,33 @@ public class SettlingClient extends Settling {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
+    private void updateChunks() {
+        if (this.dirtyChunks.size() > 0) {
+            float distance = -1.0F;
+            Chunk toRender = null;
+
+            for (Chunk chunk : this.dirtyChunks) {
+                float cDistance = (-this.player.location.x / 16.0F + 0.5F - (float) chunk.chunkX) * (-this.player.location.x / 16.0F + 0.5F - (float) chunk.chunkX);
+                cDistance += (-this.player.location.z / 16.0F + 0.5F - (float) chunk.chunkZ) * (-this.player.location.z / 16.0F + 0.5F - (float) chunk.chunkZ);
+
+                if (cDistance < distance || distance < 0) {
+                    distance = cDistance;
+                    toRender = chunk;
+                }
+            }
+
+            this.dirtyChunks.remove(toRender);
+
+            if (toRender != null) {
+                ChunkRenderer chunkRenderer = new ChunkRenderer(toRender);
+                chunkRenderer.createGlChunk();
+
+                this.chunkList.put(toRender, chunkRenderer);
+                this.renderedChunks.add(chunkRenderer);
+            }
+        }
+    }
+
     private void levelRender() {
         // For this you would get X chunks around the player and render it based
         // on local co-ords.
@@ -323,34 +354,19 @@ public class SettlingClient extends Settling {
         // Muahahahahaha, no spell checking!
 
         TileRenderer.resetTexture();
-        fontRenderer.renderString("H", 0, 0, 0xFFFFFF);
+        fontRenderer.renderString("Heldplayer", 0, 0, 0xFFFFFFFF);
         //GL20.glUseProgram(this.shader);
 
         ItemTile grass = Items.grass;
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                TileRenderer.renderTileFloor(grass, x, 0, z);
-            }
-        }
-
-        int xb = (int) this.player.location.x * -1;
-        int zb = (int) this.player.location.z * -1;
-
-        int xc = xb / 16;
-        int zc = zb / 16;
-
-        int minChunkXBorder = this.currentWorld.getMinXBorder() / 16;
-        int minChunkZBorder = this.currentWorld.getMinZBorder() / 16;
-        int maxChunkXBorder = this.currentWorld.getMaxXBorder() / 16;
-        int maxChunkZBorder = this.currentWorld.getMaxZBorder() / 16;
-
         int renderChunkRadius = 3;
 
-        for (int x = MathHelper.max(minChunkXBorder, xc - renderChunkRadius); x < MathHelper.min(maxChunkXBorder, xc + renderChunkRadius); x++) {
-            for (int z = MathHelper.max(minChunkZBorder, zc - renderChunkRadius); z < MathHelper.min(maxChunkZBorder, zc + renderChunkRadius); z++) {
-                this.currentWorld.getChunkAt(x, z, false);
-                //TileRenderer.renderTileFloor(grass, x * 16, this.currentWorld.getChunkAtTile(x * 16, z * 16).getHeight(x % 16, z % 16), z * 16);
+        for (ChunkRenderer chunkRenderer : this.renderedChunks) {
+            float distance = (-this.player.location.x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX) * (-this.player.location.x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX);
+            distance += (-this.player.location.z / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkZ) * (-this.player.location.z / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkZ);
+
+            if (distance < renderChunkRadius * renderChunkRadius) {
+                chunkRenderer.renderChunk();
             }
         }
 

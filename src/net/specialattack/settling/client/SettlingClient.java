@@ -45,6 +45,7 @@ public class SettlingClient extends Settling {
     private HashMap<Chunk, ChunkRenderer> chunkList;
     private ArrayList<Chunk> dirtyChunks;
     private ArrayList<ChunkRenderer> renderedChunks;
+    private int fps;
 
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
@@ -117,17 +118,18 @@ public class SettlingClient extends Settling {
             return false;
         }
 
-        this.shader = ShaderLoader.createProgram("sepia");
+        this.shader = ShaderLoader.createProgram("grayscale");
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL20.glUseProgram(this.shader);
 
-        TextureRegistry.tiles.bindTexture();
+        if (shader > 0) {
+            GL20.glUseProgram(this.shader);
 
-        int loc = GL20.glGetUniformLocation(this.shader, "texture1");
-        GL20.glUniform1i(loc, 0);
+            TextureRegistry.tiles.bindTexture();
 
-        GL20.glUseProgram(0);
+            int loc = GL20.glGetUniformLocation(this.shader, "texture1");
+            GL20.glUniform1i(loc, 0);
+        }
 
         this.currentWorld = new WorldDemo(new File("./demo/"));
         this.fontRenderer = new FontRenderer();
@@ -191,6 +193,7 @@ public class SettlingClient extends Settling {
             if (System.currentTimeMillis() - lastTimer1 > 1000) {
                 lastTimer1 += 1000;
                 System.out.println(ticks + " ticks - " + frames + " fps");
+                this.fps = frames;
                 frames = 0;
                 ticks = 0;
             }
@@ -245,10 +248,10 @@ public class SettlingClient extends Settling {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        this.fontRenderer.renderStringWithShadow("Location: (" + this.player.location.x + ", " + this.player.location.y + ", " + this.player.location.z + ")", 0, 16, 0xFF00FFFF);
-        this.fontRenderer.renderStringWithShadow("Pitch: " + this.player.location.pitch, 0, 34, 0xFF00FFFF);
+        this.fontRenderer.renderStringWithShadow("Location: (" + this.player.location.x + ", " + this.player.location.y + ", " + this.player.location.z + ")", 0, 16, 0xFFFFFFFF);
+        this.fontRenderer.renderStringWithShadow("Pitch: " + this.player.location.pitch, 0, 34, 0x00FFFFFF);
         this.fontRenderer.renderStringWithShadow("Yaw: " + this.player.location.yaw, 0, 52, 0xFF00FFFF);
-        this.fontRenderer.renderStringWithShadow("Dirty chunks: " + this.dirtyChunks.size(), 0, 70, 0xFF00FFFF);
+        this.fontRenderer.renderStringWithShadow("Dirty chunks: " + this.dirtyChunks.size(), 0, 70, 0xFFFF00FF);
 
         int renderedChunks = 0;
         for (ChunkRenderer chunkRenderer : this.renderedChunks) {
@@ -257,7 +260,9 @@ public class SettlingClient extends Settling {
             }
         }
 
-        this.fontRenderer.renderStringWithShadow("Rendered chunks: " + renderedChunks, 0, 88, 0xFF00FFFF);
+        this.fontRenderer.renderStringWithShadow("Rendered chunks: " + renderedChunks, 0, 88, 0x888888FF);
+
+        this.fontRenderer.renderStringWithShadow("FPS: " + this.fps, 0, 106, 0x888888FF);
 
         GL11.glDisable(GL11.GL_BLEND);
     }
@@ -379,7 +384,18 @@ public class SettlingClient extends Settling {
         // Muahahahahaha, no spell checking!
 
         TileRenderer.resetTexture();
-        fontRenderer.renderString("Heldplayer", 0, 0, 0xFFFFFFFF);
+
+        GL11.glPushMatrix();
+
+        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
+        GL11.glScalef(0.5F, 0.5F, 0.5F);
+
+        fontRenderer.renderString("Mbl111 and", -32, -64, 0xFFFFFFFF);
+        fontRenderer.renderString("Heldplayer", -32, -48, 0xFFFFFFFF);
+        fontRenderer.renderString("Present...", -32, -32, 0xFFFFFFFF);
+
+        GL11.glPopMatrix();
+
         //GL20.glUseProgram(this.shader);
 
         int renderChunkRadius = 16;

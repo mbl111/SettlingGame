@@ -6,17 +6,18 @@ import java.io.File;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.Section;
 import net.specialattack.settling.common.world.World;
+import net.specialattack.settling.common.world.gen.TestWorldGenerator;
 import net.specialattack.settling.common.world.gen.WorldGenerator;
 
 public class WorldDemo extends World {
 
     private Chunk[] chunks;
-    private WorldGenerator generator;
+    private TestWorldGenerator generator;
 
     public WorldDemo(File saveFolder) {
         super(saveFolder);
 
-        this.generator = new WorldGenerator(100L);
+        this.generator = new TestWorldGenerator(100L);
 
         this.chunks = new Chunk[265];
 

@@ -177,12 +177,12 @@ public class SettlingClient extends Settling {
                 updateChunks();
             }
 
-            try {
-                Thread.sleep(1);
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(1);
+//            }
+//            catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
 
             frames++;
             this.render();

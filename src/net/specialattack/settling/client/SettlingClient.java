@@ -9,6 +9,7 @@ import java.util.HashMap;
 import net.specialattack.settling.client.item.ClientItemDelegate;
 import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
+import net.specialattack.settling.client.rendering.ItemRenderer;
 import net.specialattack.settling.client.rendering.ShaderLoader;
 import net.specialattack.settling.client.rendering.TileRenderer;
 import net.specialattack.settling.client.texture.TextureRegistry;
@@ -16,6 +17,7 @@ import net.specialattack.settling.client.world.WorldDemo;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
+import net.specialattack.settling.common.item.ItemStack;
 import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.util.TickTimer;
@@ -241,6 +243,8 @@ public class SettlingClient extends Settling {
 
     }
 
+    ItemStack testItems = new ItemStack(1, 4);
+    
     private void render2D() {
         this.initGL2();
         GL11.glLoadIdentity();
@@ -263,7 +267,11 @@ public class SettlingClient extends Settling {
         this.fontRenderer.renderStringWithShadow("Rendered chunks: " + renderedChunks, 0, 88, 0x888888FF);
 
         this.fontRenderer.renderStringWithShadow("FPS: " + this.fps, 0, 106, 0x888888FF);
-
+        
+        testItems = new ItemStack(Items.grass, 923);
+        
+        ItemRenderer.renderItemIntoGUI(testItems, fontRenderer, 30, 400);
+        
         GL11.glDisable(GL11.GL_BLEND);
     }
 

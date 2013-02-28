@@ -268,10 +268,10 @@ public class SettlingClient extends Settling {
 
         this.fontRenderer.renderStringWithShadow("FPS: " + this.fps, 0, 106, 0x888888FF);
         
-        testItems = new ItemStack(Items.grass, 923);
+        testItems = new ItemStack(Items.grass, 42);
         
         ItemRenderer.renderItemIntoGUI(testItems, fontRenderer, 30, 400);
-        
+        ItemRenderer.resetTexture();
         GL11.glDisable(GL11.GL_BLEND);
     }
 

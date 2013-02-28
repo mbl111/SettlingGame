@@ -21,7 +21,7 @@ public class TestWorldGenerator {
 
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                result[x + z * 16] = (short) (((this.noise1.noise((x * 0.0625D + chunkX) * 0.5D, (z * 0.0625D + chunkZ) * 0.75D) * 4.0D) + (this.noise2.noise((x * 0.0625D + chunkX) * 0.5D, (z * 0.0625D + chunkZ) * 0.5D) * 4.0D)));
+                result[x + z * 16] = (short) (((this.noise1.noise((x * 0.0625D + chunkX) * 0.4D, (z * 0.0625D + chunkZ) * 0.75D) * 3.0D) + (this.noise2.noise((x * 0.0625D + chunkX) * 0.3D, (z * 0.0625D + chunkZ) * 0.5D) * 4.0D)));
             }
         }
 

@@ -15,17 +15,21 @@ public class ItemRenderer {
     private static Random random = new Random();
     private static int currentTexture = -1;
 
+    public static void resetTexture() {
+        currentTexture = -1;
+    }
+    
     public static void renderItemIntoGUI(ItemStack itemStack, FontRenderer fontRenderer, int x, int y) {
 
         Item item = itemStack.getItem();
         int amt = itemStack.getAmount() > 999 ? 999 : itemStack.getAmount();
 
         SubTexture texture = TextureRegistry.getSubTexture(item.textureName);
-        
-        if (currentTexture  != texture.getParent().getTextureId()) {
+
+        if (currentTexture != texture.getParent().getTextureId()) {
             currentTexture = texture.bindTexture();
         }
-        
+
         float startU = 1.0F * (float) texture.getStartU() / (float) texture.getParent().getWidth();
         float startV = 1.0F * (float) texture.getStartV() / (float) texture.getParent().getHeight();
         float endU = 1.0F * (float) texture.getEndU() / (float) texture.getParent().getWidth();
@@ -33,10 +37,9 @@ public class ItemRenderer {
 
         float startX = (float) x;
         float startY = (float) y;
-        float endX = startX + 24.0F;
-        float endY = startY + 24.0F;
+        float endX = startX + 32.0F;
+        float endY = startY + 32.0F;
 
-        
         GL11.glBegin(GL11.GL_QUADS);
         {
             
@@ -58,8 +61,8 @@ public class ItemRenderer {
             
         }
         GL11.glEnd();
-
-        fontRenderer.renderStringWithShadow(amt + "", (int)endX - 8, (int)endY - 12, 0xFFFFFFFF);
+        int textXOffs = (amt + "").length() * -8;
+        fontRenderer.renderString(amt + "", (int)endX + textXOffs, (int)endY - 16, 0xFFFFFFFF);
         
     }
 

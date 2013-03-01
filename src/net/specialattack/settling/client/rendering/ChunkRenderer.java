@@ -29,7 +29,13 @@ public class ChunkRenderer {
         GL11.glNewList(glCallList, GL11.GL_COMPILE);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                TileRenderer.renderTileFloor(grass, chunk.chunkX * 16 + x - 16, chunk.getHeight(chunk.chunkX * 16 + x, chunk.chunkZ * 16 + z), chunk.chunkZ * 16 + z - 16);
+                int height = chunk.getHeight(chunk.chunkX * 16 + x, chunk.chunkZ * 16 + z);
+                int rx = chunk.chunkX * 16 + x - 16;
+                int rz = chunk.chunkZ * 16 + z - 16;
+                
+                                
+                TileRenderer.renderTileNorthFace(grass, rx, height, rz);
+                TileRenderer.renderTileFloor(grass, rx, height, rz);
             }
         }
         GL11.glEndList();

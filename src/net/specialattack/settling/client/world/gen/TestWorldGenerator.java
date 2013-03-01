@@ -1,7 +1,10 @@
 
-package net.specialattack.settling.common.world.gen;
+package net.specialattack.settling.client.world.gen;
 
 import java.util.Random;
+
+import net.specialattack.settling.common.world.gen.NoiseGenerator;
+import net.specialattack.settling.common.world.gen.SimplexNoiseGenerator;
 
 public class TestWorldGenerator {
     // http://freespace.virgin.net/hugo.elias/models/m_perlin.htm

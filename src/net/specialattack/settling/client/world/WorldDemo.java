@@ -3,11 +3,10 @@ package net.specialattack.settling.client.world;
 
 import java.io.File;
 
+import net.specialattack.settling.client.world.gen.TestWorldGenerator;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.Section;
 import net.specialattack.settling.common.world.World;
-import net.specialattack.settling.common.world.gen.TestWorldGenerator;
-import net.specialattack.settling.common.world.gen.WorldGenerator;
 
 public class WorldDemo extends World {
 

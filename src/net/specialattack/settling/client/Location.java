@@ -73,4 +73,12 @@ public class Location {
         this.pitch = loc.pitch;
     }
 
+    public void add(Location loc) {
+        this.x += loc.x;
+        this.y += loc.y;
+        this.z += loc.z;
+        this.yaw += loc.yaw;
+        this.pitch += loc.pitch;
+    }
+
 }

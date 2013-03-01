@@ -9,6 +9,7 @@ public class Item {
     public String fulltextureName;
     public String textureName;
     public final CommonItemDelegate delegate;
+    private int maxStackSize;
 
     public Item(int identifier, String name, String textureName) {
         if (Items.itemList[identifier] != null) {
@@ -28,6 +29,19 @@ public class Item {
 
     public boolean canPlaceInWorld() {
         return false;
+    }
+
+    public Item setMaxStackSize(int size) {
+        this.maxStackSize = size;
+        return this;
+    }
+
+    public int getMaxStackSize() {
+        return maxStackSize;
+    }
+
+    public String getName() {
+        return name;
     }
 
 }

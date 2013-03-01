@@ -10,8 +10,9 @@ import net.specialattack.settling.client.item.ClientItemDelegate;
 import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
 import net.specialattack.settling.client.rendering.ItemRenderer;
-import net.specialattack.settling.client.rendering.ShaderLoader;
 import net.specialattack.settling.client.rendering.TileRenderer;
+import net.specialattack.settling.client.shaders.Shader;
+import net.specialattack.settling.client.shaders.ShaderLoader;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.world.WorldDemo;
 import net.specialattack.settling.common.Settling;
@@ -40,7 +41,7 @@ public class SettlingClient extends Settling {
     private int displayHeight;
     private TickTimer timer = new TickTimer(20.0F);
     private PlayerView player;
-    private int shader;
+    private Shader shader;
     public static final boolean firstPerson = true;
     public World currentWorld;
     public FontRenderer fontRenderer;
@@ -120,18 +121,20 @@ public class SettlingClient extends Settling {
             return false;
         }
 
-        this.shader = ShaderLoader.createProgram("grayscale");
+        this.shader = ShaderLoader.createShader("grayscale");
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
 
-        if (shader > 0) {
-            GL20.glUseProgram(this.shader);
+        if (this.shader != null) {
+            this.shader.bindShader();
 
             TextureRegistry.tiles.bindTexture();
 
-            int loc = GL20.glGetUniformLocation(this.shader, "texture1");
+            int loc = GL20.glGetUniformLocation(this.shader.programId, "texture1");
             GL20.glUniform1i(loc, 0);
         }
+
+        Shader.unbindShader();
 
         this.currentWorld = new WorldDemo(new File("./demo/"));
         this.fontRenderer = new FontRenderer();
@@ -179,12 +182,12 @@ public class SettlingClient extends Settling {
                 updateChunks();
             }
 
-//            try {
-//                Thread.sleep(1);
-//            }
-//            catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            //            try {
+            //                Thread.sleep(1);
+            //            }
+            //            catch (InterruptedException e) {
+            //                e.printStackTrace();
+            //            }
 
             frames++;
             this.render();
@@ -244,7 +247,7 @@ public class SettlingClient extends Settling {
     }
 
     ItemStack testItems = new ItemStack(1, 4);
-    
+
     private void render2D() {
         this.initGL2();
         GL11.glLoadIdentity();
@@ -267,9 +270,9 @@ public class SettlingClient extends Settling {
         this.fontRenderer.renderStringWithShadow("Rendered chunks: " + renderedChunks, 0, 88, 0x888888FF);
 
         this.fontRenderer.renderStringWithShadow("FPS: " + this.fps, 0, 106, 0x888888FF);
-        
+
         testItems = new ItemStack(Items.grass, 42);
-        
+
         ItemRenderer.renderItemIntoGUI(testItems, fontRenderer, 30, 400);
         ItemRenderer.resetTexture();
         GL11.glDisable(GL11.GL_BLEND);

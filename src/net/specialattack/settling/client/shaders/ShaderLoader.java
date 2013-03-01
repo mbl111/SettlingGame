@@ -1,5 +1,5 @@
 
-package net.specialattack.settling.client.rendering;
+package net.specialattack.settling.client.shaders;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,7 +9,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 public class ShaderLoader {
-    public static int createProgram(String name) {
+
+    public static Shader createShader(String name) {
         int programId = GL20.glCreateProgram();
         int vertexId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
         int fragmentId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
@@ -61,7 +62,7 @@ public class ShaderLoader {
             if (GL20.glGetShader(vertexId, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
                 System.err.println("Failed compiling vertex shader for " + name);
 
-                return -1;
+                return null;
             }
         }
 
@@ -72,14 +73,14 @@ public class ShaderLoader {
             if (GL20.glGetShader(fragmentId, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
                 System.err.println("Failed compiling fragment shader for " + name);
 
-                return -1;
+                return null;
             }
         }
 
         if (vertexData == null && fragmentData == null) {
             System.err.println("Shader did not load for both vertex and fragment for " + name);
 
-            return -1;
+            return null;
         }
 
         if (vertexData != null) {
@@ -93,7 +94,7 @@ public class ShaderLoader {
         if (GL20.glGetProgram(programId, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
             System.err.println("Failed linking shader for " + name);
 
-            return -1;
+            return null;
         }
 
         if (vertexData != null) {
@@ -103,6 +104,7 @@ public class ShaderLoader {
             GL20.glDeleteShader(fragmentId);
         }
 
-        return programId;
+        return new Shader(programId);
     }
+
 }

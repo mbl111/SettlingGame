@@ -111,9 +111,9 @@ public class SettlingClient extends Settling {
 
         try {
             Mouse.create();
-            if (firstPerson) {
-                Mouse.setGrabbed(true);
-            }
+            //if (firstPerson) {
+            Mouse.setGrabbed(true);
+            //}
         }
 
         catch (LWJGLException e) {
@@ -272,6 +272,8 @@ public class SettlingClient extends Settling {
         this.fontRenderer.renderStringWithShadow("FPS: " + this.fps, 0, 106, 0x888888FF);
 
         testItems = new ItemStack(Items.grass, 42);
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         ItemRenderer.renderItemIntoGUI(testItems, fontRenderer, 30, 400);
         ItemRenderer.resetTexture();

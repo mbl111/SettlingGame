@@ -273,8 +273,6 @@ public class SettlingClient extends Settling {
 
         testItems = new ItemStack(Items.grass, 42);
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
         ItemRenderer.renderItemIntoGUI(testItems, fontRenderer, 30, 400);
         ItemRenderer.resetTexture();
         GL11.glDisable(GL11.GL_BLEND);

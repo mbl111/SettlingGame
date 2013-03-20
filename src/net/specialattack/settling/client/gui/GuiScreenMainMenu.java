@@ -18,15 +18,18 @@ public class GuiScreenMainMenu extends GuiScreen {
     }
 
     @Override
-    public void onRender(int mouseX, int mouseY) {
+    public void drawBackground() {
         // TODO: create fancy background, low priority
     }
 
     @Override
+    public void onRender(int mouseX, int mouseY) {}
+
+    @Override
     protected void onAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
-        if (element != null) {
-            ((GuiButton) element).enabled = false;
-            ((GuiButton) element).label = "Button: " + mouseButton;
+        if (element == buttonTest) {
+            buttonTest.enabled = false;
+            buttonTest.label = "Button: " + mouseButton;
         }
     }
 

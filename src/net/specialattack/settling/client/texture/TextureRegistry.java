@@ -44,7 +44,8 @@ public class TextureRegistry {
         graphics.setColor(Color.white);
         graphics.fillRect(0, 0, 128, 128);
         graphics.setColor(Color.black);
-        graphics.drawString("missingno", 32, 54);
+        graphics.drawString("missing", 32, 48);
+        graphics.drawString("texture", 32, 64);
         graphics.dispose();
 
         textureNotFound = new ErrorSubTexture(missingTexture, GL11.glGenTextures());
@@ -74,13 +75,18 @@ public class TextureRegistry {
             URL url = TextureRegistry.class.getResource(name);
             BufferedImage image = null;
 
-            try {
-                image = ImageIO.read(url);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-
+            if (url == null) {
                 image = missingTexture;
+            }
+            else {
+                try {
+                    image = ImageIO.read(url);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+
+                    image = missingTexture;
+                }
             }
 
             int id = GL11.glGenTextures(); // Generate texture Id if it doesn't exist!

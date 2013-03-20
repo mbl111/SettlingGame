@@ -3,10 +3,11 @@ package net.specialattack.settling.client.gui;
 
 import java.util.ArrayList;
 
-import org.lwjgl.input.Keyboard;
-
 import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.rendering.FontRenderer;
+import net.specialattack.settling.client.util.KeyBinding;
+
+import org.lwjgl.opengl.GL11;
 
 public abstract class GuiScreen {
 
@@ -49,6 +50,8 @@ public abstract class GuiScreen {
             element.render(mouseX, mouseY);
         }
 
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
         this.onRender(mouseX, mouseY);
     }
 
@@ -61,7 +64,7 @@ public abstract class GuiScreen {
     }
 
     public void keyPressed(int key) {
-        if (key == Keyboard.KEY_ESCAPE) {
+        if (KeyBinding.escape.isTapped()) {
             SettlingClient.instance.displayScreen(null);
         }
     }

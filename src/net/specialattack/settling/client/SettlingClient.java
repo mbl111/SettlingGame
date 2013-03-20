@@ -14,6 +14,7 @@ import net.specialattack.settling.client.rendering.TileRenderer;
 import net.specialattack.settling.client.shaders.Shader;
 import net.specialattack.settling.client.shaders.ShaderLoader;
 import net.specialattack.settling.client.texture.TextureRegistry;
+import net.specialattack.settling.client.util.KeyBinding;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
@@ -48,6 +49,7 @@ public class SettlingClient extends Settling {
     private ArrayList<Chunk> dirtyChunks;
     private ArrayList<ChunkRenderer> renderedChunks;
     private int fps;
+    private int tps;
     private GuiScreen currentScreen = null;
     private boolean mouseGrabbed = false;
 
@@ -183,7 +185,7 @@ public class SettlingClient extends Settling {
     @Override
     protected void runGameLoop() {
         int frames = 0;
-        // int ticks = 0;
+        int ticks = 0;
         long lastTimer1 = System.currentTimeMillis();
         while (this.isRunning() && !this.isShuttingDown()) {
             if (Display.isCloseRequested()) {
@@ -193,17 +195,10 @@ public class SettlingClient extends Settling {
             this.timer.update();
 
             for (int i = 0; i < this.timer.remainingTicks; i++) {
-                // ticks++;
+                ticks++;
                 this.tick();
                 updateChunks();
             }
-
-            //try {
-            //    Thread.sleep(1);
-            //}
-            //catch (InterruptedException e) {
-            //    e.printStackTrace();
-            //}
 
             frames++;
             this.render();
@@ -218,14 +213,15 @@ public class SettlingClient extends Settling {
                 }
             }
 
-            // Display.sync(60);
+            Display.sync(60);
 
             if (System.currentTimeMillis() - lastTimer1 > 1000) {
                 lastTimer1 += 1000;
                 // System.out.println(ticks + " ticks - " + frames + " fps");
                 this.fps = frames;
+                this.tps = ticks;
                 frames = 0;
-                // ticks = 0;
+                ticks = 0;
             }
         }
     }
@@ -233,6 +229,12 @@ public class SettlingClient extends Settling {
     private void tick() {
         if (firstPerson && this.currentScreen == null && this.currentWorld != null) {
             this.player.tick(this.currentWorld);
+        }
+
+        KeyBinding.escape.update();
+
+        if (this.currentScreen == null && this.currentWorld != null && KeyBinding.escape.isTapped()) {
+            this.displayScreen(null); // TODO: Make in-game menu screen appear
         }
     }
 
@@ -278,8 +280,8 @@ public class SettlingClient extends Settling {
             this.currentScreen.render(Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
         }
 
-        //this.fontRenderer.renderStringWithShadow("Settling pre-alpha 0.1", 0, 2, 0xFFFFFFFF);
-        //this.fontRenderer.renderStringWithShadow("FPS: " + this.fps, 0, 18, 0xFFFFFFFF);
+        this.fontRenderer.renderStringWithShadow("Settling pre-alpha 0.1", 0, 2, 0xFFFFFFFF);
+        this.fontRenderer.renderStringWithShadow("FPS: " + this.fps + " TPS: " + this.tps, 0, 18, 0xFFFFFFFF);
 
         GL11.glDisable(GL11.GL_BLEND);
     }

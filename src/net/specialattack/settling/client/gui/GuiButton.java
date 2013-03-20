@@ -56,6 +56,10 @@ public class GuiButton extends GuiElement {
 
     @Override
     public boolean mouseClicked(int mouseButton, int mouseX, int mouseY) {
+        if (!this.enabled) {
+            return false;
+        }
+
         if (mouseX >= this.posX && mouseX <= this.posX + this.width && mouseY >= this.posY && mouseY <= this.posY + this.height) {
             return true;
         }

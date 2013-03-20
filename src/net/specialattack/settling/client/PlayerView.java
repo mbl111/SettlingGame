@@ -11,18 +11,15 @@ public class PlayerView {
 
     public Location location;
     public Location prevLocation;
-    private final World world;
     public float vSpeed = 0.2F;
     public float hSpeed = 0.2F;
 
-    public PlayerView(World world) {
+    public PlayerView() {
         this.location = new Location(0.0F, 0.0F, 0.0F, 0.0F, 90.0F);
         this.prevLocation = new Location(0.0F, 0.0F, 0.0F, 0.0F, 90.0F);
-
-        this.world = world;
     }
 
-    public void tick() {
+    public void tick(World world) {
         this.prevLocation.clone(this.location);
 
         float mouseDX = Mouse.getDX() * 0.8F * 0.16F;
@@ -79,17 +76,17 @@ public class PlayerView {
             this.location.y -= this.vSpeed * mod;
         }
 
-        if (this.location.x > this.world.getMaxXBorder()) {
-            this.location.x = this.world.getMaxXBorder();
+        if (this.location.x > world.getMaxXBorder()) {
+            this.location.x = world.getMaxXBorder();
         }
-        if (this.location.z > this.world.getMaxZBorder()) {
-            this.location.z = this.world.getMaxZBorder();
+        if (this.location.z > world.getMaxZBorder()) {
+            this.location.z = world.getMaxZBorder();
         }
-        if (this.location.x < this.world.getMinXBorder()) {
-            this.location.x = this.world.getMinXBorder();
+        if (this.location.x < world.getMinXBorder()) {
+            this.location.x = world.getMinXBorder();
         }
-        if (this.location.z < this.world.getMinZBorder()) {
-            this.location.z = this.world.getMinZBorder();
+        if (this.location.z < world.getMinZBorder()) {
+            this.location.z = world.getMinZBorder();
         }
 
     }

@@ -8,6 +8,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.OpenGLException;
 
 public abstract class Settling implements Runnable {
+
     private boolean running = false;
     private boolean shuttingDown = false;
     protected static Settling instance;

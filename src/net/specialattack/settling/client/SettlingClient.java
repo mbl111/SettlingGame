@@ -2,23 +2,21 @@
 package net.specialattack.settling.client;
 
 import java.awt.Canvas;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.specialattack.settling.client.gui.GuiScreen;
+import net.specialattack.settling.client.gui.GuiScreenMainMenu;
 import net.specialattack.settling.client.item.ClientItemDelegate;
 import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
-import net.specialattack.settling.client.rendering.ItemRenderer;
 import net.specialattack.settling.client.rendering.TileRenderer;
 import net.specialattack.settling.client.shaders.Shader;
 import net.specialattack.settling.client.shaders.ShaderLoader;
 import net.specialattack.settling.client.texture.TextureRegistry;
-import net.specialattack.settling.client.world.WorldDemo;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
-import net.specialattack.settling.common.item.ItemStack;
 import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.util.TickTimer;
@@ -36,6 +34,7 @@ import org.lwjgl.util.glu.GLU;
 
 public class SettlingClient extends Settling {
 
+    public static SettlingClient instance;
     private Canvas canvas;
     private int displayWidth;
     private int displayHeight;
@@ -43,12 +42,14 @@ public class SettlingClient extends Settling {
     private PlayerView player;
     private Shader shader;
     public static final boolean firstPerson = true;
-    public World currentWorld;
+    public World currentWorld = null;
     public FontRenderer fontRenderer;
     private HashMap<Chunk, ChunkRenderer> chunkList;
     private ArrayList<Chunk> dirtyChunks;
     private ArrayList<ChunkRenderer> renderedChunks;
     private int fps;
+    private GuiScreen currentScreen = null;
+    private boolean mouseGrabbed = false;
 
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
@@ -57,6 +58,10 @@ public class SettlingClient extends Settling {
     public void resize(int width, int height) {
         this.displayWidth = width <= 0 ? 1 : width;
         this.displayHeight = height <= 0 ? 1 : height;
+
+        if (this.currentScreen != null) {
+            this.currentScreen.resize(width, height);
+        }
 
         GL11.glViewport(0, 0, this.displayWidth, this.displayHeight);
 
@@ -82,6 +87,27 @@ public class SettlingClient extends Settling {
                     item.delegate.registerTextures(TextureRegistry.tiles);
                 }
             }
+        }
+    }
+
+    public void displayScreen(GuiScreen screen) {
+        if (this.currentScreen == null && screen != null && mouseGrabbed) {
+            mouseGrabbed = false;
+            Mouse.setGrabbed(false);
+        }
+        if (this.currentScreen != null && screen == null && !mouseGrabbed) {
+            mouseGrabbed = true;
+            Mouse.setGrabbed(true);
+        }
+
+        this.currentScreen = screen;
+
+        if (this.currentScreen != null) {
+            this.currentScreen.initialize(displayWidth, displayHeight);
+        }
+
+        if (screen == null && this.currentWorld == null) {
+            this.displayScreen(new GuiScreenMainMenu());
         }
     }
 
@@ -111,11 +137,7 @@ public class SettlingClient extends Settling {
 
         try {
             Mouse.create();
-            //if (firstPerson) {
-            Mouse.setGrabbed(true);
-            //}
         }
-
         catch (LWJGLException e) {
             e.printStackTrace();
             return false;
@@ -136,23 +158,17 @@ public class SettlingClient extends Settling {
 
         Shader.unbindShader();
 
-        this.currentWorld = new WorldDemo(new File("./demo/"));
+        //this.currentWorld = new WorldDemo(new File("./demo/"));
+
         this.fontRenderer = new FontRenderer();
+
         this.chunkList = new HashMap<Chunk, ChunkRenderer>();
         this.dirtyChunks = new ArrayList<Chunk>();
         this.renderedChunks = new ArrayList<ChunkRenderer>();
 
-        for (int x = this.currentWorld.getMinXBorder() / 16; x < this.currentWorld.getMaxXBorder() / 16; x++) {
-            for (int z = this.currentWorld.getMinZBorder() / 16; z < this.currentWorld.getMaxZBorder() / 16; z++) {
-                Chunk chunk = this.currentWorld.getChunkAt(x, z, false);
+        this.player = new PlayerView();
 
-                if (!this.dirtyChunks.contains(chunk)) {
-                    this.dirtyChunks.add(chunk);
-                }
-            }
-        }
-
-        this.player = new PlayerView(this.currentWorld);
+        this.displayScreen(new GuiScreenMainMenu());
 
         return true;
     }
@@ -167,7 +183,7 @@ public class SettlingClient extends Settling {
     @Override
     protected void runGameLoop() {
         int frames = 0;
-        int ticks = 0;
+        // int ticks = 0;
         long lastTimer1 = System.currentTimeMillis();
         while (this.isRunning() && !this.isShuttingDown()) {
             if (Display.isCloseRequested()) {
@@ -177,61 +193,47 @@ public class SettlingClient extends Settling {
             this.timer.update();
 
             for (int i = 0; i < this.timer.remainingTicks; i++) {
-                ticks++;
+                // ticks++;
                 this.tick();
                 updateChunks();
             }
 
-            //            try {
-            //                Thread.sleep(1);
-            //            }
-            //            catch (InterruptedException e) {
-            //                e.printStackTrace();
-            //            }
+            //try {
+            //    Thread.sleep(1);
+            //}
+            //catch (InterruptedException e) {
+            //    e.printStackTrace();
+            //}
 
             frames++;
             this.render();
             Display.update();
 
-            //Display.sync(60);
+            Mouse.poll();
+            Keyboard.poll();
+
+            while (Mouse.next()) {
+                if (Mouse.getEventButton() != -1 && this.currentScreen != null) {
+                    this.currentScreen.mousePressed(Mouse.getEventButton(), Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
+                }
+            }
+
+            // Display.sync(60);
 
             if (System.currentTimeMillis() - lastTimer1 > 1000) {
                 lastTimer1 += 1000;
-                System.out.println(ticks + " ticks - " + frames + " fps");
+                // System.out.println(ticks + " ticks - " + frames + " fps");
                 this.fps = frames;
                 frames = 0;
-                ticks = 0;
+                // ticks = 0;
             }
         }
     }
 
     private void tick() {
-        if (firstPerson) {
-            this.player.tick();
+        if (firstPerson && this.currentScreen == null && this.currentWorld != null) {
+            this.player.tick(this.currentWorld);
         }
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_F1)) {
-
-            int xb = (int) (this.player.location.x / 50) * -1;
-            int zb = (int) (this.player.location.z / 50) * -1;
-
-            int xc = xb / 16;
-            int zc = zb / 16;
-
-            int minChunkXBorder = this.currentWorld.getMinXBorder() / 16;
-            int minChunkZBorder = this.currentWorld.getMinZBorder() / 16;
-            int maxChunkXBorder = this.currentWorld.getMaxXBorder() / 16;
-            int maxChunkZBorder = this.currentWorld.getMaxZBorder() / 16;
-
-            int renderChunkRadius = 10;
-
-            for (int x = minChunkXBorder < renderChunkRadius - xc ? minChunkXBorder : renderChunkRadius - xc; x < (maxChunkXBorder < renderChunkRadius + xc ? maxChunkXBorder : renderChunkRadius + xc); x++) {
-                for (int z = minChunkZBorder < renderChunkRadius - zc ? minChunkZBorder : renderChunkRadius - zc; z < (maxChunkZBorder < renderChunkRadius + zc ? maxChunkZBorder : renderChunkRadius + zc); z++) {
-                    //this.currentWorld.getChunkAtTile(x * 16, z * 16).tileUpdate();
-                }
-            }
-        }
-
     }
 
     private void render() {
@@ -246,8 +248,6 @@ public class SettlingClient extends Settling {
 
     }
 
-    ItemStack testItems = new ItemStack(1, 4);
-
     private void render2D() {
         this.initGL2();
         GL11.glLoadIdentity();
@@ -255,26 +255,32 @@ public class SettlingClient extends Settling {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        this.fontRenderer.renderStringWithShadow("Location: (" + this.player.location.x + ", " + this.player.location.y + ", " + this.player.location.z + ")", 0, 16, 0xFFFFFFFF);
-        this.fontRenderer.renderStringWithShadow("Pitch: " + this.player.location.pitch, 0, 34, 0x00FFFFFF);
-        this.fontRenderer.renderStringWithShadow("Yaw: " + this.player.location.yaw, 0, 52, 0xFF00FFFF);
-        this.fontRenderer.renderStringWithShadow("Dirty chunks: " + this.dirtyChunks.size(), 0, 70, 0xFFFF00FF);
+        //this.fontRenderer.renderStringWithShadow("Location: (" + this.player.location.x + ", " + this.player.location.y + ", " + this.player.location.z + ")", 0, 16, 0xFFFFFFFF);
+        //this.fontRenderer.renderStringWithShadow("Pitch: " + this.player.location.pitch, 0, 34, 0x00FFFFFF);
+        //this.fontRenderer.renderStringWithShadow("Yaw: " + this.player.location.yaw, 0, 52, 0xFF00FFFF);
+        //this.fontRenderer.renderStringWithShadow("Dirty chunks: " + this.dirtyChunks.size(), 0, 70, 0xFFFF00FF);
 
-        int renderedChunks = 0;
-        for (ChunkRenderer chunkRenderer : this.renderedChunks) {
-            if (!chunkRenderer.dirty) {
-                renderedChunks++;
-            }
+        //int renderedChunks = 0;
+        //for (ChunkRenderer chunkRenderer : this.renderedChunks) {
+        //if (!chunkRenderer.dirty) {
+        //renderedChunks++;
+        //}
+        //}
+
+        //this.fontRenderer.renderStringWithShadow("Rendered chunks: " + renderedChunks, 0, 88, 0x888888FF);
+
+        //ItemStack testItems = new ItemStack(Items.grass, 42);
+
+        //ItemRenderer.renderItemIntoGUI(testItems, fontRenderer, 30, 400);
+        //ItemRenderer.resetTexture();
+
+        if (this.currentScreen != null) {
+            this.currentScreen.render(Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
         }
 
-        this.fontRenderer.renderStringWithShadow("Rendered chunks: " + renderedChunks, 0, 88, 0x888888FF);
+        //this.fontRenderer.renderStringWithShadow("Settling pre-alpha 0.1", 0, 2, 0xFFFFFFFF);
+        //this.fontRenderer.renderStringWithShadow("FPS: " + this.fps, 0, 18, 0xFFFFFFFF);
 
-        this.fontRenderer.renderStringWithShadow("FPS: " + this.fps, 0, 106, 0x888888FF);
-
-        testItems = new ItemStack(Items.grass, 42);
-
-        ItemRenderer.renderItemIntoGUI(testItems, fontRenderer, 30, 400);
-        ItemRenderer.resetTexture();
         GL11.glDisable(GL11.GL_BLEND);
     }
 

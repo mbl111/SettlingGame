@@ -7,7 +7,6 @@ public class ItemStack {
 
     private int itemId;
     private int count;
-    private short data;
 
     public HashMap<String, String> metaData = new HashMap<String, String>();
 

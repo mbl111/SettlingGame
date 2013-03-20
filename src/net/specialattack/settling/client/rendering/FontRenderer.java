@@ -28,6 +28,8 @@ public class FontRenderer {
     16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, // F
     };
 
+    public float fontSize = 16.0F;
+
     public FontRenderer() {
         this.texture = TextureRegistry.getTexture("/font.png");
     }
@@ -73,24 +75,38 @@ public class FontRenderer {
         GL11.glBegin(GL11.GL_QUADS);
 
         GL11.glTexCoord2f(start[0], start[1]);
-        //GL11.glVertex3f(25.0F, 0.0F, 0.0F);
         GL11.glVertex3f(posX, posY, 0.0F);
 
         GL11.glTexCoord2f(end[0], start[1]);
-        //GL11.glVertex3f(50.0F, 12.5F, 0.0F);
-        GL11.glVertex3f(posX + widths[charIndex], posY, 0.0F);
+        GL11.glVertex3f(posX + (float) widths[charIndex] * fontSize / 16.0F, posY, 0.0F);
 
         GL11.glTexCoord2f(end[0], end[1]);
-        //GL11.glVertex3f(25.5F, 25.2F, 0.0F); // 25.2F to prevent borders
-        GL11.glVertex3f(posX + widths[charIndex], posY + 16, 0.0F);
+        GL11.glVertex3f(posX + (float) widths[charIndex] * fontSize / 16.0F, posY + fontSize, 0.0F);
 
         GL11.glTexCoord2f(start[0], end[1]);
-        //GL11.glVertex3f(0.0F, 12.5F, 0.0F);
-        GL11.glVertex3f(posX, posY + 16, 0.0F);
+        GL11.glVertex3f(posX, posY + fontSize, 0.0F);
 
         GL11.glEnd();
 
-        return posX + widths[charIndex] + 2;
+        return posX + (int) ((float) widths[charIndex] * fontSize / 16.0F) + 2;
+    }
+
+    public int getStringWidth(String text) {
+        char[] chars = text.toCharArray();
+
+        int width = 0;
+
+        for (int i = 0; i < chars.length; i++) {
+            width += getCharWidth(chars[i]) + 2;
+        }
+
+        return width;
+    }
+
+    public int getCharWidth(char character) {
+        int charIndex = character & 0xFF;
+
+        return (int) ((float) widths[charIndex] * fontSize / 16.0F);
     }
 
 }

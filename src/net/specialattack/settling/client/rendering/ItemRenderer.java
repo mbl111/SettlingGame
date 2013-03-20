@@ -1,14 +1,12 @@
 
 package net.specialattack.settling.client.rendering;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
 import net.specialattack.settling.client.texture.SubTexture;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.common.item.Item;
 import net.specialattack.settling.common.item.ItemStack;
+
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderer {
 
@@ -19,8 +17,10 @@ public class ItemRenderer {
     }
 
     public static void renderItemIntoGUI(ItemStack itemStack, FontRenderer fontRenderer, int x, int y) {
+        // This code is just a blatant copy of tiles, it will only last until I start writing item renderers
+        
         Item item = itemStack.getItem();
-        int amt = itemStack.getAmount() > 999 ? 999 : itemStack.getAmount();
+        int amount = itemStack.getAmount() > 999 ? 999 : itemStack.getAmount();
 
         SubTexture texture = TextureRegistry.getSubTexture(item.textureName);
 
@@ -55,8 +55,8 @@ public class ItemRenderer {
 
         GL11.glEnd();
 
-        int textXOffs = (amt + "").length() * -8;
-        fontRenderer.renderString(amt + "", (int) endX + textXOffs, (int) endY - 16, 0xFFFFFFFF);
+        int textXOffs = -fontRenderer.getStringWidth(amount + "");
+        fontRenderer.renderString(amount + "", (int) endX + textXOffs, (int) endY - 16, 0xFFFFFFFF);
     }
 
 }

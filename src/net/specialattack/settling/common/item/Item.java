@@ -44,4 +44,8 @@ public class Item {
         return name;
     }
 
+    public String[] getTextureNames() {
+        return new String[] { this.fulltextureName };
+    }
+
 }

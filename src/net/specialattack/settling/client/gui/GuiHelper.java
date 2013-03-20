@@ -119,4 +119,32 @@ public class GuiHelper {
 
         GL11.glEnd();
     }
+
+    public static void drawTexturedRectangle2(int posX, int posY, int width, int height, float startU, float startV, float endU, float endV) {
+        GL11.glTexCoord2d(startU, startV);
+        GL11.glVertex2i(posX, posY);
+
+        GL11.glTexCoord2d(endU, startV);
+        GL11.glVertex2i(posX + width, posY);
+
+        GL11.glTexCoord2d(endU, endV);
+        GL11.glVertex2i(posX + width, posY + height);
+
+        GL11.glTexCoord2d(startU, endV);
+        GL11.glVertex2i(posX, posY + height);
+    }
+
+    public static void drawTexturedRectangle2(float posX, float posY, float width, float height, float startU, float startV, float endU, float endV) {
+        GL11.glTexCoord2d(startU, startV);
+        GL11.glVertex2f(posX, posY);
+
+        GL11.glTexCoord2d(endU, startV);
+        GL11.glVertex2f(posX + width, posY);
+
+        GL11.glTexCoord2d(endU, endV);
+        GL11.glVertex2f(posX + width, posY + height);
+
+        GL11.glTexCoord2d(startU, endV);
+        GL11.glVertex2f(posX, posY + height);
+    }
 }

@@ -53,6 +53,10 @@ public class SettlingClient extends Settling {
     private GuiScreen currentScreen = null;
     private boolean mouseGrabbed = false;
 
+    public SettlingClient() {
+        instance = this;
+    }
+
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
     }
@@ -196,7 +200,7 @@ public class SettlingClient extends Settling {
 
             for (int i = 0; i < this.timer.remainingTicks; i++) {
                 ticks++;
-                this.tick();
+                this.tick(); // FIXME: Ticks don't kick in until a certain amount of time!
                 updateChunks();
             }
 
@@ -233,8 +237,19 @@ public class SettlingClient extends Settling {
 
         KeyBinding.escape.update();
 
-        if (this.currentScreen == null && this.currentWorld != null && KeyBinding.escape.isTapped()) {
-            this.displayScreen(null); // TODO: Make in-game menu screen appear
+        boolean escapeTapped = KeyBinding.escape.isTapped();
+
+        // FIXME: Holding escape counts as multiple taps!
+
+        if (this.currentScreen != null && this.currentWorld != null && escapeTapped) {
+            System.out.println("Hit escape!");
+
+            this.displayScreen(null);
+        }
+        else if (this.currentWorld != null && escapeTapped) {
+            System.out.println("Hit escape!");
+
+            this.displayScreen(new GuiScreenMainMenu());
         }
     }
 
@@ -247,7 +262,6 @@ public class SettlingClient extends Settling {
         this.clearGL();
         this.render3D();
         this.render2D();
-
     }
 
     private void render2D() {
@@ -282,8 +296,6 @@ public class SettlingClient extends Settling {
 
         this.fontRenderer.renderStringWithShadow("Settling pre-alpha 0.1", 0, 2, 0xFFFFFFFF);
         this.fontRenderer.renderStringWithShadow("FPS: " + this.fps + " TPS: " + this.tps, 0, 18, 0xFFFFFFFF);
-
-        GL11.glDisable(GL11.GL_BLEND);
     }
 
     private void render3D() {
@@ -389,6 +401,16 @@ public class SettlingClient extends Settling {
                 if (!isRenderedAlready) {
                     this.chunkList.put(toRender, chunkRenderer);
                     this.renderedChunks.add(chunkRenderer);
+                }
+            }
+        }
+    }
+
+    public void markChunksDirty() {
+        if (this.currentWorld != null) {
+            for (int x = -8; x < 8; x++) {
+                for (int z = -8; z < 8; z++) {
+                    this.dirtyChunks.add(this.currentWorld.getChunkAt(x, z, false));
                 }
             }
         }

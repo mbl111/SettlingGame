@@ -56,7 +56,7 @@ public class GuiButton extends GuiElement {
 
     @Override
     public boolean mouseClicked(int mouseButton, int mouseX, int mouseY) {
-        if (!this.enabled) {
+        if (!this.enabled || mouseButton != 0) {
             return false;
         }
 

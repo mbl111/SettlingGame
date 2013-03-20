@@ -1,7 +1,9 @@
 
 package net.specialattack.settling.client.gui;
 
+import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.texture.TextureRegistry;
+import net.specialattack.settling.client.world.WorldDemo;
 import net.specialattack.settling.common.Settling;
 
 public class GuiScreenMainMenu extends GuiScreen {
@@ -39,7 +41,8 @@ public class GuiScreenMainMenu extends GuiScreen {
     @Override
     protected void onAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
         if (element == buttonPlay) {
-
+            SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
+            SettlingClient.instance.markChunksDirty();
         }
         if (element == buttonExit) {
             Settling.getInstance().attemptShutdown();

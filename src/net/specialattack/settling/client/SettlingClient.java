@@ -417,13 +417,6 @@ public class SettlingClient extends Settling {
     }
 
     private void levelRender() {
-        // For this you would get X chunks around the player and render it based
-        // on local co-ords.
-        // We need to use chunks as a help in rendering
-        // Each chunk would be in a display list rather than rendering every
-        // visable block every time
-        // Muahahahahaha, no spell checking!
-
         TileRenderer.resetTexture();
 
         GL11.glPushMatrix();

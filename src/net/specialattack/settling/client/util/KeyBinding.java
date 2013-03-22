@@ -19,7 +19,7 @@ public class KeyBinding {
         if (!aknowledged) {
             aknowledged = true;
 
-            return Keyboard.isKeyDown(key);
+            return true;
         }
 
         return false;
@@ -36,10 +36,9 @@ public class KeyBinding {
                 aknowledged = false;
             }
         }
-
-        if (pressed) {
+        else if (pressed) {
             pressed = false;
-            aknowledged = false;
+            aknowledged = true;
         }
     }
 

@@ -200,7 +200,7 @@ public class SettlingClient extends Settling {
 
             for (int i = 0; i < this.timer.remainingTicks; i++) {
                 ticks++;
-                this.tick(); // FIXME: Ticks don't kick in until a certain amount of time!
+                this.tick();
                 updateChunks();
             }
 
@@ -238,8 +238,6 @@ public class SettlingClient extends Settling {
         KeyBinding.escape.update();
 
         boolean escapeTapped = KeyBinding.escape.isTapped();
-
-        // FIXME: Holding escape counts as multiple taps!
 
         if (this.currentScreen != null && this.currentWorld != null && escapeTapped) {
             System.out.println("Hit escape!");
@@ -430,8 +428,6 @@ public class SettlingClient extends Settling {
 
         GL11.glPopMatrix();
 
-        //GL20.glUseProgram(this.shader);
-
         int renderChunkRadius = 16;
 
         for (ChunkRenderer chunkRenderer : this.renderedChunks) {
@@ -442,9 +438,6 @@ public class SettlingClient extends Settling {
                 chunkRenderer.renderChunk();
             }
         }
-
-        //GL20.glUseProgram(0);
-
     }
 
 }

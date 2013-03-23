@@ -5,6 +5,7 @@ import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.world.WorldDemo;
 import net.specialattack.settling.common.Settling;
+import net.specialattack.settling.common.lang.LanguageRegistry;
 
 public class GuiScreenMainMenu extends GuiScreen {
 
@@ -20,7 +21,7 @@ public class GuiScreenMainMenu extends GuiScreen {
     @Override
     public void onInit() {
         buttonPlay = new GuiButton("Play, demo world only", this.width / 2 - 200, 350, 400, 50, this);
-        buttonExit = new GuiButton("Exit", this.width / 2 - 200, 410, 400, 50, this);
+        buttonExit = new GuiButton(LanguageRegistry.translate("gui.mainscreen.exit"), this.width / 2 - 200, 410, 400, 50, this);
 
         this.elements.add(buttonPlay);
         this.elements.add(buttonExit);
@@ -41,8 +42,9 @@ public class GuiScreenMainMenu extends GuiScreen {
     @Override
     protected void onAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
         if (element == buttonPlay) {
-            SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
-            SettlingClient.instance.markChunksDirty();
+            //SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
+            //SettlingClient.instance.markChunksDirty();
+            LanguageRegistry.printEntries();
         }
         if (element == buttonExit) {
             Settling.getInstance().attemptShutdown();

@@ -20,6 +20,7 @@ import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
 import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
+import net.specialattack.settling.common.lang.LanguageRegistry;
 import net.specialattack.settling.common.util.TickTimer;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.World;
@@ -164,6 +165,8 @@ public class SettlingClient extends Settling {
 
         Shader.unbindShader();
 
+        LanguageRegistry.loadLang("en_US");
+
         //this.currentWorld = new WorldDemo(new File("./demo/"));
 
         this.fontRenderer = new FontRenderer();
@@ -212,7 +215,7 @@ public class SettlingClient extends Settling {
             Keyboard.poll();
 
             while (Mouse.next()) {
-                if (Mouse.getEventButton() != -1 && this.currentScreen != null) {
+                if (Mouse.getEventButton() != -1 && this.currentScreen != null && Mouse.isButtonDown(Mouse.getEventButton())) {
                     this.currentScreen.mousePressed(Mouse.getEventButton(), Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
                 }
             }

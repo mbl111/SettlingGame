@@ -240,13 +240,9 @@ public class SettlingClient extends Settling {
         boolean escapeTapped = KeyBinding.escape.isTapped();
 
         if (this.currentScreen != null && this.currentWorld != null && escapeTapped) {
-            System.out.println("Hit escape!");
-
             this.displayScreen(null);
         }
         else if (this.currentWorld != null && escapeTapped) {
-            System.out.println("Hit escape!");
-
             this.displayScreen(new GuiScreenMainMenu());
         }
     }

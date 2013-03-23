@@ -1,6 +1,7 @@
 
 package net.specialattack.settling.client;
 
+import net.specialattack.settling.common.util.Location;
 import net.specialattack.settling.common.world.World;
 
 import org.lwjgl.input.Keyboard;

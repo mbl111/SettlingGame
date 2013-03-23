@@ -3,8 +3,6 @@ package net.specialattack.settling.launcher;
 
 import java.applet.Applet;
 
-import net.specialattack.settling.client.SettlingApplet;
-
 public class InlineLauncher extends LauncherStub {
 
     private static final long serialVersionUID = -6105682158910098389L;
@@ -19,7 +17,15 @@ public class InlineLauncher extends LauncherStub {
 
     @Override
     public Applet launchGame() {
-        return new SettlingApplet();
+        try {
+            Class<?> clazz = Class.forName("net.specialattack.settling.client.SettlingApplet");
+            return (Applet) clazz.newInstance();
+        }
+        catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+
+            return null;
+        }
     }
 
 }

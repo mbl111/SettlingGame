@@ -1,5 +1,5 @@
 
-package net.specialattack.settling.client;
+package net.specialattack.settling.common.util;
 
 public class Location {
 

@@ -1,7 +1,7 @@
 
 package net.specialattack.settling.common.world;
 
-import net.specialattack.settling.client.Location;
+import net.specialattack.settling.common.util.Location;
 
 public enum TileSide {
 

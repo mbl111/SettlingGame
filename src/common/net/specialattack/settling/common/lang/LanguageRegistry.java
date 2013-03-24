@@ -54,12 +54,21 @@ public final class LanguageRegistry {
         if (entries == null) {
             return "No language loaded";
         }
+
+        if (!entries.containsKey(key)) {
+            return key;
+        }
+
         return entries.get(key);
     }
 
     public static String translate(String key, Object... args) {
         if (entries == null) {
             return "No language loaded";
+        }
+
+        if (!entries.containsKey(key)) {
+            return key;
         }
         try {
             return String.format(entries.get(key), args);

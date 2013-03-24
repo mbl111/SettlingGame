@@ -200,7 +200,14 @@ public class SettlingClient extends Settling {
                 this.attemptShutdown();
             }
 
-            this.timer.update();
+            if (this.currentScreen != null) {
+                float partialTicks = this.timer.renderPartialTicks;
+                this.timer.update();
+                this.timer.renderPartialTicks = partialTicks;
+            }
+            else {
+                this.timer.update();
+            }
 
             for (int i = 0; i < this.timer.remainingTicks; i++) {
                 ticks++;

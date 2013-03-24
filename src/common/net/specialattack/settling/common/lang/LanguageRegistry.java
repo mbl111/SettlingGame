@@ -69,13 +69,4 @@ public final class LanguageRegistry {
         }
     }
 
-    public static void printEntries() {
-        if (entries == null) {
-            return;
-        }
-        for (String key : entries.keySet()) {
-            System.out.println(key + "=" + entries.get(key));
-        }
-    }
-
 }

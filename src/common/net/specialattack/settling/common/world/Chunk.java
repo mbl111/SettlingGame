@@ -40,4 +40,34 @@ public class Chunk {
 
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + chunkX;
+        result = prime * result + chunkZ;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Chunk other = (Chunk) obj;
+        if (chunkX != other.chunkX) {
+            return false;
+        }
+        if (chunkZ != other.chunkZ) {
+            return false;
+        }
+        return true;
+    }
+
 }

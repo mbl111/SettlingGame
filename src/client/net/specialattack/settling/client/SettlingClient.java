@@ -293,6 +293,15 @@ public class SettlingClient extends Settling {
 
         this.fontRenderer.renderStringWithShadow("Settling pre-alpha 0.1", 0, 2, 0xFFFFFFFF);
         this.fontRenderer.renderStringWithShadow("FPS: " + this.fps + " TPS: " + this.tps, 0, 18, 0xFFFFFFFF);
+
+        long maxMemory = Runtime.getRuntime().maxMemory();
+        long totalMemory = Runtime.getRuntime().totalMemory();
+        long freeMemory = Runtime.getRuntime().freeMemory();
+        long usedMemory = totalMemory - freeMemory;
+        String usedString = "Used memory: " + usedMemory * 100L / maxMemory + "% (" + usedMemory / 1024L / 1024L + "MB of " + maxMemory / 1024L / 1024L + "MB)";
+        String allocatedString = "Allocated memory: " + totalMemory * 100L / maxMemory + "% (" + totalMemory / 1024L / 1024L + "MB)";
+        this.fontRenderer.renderStringWithShadow(usedString, this.displayWidth - this.fontRenderer.getStringWidth(usedString) - 1, 0, 0xFFFFFFFF);
+        this.fontRenderer.renderStringWithShadow(allocatedString, this.displayWidth - this.fontRenderer.getStringWidth(allocatedString) - 1, 16, 0xFFFFFFFF);
     }
 
     private void render3D() {
@@ -379,9 +388,9 @@ public class SettlingClient extends Settling {
                 }
             }
 
-            this.dirtyChunks.remove(toRender);
-
             if (toRender != null) {
+                this.dirtyChunks.remove(toRender);
+
                 ChunkRenderer chunkRenderer;
                 boolean isRenderedAlready = false;
 
@@ -404,6 +413,10 @@ public class SettlingClient extends Settling {
     }
 
     public void markChunksDirty() {
+        this.dirtyChunks.clear();
+        this.chunkList.clear();
+        this.renderedChunks.clear();
+
         if (this.currentWorld != null) {
             for (int x = -8; x < 8; x++) {
                 for (int z = -8; z < 8; z++) {

@@ -32,8 +32,7 @@ public class ChunkRenderer {
                 int height = chunk.getHeight(chunk.chunkX * 16 + x, chunk.chunkZ * 16 + z);
                 int rx = chunk.chunkX * 16 + x - 16;
                 int rz = chunk.chunkZ * 16 + z - 16;
-                
-                                
+
                 TileRenderer.renderTileNorthFace(grass, rx, height, rz);
                 TileRenderer.renderTileFloor(grass, rx, height, rz);
             }
@@ -47,5 +46,36 @@ public class ChunkRenderer {
         if (glCallList > 0 && !dirty) {
             GL11.glCallList(glCallList);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((chunk == null) ? 0 : chunk.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ChunkRenderer other = (ChunkRenderer) obj;
+        if (chunk == null) {
+            if (other.chunk != null) {
+                return false;
+            }
+        }
+        else if (!chunk.equals(other.chunk)) {
+            return false;
+        }
+        return true;
     }
 }

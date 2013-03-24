@@ -16,7 +16,7 @@ public class WorldDemo extends World {
     public WorldDemo(File saveFolder) {
         super(saveFolder);
 
-        this.generator = new TestWorldGenerator(100L);
+        this.generator = new TestWorldGenerator(System.currentTimeMillis());
 
         this.chunks = new Chunk[265];
 

@@ -20,7 +20,7 @@ public class GuiScreenMainMenu extends GuiScreen {
 
     @Override
     public void onInit() {
-        buttonPlay = new GuiButton("Play, demo world only", this.width / 2 - 200, 350, 400, 50, this);
+        buttonPlay = new GuiButton(LanguageRegistry.translate("gui.mainscreen.play"), this.width / 2 - 200, 350, 400, 50, this);
         buttonExit = new GuiButton(LanguageRegistry.translate("gui.mainscreen.exit"), this.width / 2 - 200, 410, 400, 50, this);
 
         this.elements.add(buttonPlay);
@@ -42,9 +42,8 @@ public class GuiScreenMainMenu extends GuiScreen {
     @Override
     protected void onAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
         if (element == buttonPlay) {
-            //SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
-            //SettlingClient.instance.markChunksDirty();
-            LanguageRegistry.printEntries();
+            SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
+            SettlingClient.instance.markChunksDirty();
         }
         if (element == buttonExit) {
             Settling.getInstance().attemptShutdown();

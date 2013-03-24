@@ -44,6 +44,7 @@ public class GuiScreenMainMenu extends GuiScreen {
         if (element == buttonPlay) {
             SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
             SettlingClient.instance.markChunksDirty();
+            SettlingClient.instance.displayScreen(null);
         }
         if (element == buttonExit) {
             Settling.getInstance().attemptShutdown();

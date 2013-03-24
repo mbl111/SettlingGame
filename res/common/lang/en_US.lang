@@ -1,2 +1,7 @@
+#Main screen
 gui.mainscreen.exit=Exit
 gui.mainscreen.play=Connect to server
+
+#Menu screen
+gui.menu.resume=Resume
+gui.menu.disconnect=Disconnect

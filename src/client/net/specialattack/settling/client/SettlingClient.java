@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
+import net.specialattack.settling.client.gui.GuiScreenMenu;
 import net.specialattack.settling.client.item.ClientItemDelegate;
 import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
@@ -246,7 +247,7 @@ public class SettlingClient extends Settling {
             this.displayScreen(null);
         }
         else if (this.currentWorld != null && escapeTapped) {
-            this.displayScreen(new GuiScreenMainMenu());
+            this.displayScreen(new GuiScreenMenu());
         }
     }
 
@@ -412,6 +413,7 @@ public class SettlingClient extends Settling {
         }
     }
 
+    @Deprecated
     public void markChunksDirty() {
         this.dirtyChunks.clear();
         this.chunkList.clear();

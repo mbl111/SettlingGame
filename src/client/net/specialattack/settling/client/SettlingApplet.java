@@ -28,6 +28,8 @@ public class SettlingApplet extends Applet {
         this.settling = new SettlingClient();
 
         this.settling.setCanvas(this.canvas);
+        this.revalidate();
+        this.repaint();
     }
 
     @Override

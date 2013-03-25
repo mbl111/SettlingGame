@@ -82,9 +82,7 @@ public class LauncherFrame extends Frame {
                         try {
                             Thread.sleep(30000L);
                         }
-                        catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        catch (InterruptedException e) {}
                         System.out.println("FORCING EXIT!");
                         System.exit(0);
                     }

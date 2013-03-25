@@ -3,7 +3,7 @@ package net.specialattack.settling.client.texture;
 
 import java.awt.image.BufferedImage;
 
-import net.specialattack.settling.common.ISubTexture;
+import net.specialattack.settling.common.texture.ISubTexture;
 
 public class SubTexture implements ISubTexture {
 

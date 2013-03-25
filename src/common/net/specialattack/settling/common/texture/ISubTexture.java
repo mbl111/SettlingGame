@@ -1,5 +1,5 @@
 
-package net.specialattack.settling.common;
+package net.specialattack.settling.common.texture;
 
 public interface ISubTexture {
     public abstract int getStartU();

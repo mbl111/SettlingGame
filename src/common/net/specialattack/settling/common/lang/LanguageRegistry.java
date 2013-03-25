@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.IllegalFormatException;
 import java.util.TreeMap;
+import java.util.logging.Level;
+
+import net.specialattack.settling.common.Settling;
 
 public final class LanguageRegistry {
 
@@ -22,16 +25,23 @@ public final class LanguageRegistry {
 
             try {
                 while ((line = reader.readLine()) != null) {
+                    line = line.trim();
                     if (!line.startsWith("#")) {
                         String[] split = line.split("=", 2);
                         if (split.length == 2) {
-                            entries.put(split[0], split[1]);
+                            entries.put(split[0].trim(), split[1].trim());
                         }
                     }
                 }
             }
             catch (IOException e) {
-                e.printStackTrace();
+                Settling.log.log(Level.SEVERE, "Failed reading localization file for language '" + language + "'", e);
+            }
+            finally {
+                try {
+                    reader.close();
+                }
+                catch (IOException e) {}
             }
         }
     }
@@ -44,7 +54,7 @@ public final class LanguageRegistry {
             reader = new BufferedReader(new InputStreamReader(url.openStream()));
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Settling.log.log(Level.SEVERE, "Failed opening resource '" + path + "'", e);
         }
 
         return reader;

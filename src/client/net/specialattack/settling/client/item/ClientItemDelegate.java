@@ -4,9 +4,9 @@ package net.specialattack.settling.client.item;
 import java.awt.image.BufferedImage;
 
 import net.specialattack.settling.client.texture.TextureRegistry;
-import net.specialattack.settling.common.IStitchedTexture;
 import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
+import net.specialattack.settling.common.texture.IStitchedTexture;
 
 public class ClientItemDelegate extends CommonItemDelegate {
 

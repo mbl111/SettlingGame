@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
+
+import net.specialattack.settling.common.Settling;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -59,7 +62,7 @@ public class TextureRegistry {
             image = ImageIO.read(url);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Settling.log.log(Level.SEVERE, "Failed opening resource '" + path + "'", e);
 
             image = missingTexture;
         }
@@ -83,7 +86,7 @@ public class TextureRegistry {
                     image = ImageIO.read(url);
                 }
                 catch (IOException e) {
-                    e.printStackTrace();
+                    Settling.log.log(Level.SEVERE, "Failed reading texture '" + name + "'", e);
 
                     image = missingTexture;
                 }

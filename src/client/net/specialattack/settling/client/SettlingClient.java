@@ -4,6 +4,7 @@ package net.specialattack.settling.client;
 import java.awt.Canvas;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
@@ -16,6 +17,7 @@ import net.specialattack.settling.client.shaders.Shader;
 import net.specialattack.settling.client.shaders.ShaderLoader;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.util.KeyBinding;
+import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
@@ -125,8 +127,8 @@ public class SettlingClient extends Settling {
             Display.setParent(this.canvas);
             Display.create();
         }
-        catch (LWJGLException ex) {
-            ex.printStackTrace();
+        catch (LWJGLException e) {
+            Settling.log.log(Level.SEVERE, "Failed starting Settling", e);
             return false;
         }
 
@@ -147,7 +149,7 @@ public class SettlingClient extends Settling {
             Mouse.create();
         }
         catch (LWJGLException e) {
-            e.printStackTrace();
+            Settling.log.log(Level.SEVERE, "Failed starting Settling", e);
             return false;
         }
 
@@ -167,6 +169,7 @@ public class SettlingClient extends Settling {
         Shader.unbindShader();
 
         LanguageRegistry.loadLang("en_US");
+        Settings.loadSettings();
 
         //this.currentWorld = new WorldDemo(new File("./demo/"));
 
@@ -228,6 +231,14 @@ public class SettlingClient extends Settling {
                 }
             }
 
+            while (Keyboard.next()) {
+                if (Keyboard.getEventKeyState() && !Keyboard.isRepeatEvent()) {
+                    if (this.currentScreen != null) {
+                        this.currentScreen.keyPressed(Keyboard.getEventKey());
+                    }
+                }
+            }
+
             Display.sync(60);
 
             if (System.currentTimeMillis() - lastTimer1 > 1000) {
@@ -247,6 +258,8 @@ public class SettlingClient extends Settling {
         }
 
         KeyBinding.escape.update();
+
+        Settings.update();
 
         boolean escapeTapped = KeyBinding.escape.isTapped();
 
@@ -275,25 +288,6 @@ public class SettlingClient extends Settling {
 
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-        //this.fontRenderer.renderStringWithShadow("Location: (" + this.player.location.x + ", " + this.player.location.y + ", " + this.player.location.z + ")", 0, 16, 0xFFFFFFFF);
-        //this.fontRenderer.renderStringWithShadow("Pitch: " + this.player.location.pitch, 0, 34, 0x00FFFFFF);
-        //this.fontRenderer.renderStringWithShadow("Yaw: " + this.player.location.yaw, 0, 52, 0xFF00FFFF);
-        //this.fontRenderer.renderStringWithShadow("Dirty chunks: " + this.dirtyChunks.size(), 0, 70, 0xFFFF00FF);
-
-        //int renderedChunks = 0;
-        //for (ChunkRenderer chunkRenderer : this.renderedChunks) {
-        //if (!chunkRenderer.dirty) {
-        //renderedChunks++;
-        //}
-        //}
-
-        //this.fontRenderer.renderStringWithShadow("Rendered chunks: " + renderedChunks, 0, 88, 0x888888FF);
-
-        //ItemStack testItems = new ItemStack(Items.grass, 42);
-
-        //ItemRenderer.renderItemIntoGUI(testItems, fontRenderer, 30, 400);
-        //ItemRenderer.resetTexture();
 
         if (this.currentScreen != null) {
             this.currentScreen.render(Mouse.getX(), this.displayHeight - 1 - Mouse.getY());

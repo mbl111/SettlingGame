@@ -3,7 +3,6 @@ package net.specialattack.settling.client.gui;
 
 import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.texture.TextureRegistry;
-import net.specialattack.settling.client.world.WorldDemo;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.lang.LanguageRegistry;
 
@@ -42,9 +41,10 @@ public class GuiScreenMainMenu extends GuiScreen {
     @Override
     protected void onAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
         if (element == buttonPlay) {
-            SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
-            SettlingClient.instance.markChunksDirty();
-            SettlingClient.instance.displayScreen(null);
+            //SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
+            //SettlingClient.instance.markChunksDirty();
+            //SettlingClient.instance.displayScreen(null);
+            SettlingClient.instance.displayScreen(new GuiOptions(this));
         }
         if (element == buttonExit) {
             Settling.getInstance().attemptShutdown();

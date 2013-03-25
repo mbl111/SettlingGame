@@ -1,6 +1,9 @@
 
 package net.specialattack.settling.common;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Items;
 
@@ -12,6 +15,7 @@ public abstract class Settling implements Runnable {
     private boolean running = false;
     private boolean shuttingDown = false;
     protected static Settling instance;
+    public static final Logger log = Logger.getLogger("Settling");
 
     public Settling() {
         instance = this;
@@ -46,8 +50,8 @@ public abstract class Settling implements Runnable {
         try {
             Items.class.getName();
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception e) {
+            Settling.log.log(Level.SEVERE, "Failed loading items, aborting", e);
             this.attemptShutdown();
         }
 
@@ -56,16 +60,16 @@ public abstract class Settling implements Runnable {
         try {
             this.runGameLoop();
         }
-        catch (OpenGLException ex) {
-            ex.printStackTrace();
+        catch (OpenGLException e) {
+            Settling.log.log(Level.SEVERE, "Error while running Settling. Shutting down", e);
             this.attemptShutdown();
         }
-        catch (LWJGLException ex) {
-            ex.printStackTrace();
+        catch (LWJGLException e) {
+            Settling.log.log(Level.SEVERE, "Error while running Settling. Shutting down", e);
             this.attemptShutdown();
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception e) {
+            Settling.log.log(Level.SEVERE, "Error while running Settling. Shutting down", e);
             this.attemptShutdown();
         }
 

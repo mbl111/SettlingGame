@@ -1,7 +1,7 @@
 
 package net.specialattack.settling.common.item;
 
-import net.specialattack.settling.common.IStitchedTexture;
+import net.specialattack.settling.common.texture.IStitchedTexture;
 
 public abstract class CommonItemDelegate {
 

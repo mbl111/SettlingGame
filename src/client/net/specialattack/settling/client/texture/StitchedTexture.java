@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
-import net.specialattack.settling.common.IStitchedTexture;
+import net.specialattack.settling.common.texture.IStitchedTexture;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;

@@ -46,7 +46,7 @@ public class KeyBinding implements ISetting {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + key;
+        result = prime * result + id.hashCode();
         return result;
     }
 
@@ -62,7 +62,7 @@ public class KeyBinding implements ISetting {
             return false;
         }
         KeyBinding other = (KeyBinding) obj;
-        if (key != other.key) {
+        if (id != other.id) {
             return false;
         }
         return true;

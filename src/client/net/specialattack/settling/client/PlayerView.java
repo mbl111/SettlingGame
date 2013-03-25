@@ -1,6 +1,7 @@
 
 package net.specialattack.settling.client;
 
+import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.util.Location;
 import net.specialattack.settling.common.world.World;
 
@@ -48,32 +49,32 @@ public class PlayerView {
 
         float mod = 1.0F;
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        if (Settings.sneak.isPressed()) {
             mod = 10.0F;
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+        if (Settings.back.isPressed()) {
             this.location.x += Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
             this.location.z += -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
         }
-        if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+        if (Settings.forward.isPressed()) {
             this.location.x -= Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
             this.location.z -= -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
         }
-        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+        if (Settings.right.isPressed()) {
             this.location.x += Math.sin((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
             this.location.z += -Math.cos((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
         }
-        if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+        if (Settings.left.isPressed()) {
             this.location.x += Math.sin((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
             this.location.z += -Math.cos((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+        if (Settings.jump.isPressed()) {
             this.location.y += this.vSpeed * mod;
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+        if (Settings.sprint.isPressed()) {
             this.location.y -= this.vSpeed * mod;
         }
 

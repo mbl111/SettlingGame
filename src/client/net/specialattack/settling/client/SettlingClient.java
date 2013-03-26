@@ -432,17 +432,6 @@ public class SettlingClient extends Settling {
     private void levelRender() {
         TileRenderer.resetTexture();
 
-        GL11.glPushMatrix();
-
-        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-        GL11.glScalef(0.5F, 0.5F, 0.5F);
-
-        fontRenderer.renderString("Mbl111 and", -32, -64, 0xFFFFFFFF);
-        fontRenderer.renderString("Heldplayer", -32, -48, 0xFFFFFFFF);
-        fontRenderer.renderString("Present...", -32, -32, 0xFFFFFFFF);
-
-        GL11.glPopMatrix();
-
         int renderChunkRadius = 16;
 
         for (ChunkRenderer chunkRenderer : this.renderedChunks) {

@@ -129,6 +129,7 @@ public class LauncherFrame extends Frame implements Runnable {
             try {
                 rot += 0.002F;
                 returnCode = renderLauncher();
+                tickLauncher();
                 Thread.sleep(1L);
             }
             catch (Exception e) {
@@ -158,7 +159,7 @@ public class LauncherFrame extends Frame implements Runnable {
         Graphics g = bs.getDrawGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        
+
         {
             double rotationRequired = Math.toRadians(rot);
             AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, globe.getWidth() / 2, globe.getHeight() / 2);
@@ -168,28 +169,28 @@ public class LauncherFrame extends Frame implements Runnable {
             g.drawImage(op.filter(globe, null), 30 - globe.getWidth() / 2, (this.getHeight() - globe.getHeight()) / 2, null);
         }
 
-        g.drawImage(title, (this.getWidth() - title.getWidth())/2 + 210, 100, null);
-        
-        if (InputHandler.MouseX > 854 - 250 && InputHandler.MouseX < 854 - 250 + playNormal.getWidth() && InputHandler.MouseY > this.getHeight()/2 - 20 && InputHandler.MouseY < playNormal.getHeight() + this.getHeight()/2 - 20) {
-            g.drawImage(playHover, 854 - 250, this.getHeight()/2 - 20, null);
+        g.drawImage(title, (this.getWidth() - title.getWidth()) / 2 + 210, 100, null);
+
+        if (InputHandler.MouseX > 854 - 250 && InputHandler.MouseX < 854 - 250 + playNormal.getWidth() && InputHandler.MouseY > this.getHeight() / 2 - 20 && InputHandler.MouseY < playNormal.getHeight() + this.getHeight() / 2 - 20) {
+            g.drawImage(playHover, 854 - 250, this.getHeight() / 2 - 20, null);
             if (InputHandler.MouseButton == 1) {
                 running = false;
                 return 0;
             }
         }
         else {
-            g.drawImage(playNormal, 854 - 250, this.getHeight()/2 - 20, null);
+            g.drawImage(playNormal, 854 - 250, this.getHeight() / 2 - 20, null);
         }
 
-        if (InputHandler.MouseX > 854 - 250 && InputHandler.MouseX < 854 - 250 + quitNormal.getWidth() && InputHandler.MouseY > this.getHeight()/2 + 20 && InputHandler.MouseY < quitNormal.getHeight() + this.getHeight()/2 + 20) {
-            g.drawImage(quitHover, 854 - 250, this.getHeight()/2 + 20, null);
+        if (InputHandler.MouseX > 854 - 250 && InputHandler.MouseX < 854 - 250 + quitNormal.getWidth() && InputHandler.MouseY > this.getHeight() / 2 + 20 && InputHandler.MouseY < quitNormal.getHeight() + this.getHeight() / 2 + 20) {
+            g.drawImage(quitHover, 854 - 250, this.getHeight() / 2 + 20, null);
             if (InputHandler.MouseButton == 1) {
                 running = false;
                 return 1;
             }
         }
         else {
-            g.drawImage(quitNormal, 854 - 250, this.getHeight()/2 + 20, null);
+            g.drawImage(quitNormal, 854 - 250, this.getHeight() / 2 + 20, null);
         }
 
         g.dispose();
@@ -198,7 +199,7 @@ public class LauncherFrame extends Frame implements Runnable {
     }
 
     public void tickLauncher() {
-
+        
     }
 
     private void launchClicked() {

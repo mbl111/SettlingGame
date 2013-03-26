@@ -65,7 +65,7 @@ public class TileRenderer {
 
         GL11.glEnd();
     }
-    
+
     //teh north is X + 1
     public static void renderTileNorthFace(ItemTile item, int posX, int posY, int posZ) {
         SubTexture texture = TextureRegistry.getSubTexture(item.textureName);

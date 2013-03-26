@@ -3,7 +3,7 @@ package net.specialattack.settling.launcher;
 
 import java.applet.Applet;
 
-public class InlineLauncher extends LauncherStub {
+public class StandaloneLauncher extends LauncherStub {
 
     private static final long serialVersionUID = -6105682158910098389L;
 
@@ -12,7 +12,7 @@ public class InlineLauncher extends LauncherStub {
         System.setProperty("sun.java2d.noddraw", "true");
         System.setProperty("sun.java2d.opengl", "false");
 
-        InlineLauncherFrame.main(args, new InlineLauncher());
+        StandaloneLauncherFrame.main(args, new StandaloneLauncher());
     }
 
     @Override

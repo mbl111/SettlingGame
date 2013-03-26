@@ -22,10 +22,10 @@ import javax.swing.UIManager;
 
 import org.lwjgl.LWJGLUtil;
 
-public class LauncherFrame extends Frame implements Runnable {
+public class StandaloneLauncherFrame extends Frame implements Runnable {
 
     private static final long serialVersionUID = 5344282572136619990L;
-    public static LauncherFrame instance;
+    public static StandaloneLauncherFrame instance;
     private LauncherStub launcher;
     private Applet applet;
     private BufferedImage menuImage;
@@ -39,11 +39,11 @@ public class LauncherFrame extends Frame implements Runnable {
     private InputHandler input;
     private boolean running = true;
 
-    public LauncherFrame(LauncherStub launcher) {
+    public StandaloneLauncherFrame(LauncherStub launcher) {
         super("Settling Launcher Window");
 
         this.launcher = launcher;
-        LauncherFrame.instance = this;
+        StandaloneLauncherFrame.instance = this;
         this.setBackground(Color.black);
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout());
@@ -61,8 +61,8 @@ public class LauncherFrame extends Frame implements Runnable {
 
                 @Override
                 public void windowGainedFocus(WindowEvent arg0) {
-                    if (LauncherFrame.this.applet != null) {
-                        LauncherFrame.this.applet.requestFocusInWindow();
+                    if (StandaloneLauncherFrame.this.applet != null) {
+                        StandaloneLauncherFrame.this.applet.requestFocusInWindow();
                     }
                 }
             });
@@ -91,8 +91,8 @@ public class LauncherFrame extends Frame implements Runnable {
 
                 System.out.println("Closing window...");
 
-                if (LauncherFrame.this.applet != null) {
-                    LauncherFrame.this.applet.stop();
+                if (StandaloneLauncherFrame.this.applet != null) {
+                    StandaloneLauncherFrame.this.applet.stop();
                     System.exit(0);
                 }
                 else {
@@ -108,13 +108,13 @@ public class LauncherFrame extends Frame implements Runnable {
 
     public void run() {
         try {
-            menuImage = ImageIO.read(LauncherFrame.class.getResource("/launcherbg.png"));
-            globe = ImageIO.read(LauncherFrame.class.getResource("/globe.png"));
-            playNormal = ImageIO.read(LauncherFrame.class.getResource("/Play_normal.png"));
-            playHover = ImageIO.read(LauncherFrame.class.getResource("/Play_hover.png"));
-            quitNormal = ImageIO.read(LauncherFrame.class.getResource("/Quit_normal.png"));
-            quitHover = ImageIO.read(LauncherFrame.class.getResource("/Quit_hover.png"));
-            title = ImageIO.read(LauncherFrame.class.getResource("/title.png"));
+            menuImage = ImageIO.read(StandaloneLauncherFrame.class.getResource("/launcherbg.png"));
+            globe = ImageIO.read(StandaloneLauncherFrame.class.getResource("/globe.png"));
+            playNormal = ImageIO.read(StandaloneLauncherFrame.class.getResource("/Play_normal.png"));
+            playHover = ImageIO.read(StandaloneLauncherFrame.class.getResource("/Play_hover.png"));
+            quitNormal = ImageIO.read(StandaloneLauncherFrame.class.getResource("/Quit_normal.png"));
+            quitHover = ImageIO.read(StandaloneLauncherFrame.class.getResource("/Quit_hover.png"));
+            title = ImageIO.read(StandaloneLauncherFrame.class.getResource("/title.png"));
         }
         catch (IOException e1) {
             System.out.println("Failed to load Images");
@@ -201,11 +201,11 @@ public class LauncherFrame extends Frame implements Runnable {
     }
 
     private void launchClicked() {
-        Applet applet = LauncherFrame.this.launcher.launchGame();
-        LauncherFrame.this.applet = LauncherFrame.this.launcher;
-        LauncherFrame.this.launcher.setApplet(applet);
-        LauncherFrame.this.initiateApplet();
-        LauncherFrame.this.setTitle("Settling");
+        Applet applet = StandaloneLauncherFrame.this.launcher.launchGame();
+        StandaloneLauncherFrame.this.applet = StandaloneLauncherFrame.this.launcher;
+        StandaloneLauncherFrame.this.launcher.setApplet(applet);
+        StandaloneLauncherFrame.this.initiateApplet();
+        StandaloneLauncherFrame.this.setTitle("Settling");
     }
 
     private void initiateApplet() {
@@ -230,7 +230,7 @@ public class LauncherFrame extends Frame implements Runnable {
         }
         catch (Exception localException) {}
 
-        LauncherFrame frame = new LauncherFrame(launcher);
+        StandaloneLauncherFrame frame = new StandaloneLauncherFrame(launcher);
         frame.setVisible(true);
         frame.start();
     }

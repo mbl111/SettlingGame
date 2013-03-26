@@ -8,9 +8,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
@@ -123,9 +120,10 @@ public class LauncherFrame extends Frame implements Runnable {
             System.out.println("Failed to load Images");
             System.exit(0);
         }
-        int returnCode = -1;
-        while (running) {
 
+        int returnCode = -1;
+
+        while (running) {
             try {
                 rot += 0.002F;
                 returnCode = renderLauncher();
@@ -136,11 +134,13 @@ public class LauncherFrame extends Frame implements Runnable {
                 e.printStackTrace();
                 break;
             }
-            if (returnCode > -1)
+            if (returnCode > -1) {
                 break;
+            }
         }
-        if (returnCode == 0)
+        if (returnCode == 0) {
             launchClicked();
+        }
 
         if (returnCode == 1) {
             this.dispose();
@@ -160,14 +160,12 @@ public class LauncherFrame extends Frame implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        {
-            double rotationRequired = Math.toRadians(rot);
-            AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, globe.getWidth() / 2, globe.getHeight() / 2);
-            AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+        double rotationRequired = Math.toRadians(rot);
+        AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, globe.getWidth() / 2, globe.getHeight() / 2);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 
-            // Drawing the rotated image at the required drawing locations
-            g.drawImage(op.filter(globe, null), 30 - globe.getWidth() / 2, (this.getHeight() - globe.getHeight()) / 2, null);
-        }
+        // Drawing the rotated image at the required drawing locations
+        g.drawImage(op.filter(globe, null), 30 - globe.getWidth() / 2, (this.getHeight() - globe.getHeight()) / 2, null);
 
         g.drawImage(title, (this.getWidth() - title.getWidth()) / 2 + 210, 100, null);
 
@@ -199,7 +197,7 @@ public class LauncherFrame extends Frame implements Runnable {
     }
 
     public void tickLauncher() {
-        
+
     }
 
     private void launchClicked() {

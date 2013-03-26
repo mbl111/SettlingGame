@@ -18,7 +18,7 @@ public class ItemRenderer {
 
     public static void renderItemIntoGUI(ItemStack itemStack, FontRenderer fontRenderer, int x, int y) {
         // This code is just a blatant copy of tiles, it will only last until I start writing item renderers
-        
+
         Item item = itemStack.getItem();
         int amount = itemStack.getAmount() > 999 ? 999 : itemStack.getAmount();
 

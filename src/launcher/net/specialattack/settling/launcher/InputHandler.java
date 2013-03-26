@@ -9,9 +9,9 @@ public class InputHandler implements MouseListener, MouseMotionListener {
 
     public static int MouseX;
     public static int MouseY;
-    public static int MouseDx;// dragged
+    public static int MouseDx; // dragged
     public static int MouseDy;
-    public static int MousePx;// Pressed (click)
+    public static int MousePx; // Pressed (click)
     public static int MousePy;
     public static boolean dragged = false;
 

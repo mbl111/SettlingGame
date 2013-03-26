@@ -44,20 +44,17 @@ public class GuiTextbox extends GuiElement {
         //            color = 0xFFFF00FF;
         //        }
 
-        vAdd = 0.125F;
+        vAdd = 0.125F * 1;
         color = 0x888888FF;
 
         GuiHelper.drawTexturedRectangle(posX, posY, width, height, 0.0F, 0.0F + vAdd, 0.5F, 0.0625F + vAdd);
-
-        float textTop = (float) this.posY + (float) this.height / 2.0F - this.screen.font.fontSize / 2.0F;
-        float textLeft = (float) this.posX + (float) this.width / 2.0F - (float) this.screen.font.getStringWidth(text) / 2.0F;
 
         //this.screen.font.renderStringWithShadow(text, (int) textLeft, (int) textTop, color);
 
         if (active) {
             if (SettlingClient.instance.timer.totalTicks/400 % 2 == 0) {
                 //This is where I need a total tick count or something... ticks % 10 < 5
-                this.screen.font.renderStringWithShadow("|", this.posX + this.screen.font.getStringWidth(text), this.posY, 0xFFFFFFFF);
+                this.screen.font.renderStringWithShadow("a", this.posX + text.length() == 0 ? 0 : this.screen.font.getStringWidth(text), this.posY, 0xFFFFFFFF);
             }
         }
     }

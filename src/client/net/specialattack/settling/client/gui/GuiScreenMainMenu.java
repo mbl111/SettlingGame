@@ -37,7 +37,7 @@ public class GuiScreenMainMenu extends GuiScreen {
     public void onRender(int mouseX, int mouseY) {
         //TextureRegistry.getTexture("/textures/settling.png").bindTexture();
 
-        GuiHelper.drawTexturedRectangle((float) width / 2.0F - 300, 40.0F, 600.0F, 300.0F, 0.0F, 0.0F, 1.0F, 1.0F);
+       // GuiHelper.drawTexturedRectangle((float) width / 2.0F - 300, 40.0F, 600.0F, 300.0F, 0.0F, 0.0F, 1.0F, 1.0F);
     }
 
     @Override

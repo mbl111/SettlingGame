@@ -15,6 +15,7 @@ public class TickTimer {
     public float speed = 1.0F;
     public double syncAdjustment = 1.0D;
     public long timeCounter;
+    public long totalTicks;
 
     public TickTimer(float tps) {
         this.tps = tps;
@@ -35,7 +36,7 @@ public class TickTimer {
 
         if (var3 <= 1000L && var3 >= 0L) {
             this.timeCounter += var3;
-
+            this.totalTicks += var3;
             if (this.timeCounter > 1000L) {
                 long var9 = var5 - this.lastNanoTimeSync;
                 double var11 = (double) this.timeCounter / (double) var9;

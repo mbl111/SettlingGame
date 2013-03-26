@@ -43,7 +43,7 @@ public class SettlingClient extends Settling {
     private Canvas canvas;
     private int displayWidth;
     private int displayHeight;
-    private TickTimer timer = new TickTimer(20.0F);
+    public TickTimer timer = new TickTimer(20.0F);
     private PlayerView player;
     private Shader shader;
     public static final boolean firstPerson = true;

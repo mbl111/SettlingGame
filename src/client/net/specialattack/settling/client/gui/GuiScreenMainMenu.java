@@ -10,6 +10,7 @@ public class GuiScreenMainMenu extends GuiScreen {
 
     private GuiButton buttonPlay;
     private GuiButton buttonExit;
+    private GuiTextbox serverAddress;
 
     @Override
     public void onResize(int newWidth, int newHeight) {
@@ -21,9 +22,10 @@ public class GuiScreenMainMenu extends GuiScreen {
     public void onInit() {
         buttonPlay = new GuiButton(LanguageRegistry.translate("gui.mainscreen.play"), this.width / 2 - 200, 350, 400, 50, this);
         buttonExit = new GuiButton(LanguageRegistry.translate("gui.mainscreen.exit"), this.width / 2 - 200, 410, 400, 50, this);
-
+        serverAddress = new GuiTextbox(this.width / 2 - 200, 200, 400, 50, this);
         this.elements.add(buttonPlay);
         this.elements.add(buttonExit);
+        this.elements.add(serverAddress);
     }
 
     @Override
@@ -33,7 +35,7 @@ public class GuiScreenMainMenu extends GuiScreen {
 
     @Override
     public void onRender(int mouseX, int mouseY) {
-        TextureRegistry.getTexture("/textures/settling.png").bindTexture();
+        //TextureRegistry.getTexture("/textures/settling.png").bindTexture();
 
         GuiHelper.drawTexturedRectangle((float) width / 2.0F - 300, 40.0F, 600.0F, 300.0F, 0.0F, 0.0F, 1.0F, 1.0F);
     }

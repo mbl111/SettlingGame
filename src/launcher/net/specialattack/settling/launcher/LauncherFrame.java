@@ -199,7 +199,7 @@ public class LauncherFrame extends Frame implements Runnable {
     }
 
     public void tickLauncher() {
-        
+
     }
 
     private void launchClicked() {

@@ -5,7 +5,6 @@ import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.util.Location;
 import net.specialattack.settling.common.world.World;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 

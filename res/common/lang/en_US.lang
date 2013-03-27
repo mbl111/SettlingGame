@@ -10,6 +10,8 @@ gui.menu.disconnect=Disconnect
 #Guis
 gui.return=Back
 gui.options=Options
+gui.controls=Controls
+gui.video=Video Settings
 
 #Controls
 movement.forward=Forward

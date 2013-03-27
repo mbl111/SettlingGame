@@ -56,15 +56,14 @@ public class GuiScreenMainMenu extends GuiScreen {
             SettlingClient.instance.displayScreen(null);
         }
         if (element == buttonOptions) {
-            SettlingClient.instance.displayScreen(new GuiControls(this));
+            SettlingClient.instance.displayScreen(new GuiOptions(this));
         }
         if (element == buttonExit) {
             Settling.getInstance().attemptShutdown();
         }
     }
 
-    protected void onKeyAction(GuiElement element, int key) {
-
-    }
+    @Override
+    protected void onKeyAction(GuiElement element, int key) {}
 
 }

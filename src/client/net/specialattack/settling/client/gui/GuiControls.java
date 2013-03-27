@@ -41,7 +41,11 @@ public class GuiControls extends GuiScreen {
 
     @Override
     public void onResize(int newWidth, int newHeight) {
+        buttonReturn.posX = newWidth / 2 - 150;
 
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].posX = newWidth / 2 - 310 + 320 * (i % 2);
+        }
     }
 
     @Override

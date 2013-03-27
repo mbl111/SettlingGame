@@ -38,7 +38,7 @@ public class GuiScreenMenu extends GuiScreen {
             SettlingClient.instance.displayScreen(null);
         }
         if (element == buttonOptions) {
-            SettlingClient.instance.displayScreen(new GuiControls(this));
+            SettlingClient.instance.displayScreen(new GuiOptions(this));
         }
         if (element == buttonDisconnect) {
             SettlingClient.instance.currentWorld = null;
@@ -48,7 +48,6 @@ public class GuiScreenMenu extends GuiScreen {
     }
 
     @Override
-    protected void onKeyAction(GuiElement element, int key) {
-    }
+    protected void onKeyAction(GuiElement element, int key) {}
 
 }

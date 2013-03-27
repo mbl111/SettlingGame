@@ -8,7 +8,7 @@ import net.specialattack.settling.common.lang.LanguageRegistry;
 
 import org.lwjgl.input.Keyboard;
 
-public class GuiOptions extends GuiScreen {
+public class GuiControls extends GuiScreen {
 
     private GuiButton buttonReturn;
     private GuiButtonKey[] buttons;
@@ -17,7 +17,7 @@ public class GuiOptions extends GuiScreen {
 
     private GuiScreen parent;
 
-    public GuiOptions(GuiScreen parent) {
+    public GuiControls(GuiScreen parent) {
         this.parent = parent;
     }
 

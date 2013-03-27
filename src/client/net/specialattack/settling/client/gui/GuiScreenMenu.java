@@ -38,7 +38,7 @@ public class GuiScreenMenu extends GuiScreen {
             SettlingClient.instance.displayScreen(null);
         }
         if (element == buttonOptions) {
-            SettlingClient.instance.displayScreen(new GuiOptions(this));
+            SettlingClient.instance.displayScreen(new GuiControls(this));
         }
         if (element == buttonDisconnect) {
             SettlingClient.instance.currentWorld = null;

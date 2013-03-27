@@ -1,6 +1,7 @@
 #Main screen
 gui.mainscreen.exit=Exit
-gui.mainscreen.play=Connect to server
+gui.mainscreen.play=Play offline
+gui.mainscreen.multiplayer=Connect to SpA server
 
 #Menu screen
 gui.menu.resume=Resume

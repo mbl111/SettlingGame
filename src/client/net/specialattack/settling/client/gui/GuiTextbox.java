@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiTextbox extends GuiElement {
 
-    //public String label;
     public int posX;
     public int posY;
     public int width;
@@ -21,7 +20,6 @@ public class GuiTextbox extends GuiElement {
     public boolean enabled = true;
 
     public GuiTextbox(int posX, int posY, int width, int height, GuiScreen screen) {
-        //this.label = label;
         this.posX = posX;
         this.posY = posY;
         this.width = width;
@@ -44,7 +42,8 @@ public class GuiTextbox extends GuiElement {
         this.screen.font.renderStringWithShadow(text, this.posX + 4, this.posY + (this.height / 2) - 8, 0xFFFFFFFF);
         if (active) {
             if (SettlingClient.instance.timer.totalTicks / 400 % 2 == 0) {
-                //TODO Add a | char to the text file
+                // TODO: Add a | char to the text file
+                // TODO: Add characters for anything other than the uppercase letters
                 this.screen.font.renderStringWithShadow(":", this.posX + (text.length() == 0 ? 0 : this.screen.font.getStringWidth(text)) + 8, this.posY + (this.height / 2) - 8, 0xFFFFFFFF);
             }
         }

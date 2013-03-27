@@ -76,7 +76,7 @@ public class GuiButtonKey extends GuiElement {
         return false;
     }
 
-    public boolean keyPressed(int keyCode) {
+    public boolean keyPressed(int keyCode, char character) {
         return false;
     }
 }

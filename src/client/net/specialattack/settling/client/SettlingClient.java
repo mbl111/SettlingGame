@@ -234,7 +234,7 @@ public class SettlingClient extends Settling {
             while (Keyboard.next()) {
                 if (Keyboard.getEventKeyState() && !Keyboard.isRepeatEvent()) {
                     if (this.currentScreen != null) {
-                        this.currentScreen.keyPressed(Keyboard.getEventKey());
+                        this.currentScreen.keyPressed(Keyboard.getEventKey(), Keyboard.getEventCharacter());
                     }
                 }
             }

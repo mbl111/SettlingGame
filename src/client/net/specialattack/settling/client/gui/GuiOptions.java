@@ -22,9 +22,9 @@ public class GuiOptions extends GuiScreen {
     }
 
     @Override
-    public void keyPressed(int key) {
+    public void keyPressed(int key, char character) {
         if (this.currentKey == -1) {
-            super.keyPressed(key);
+            super.keyPressed(key, character);
         }
         else {
             KeyBinding binding = this.buttons[this.currentKey].key;
@@ -90,7 +90,6 @@ public class GuiOptions extends GuiScreen {
     }
 
     @Override
-    protected void onKeyAction(GuiElement element, int key) {
-    }
+    protected void onKeyAction(GuiElement element, int key) {}
 
 }

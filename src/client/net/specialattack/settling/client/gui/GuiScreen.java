@@ -63,19 +63,18 @@ public abstract class GuiScreen {
         }
     }
 
-    public void keyPressed(int key) {
+    public void keyPressed(int key, char character) {
         if (KeyBinding.escape.isTapped()) {
             SettlingClient.instance.displayScreen(null);
         }
 
         for (GuiElement element : this.elements) {
-            if (element.keyPressed(key)) {
+            if (element.keyPressed(key, character)) {
                 this.onKeyAction(element, key);
             }
         }
 
     }
-
 
     public void drawBackground() {
         GuiHelper.renderRectangle(0, 0, width, height, 0x22222299);
@@ -88,7 +87,7 @@ public abstract class GuiScreen {
     protected abstract void onRender(int mouseX, int mouseY);
 
     protected abstract void onClickAction(GuiElement element, int mouseX, int mouseZ, int mouseButton);
-    
+
     //Can just be ignored.. Perhaps if there is a hotkey pressed for a button or something. Tends to just be used with a textbox
     protected abstract void onKeyAction(GuiElement element, int key);
 

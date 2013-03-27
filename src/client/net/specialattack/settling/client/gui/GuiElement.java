@@ -7,4 +7,6 @@ public abstract class GuiElement {
 
     public abstract boolean mouseClicked(int mouseButton, int mouseX, int mouseY);
 
+    public abstract boolean keyPressed(int keyCode);
+    
 }

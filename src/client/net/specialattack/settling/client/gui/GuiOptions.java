@@ -69,7 +69,7 @@ public class GuiOptions extends GuiScreen {
     public void onRender(int mouseX, int mouseY) {}
 
     @Override
-    protected void onAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
+    protected void onClickAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
         if (element == buttonReturn) {
             SettlingClient.instance.displayScreen(parent);
         }
@@ -87,6 +87,10 @@ public class GuiOptions extends GuiScreen {
                 break;
             }
         }
+    }
+
+    @Override
+    protected void onKeyAction(GuiElement element, int key) {
     }
 
 }

@@ -66,4 +66,10 @@ public class GuiButton extends GuiElement {
 
         return false;
     }
+
+    @Override
+    public boolean keyPressed(int keyCode) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

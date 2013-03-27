@@ -33,7 +33,7 @@ public class GuiScreenMenu extends GuiScreen {
 
     @SuppressWarnings("deprecation")
     @Override
-    protected void onAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
+    protected void onClickAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
         if (element == buttonResume) {
             SettlingClient.instance.displayScreen(null);
         }
@@ -45,6 +45,10 @@ public class GuiScreenMenu extends GuiScreen {
             SettlingClient.instance.markChunksDirty();
             SettlingClient.instance.displayScreen(null);
         }
+    }
+
+    @Override
+    protected void onKeyAction(GuiElement element, int key) {
     }
 
 }

@@ -23,10 +23,10 @@ public class GuiScreenMainMenu extends GuiScreen {
 
     @Override
     public void onInit() {
-        buttonPlay = new GuiButton(LanguageRegistry.translate("gui.mainscreen.play"), this.width / 2 - 200, 350, 400, 50, this);
-        buttonOptions = new GuiButton(LanguageRegistry.translate("gui.options"), this.width / 2 - 200, 360, 400, 50, this);
-        buttonExit = new GuiButton(LanguageRegistry.translate("gui.mainscreen.exit"), this.width / 2 - 200, 410, 400, 50, this);
         serverAddress = new GuiTextbox(this.width / 2 - 200, 200, 400, 50, this);
+        buttonPlay = new GuiButton(LanguageRegistry.translate("gui.mainscreen.play"), this.width / 2 - 200, 300, 400, 50, this);
+        buttonOptions = new GuiButton(LanguageRegistry.translate("gui.options"), this.width / 2 - 200, 360, 400, 50, this);
+        buttonExit = new GuiButton(LanguageRegistry.translate("gui.mainscreen.exit"), this.width / 2 - 200, 420, 400, 50, this);
 
         this.elements.add(buttonPlay);
         this.elements.add(buttonOptions);
@@ -43,12 +43,12 @@ public class GuiScreenMainMenu extends GuiScreen {
     public void onRender(int mouseX, int mouseY) {
         //TextureRegistry.getTexture("/textures/settling.png").bindTexture();
 
-        // GuiHelper.drawTexturedRectangle((float) width / 2.0F - 300, 40.0F, 600.0F, 300.0F, 0.0F, 0.0F, 1.0F, 1.0F);
+       // GuiHelper.drawTexturedRectangle((float) width / 2.0F - 300, 40.0F, 600.0F, 300.0F, 0.0F, 0.0F, 1.0F, 1.0F);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    protected void onAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
+    protected void onClickAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
         if (element == buttonPlay) {
             SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
             SettlingClient.instance.markChunksDirty();
@@ -60,6 +60,10 @@ public class GuiScreenMainMenu extends GuiScreen {
         if (element == buttonExit) {
             Settling.getInstance().attemptShutdown();
         }
+    }
+
+    protected void onKeyAction(GuiElement element, int key) {
+        
     }
 
 }

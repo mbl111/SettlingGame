@@ -1,6 +1,8 @@
 
 package net.specialattack.settling.client.gui;
 
+import java.awt.event.KeyEvent;
+
 import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.texture.TextureRegistry;
 
@@ -50,18 +52,17 @@ public class GuiTextbox extends GuiElement {
         GuiHelper.drawTexturedRectangle(posX, posY, width, height, 0.0F, 0.0F + vAdd, 0.5F, 0.0625F + vAdd);
 
         //this.screen.font.renderStringWithShadow(text, (int) textLeft, (int) textTop, color);
-
+        this.screen.font.renderStringWithShadow(text, this.posX + 4, this.posY + (this.height/2) - 8, 0xFFFFFFFF);
         if (active) {
             if (SettlingClient.instance.timer.totalTicks/400 % 2 == 0) {
-                //This is where I need a total tick count or something... ticks % 10 < 5
-                this.screen.font.renderStringWithShadow("a", this.posX + text.length() == 0 ? 0 : this.screen.font.getStringWidth(text), this.posY, 0xFFFFFFFF);
+                //TODO Add a | char to the text file
+                this.screen.font.renderStringWithShadow(":", this.posX + (text.length() == 0 ? 0 : this.screen.font.getStringWidth(text)) + 8, this.posY + (this.height/2) - 8, 0xFFFFFFFF);
             }
         }
     }
 
     @Override
     public boolean mouseClicked(int mouseButton, int mouseX, int mouseY) {
-
         if (mouseX >= this.posX && mouseX <= this.posX + this.width && mouseY >= this.posY && mouseY <= this.posY + this.height) {
             this.active = true;
             return true;
@@ -69,5 +70,23 @@ public class GuiTextbox extends GuiElement {
         }
         this.active = false;
         return false;
+    }
+
+    @Override
+    //TODO idk, how do you wanna handle this then... 
+    public boolean keyPressed(int keyCode) {
+        if (keyCode == KeyEvent.VK_BACK_SPACE){
+            if (text.length() > 0){
+                text = text.substring(0, text.length() - 2);
+            }
+        }else{
+            String txt = KeyEvent.getKeyText(keyCode);
+            if (txt.length() == 1){
+                text += txt;
+            }
+        }
+        
+        
+        return active;
     }
 }

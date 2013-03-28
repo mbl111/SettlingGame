@@ -168,7 +168,7 @@ public class SettlingClient extends Settling {
 
         Shader.unbindShader();
 
-        LanguageRegistry.loadLang("en_US");
+        LanguageRegistry.loadLang(Settings.language.getValue());
         Settings.loadSettings();
 
         //this.currentWorld = new WorldDemo(new File("./demo/"));

@@ -10,6 +10,7 @@ import java.util.IllegalFormatException;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
+import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.Settling;
 
 public final class LanguageRegistry {
@@ -17,7 +18,6 @@ public final class LanguageRegistry {
     private static TreeMap<String, String> entries;
     private static HashMap<String, TreeMap<String, String>> langs = new HashMap<String, TreeMap<String, String>>();
     private static TreeMap<String, String> availableLangs;
-    private static int currentLang = -1;
     //With this being the standard english
 
     static {
@@ -51,8 +51,6 @@ public final class LanguageRegistry {
             }
         }
         System.out.println("Loaded (" + availableLangs.size() + ") languages");
-
-        currentLang = getIndexFromLangName("en_US");
 
     }
 
@@ -93,11 +91,10 @@ public final class LanguageRegistry {
             //Yay! Cache
             langs.put(language, entries);
         }
-        currentLang = getIndexFromLangName(language);
-        System.out.println(currentLang);
+        Settings.language.set(language);
     }
 
-    private static int getIndexFromLangName(String name) {
+    public static int getIndexFromLangName(String name) {
         int i = 0;
         for (String lang : availableLangs.values()) {
             if (lang.equalsIgnoreCase(name)) {
@@ -110,7 +107,7 @@ public final class LanguageRegistry {
     }
 
     public static String getCurrentLanguage() {
-        return (String) langs.keySet().toArray()[currentLang];
+        return (String) langs.keySet().toArray()[Settings.language.getIndex()];
     }
 
     public static TreeMap<String, String> getLanguages() {
@@ -164,7 +161,7 @@ public final class LanguageRegistry {
     }
 
     public static int getCurrentLanguageIndex() {
-        return currentLang;
+        return Settings.language.getIndex();
     }
 
     public static void loadLang(int selectedIndex) {
@@ -174,8 +171,11 @@ public final class LanguageRegistry {
         loadLang(lang);
     }
 
-    public static void setCurrentLanguageIndex(int selectedIndex) {
-        currentLang = selectedIndex;
+    private static void setCurrentLanguageIndex(int selectedIndex) {
+        if (selectedIndex >= availableLangs.size() && selectedIndex > -1)
+            return;
+        String lang = (String) availableLangs.values().toArray()[selectedIndex];
+        Settings.language.set(lang);
     }
 
 }

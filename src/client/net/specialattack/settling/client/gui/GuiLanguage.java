@@ -6,6 +6,7 @@ import net.specialattack.settling.client.gui.element.GuiButton;
 import net.specialattack.settling.client.gui.element.GuiElement;
 import net.specialattack.settling.client.gui.element.GuiLanguageList;
 import net.specialattack.settling.client.gui.element.GuiScreen;
+import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.lang.LanguageRegistry;
 
 public class GuiLanguage extends GuiScreen {
@@ -48,12 +49,13 @@ public class GuiLanguage extends GuiScreen {
     protected void onClickAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
         if (element == buttonReturn) {
             SettlingClient.instance.displayScreen(parent);
-            LanguageRegistry.setCurrentLanguageIndex(list.selectedIndex);
+            LanguageRegistry.loadLang(list.selectedIndex);
         }
 
         if (element == list) {
             LanguageRegistry.loadLang(list.selectedIndex);
             buttonReturn.label = LanguageRegistry.translate("gui.done");
+            Settings.saveSettings();
         }
 
     }

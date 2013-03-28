@@ -24,6 +24,7 @@ public final class Settings {
     public static KeyBinding sneak = new KeyBinding(29, "movement.sneak");
     public static KeyBinding jump = new KeyBinding(57, "movement.jump");
     public static KeyBinding sprint = new KeyBinding(42, "movement.sprint");
+    public static LanguageSetting language = new LanguageSetting("en_US"); //language.current
 
     public static void loadSettings() {
         BufferedReader reader = null;

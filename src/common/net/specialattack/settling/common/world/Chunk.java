@@ -8,11 +8,35 @@ public class Chunk {
     public final int chunkZ;
 
     public Chunk(World world, int chunkX, int chunkZ) {
+        // 0 is the lowest
         this.sections = new Section[world.getWorldHeight() >> 4];
 
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
     }
+
+//    public short getHighestBlock(int tileX, int tileZ) {
+//        tileX = tileX % 16;
+//        tileZ = tileZ % 16;
+//
+//        if (tileX < 0) {
+//            tileX = tileX + 16;
+//        }
+//        if (tileZ < 0) {
+//            tileZ = tileZ + 16;
+//        }
+//
+//        int highest = sections.length << 4;
+//        boolean highestNotFound = true;
+//
+//        while (highestNotFound) {
+//            short tile = sections[sections.length - highest % 16].tiles[tileX * highest * tileZ];
+//            if (tile != 0) {
+//                return  tile;
+//            }
+//        }
+//        return 0;
+//    }
 
     public short getHeight(int tileX, int tileZ) {
         tileX = tileX % 16;

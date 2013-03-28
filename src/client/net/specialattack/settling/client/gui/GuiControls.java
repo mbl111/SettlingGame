@@ -5,7 +5,6 @@ import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.gui.element.GuiButton;
 import net.specialattack.settling.client.gui.element.GuiButtonKey;
 import net.specialattack.settling.client.gui.element.GuiElement;
-import net.specialattack.settling.client.gui.element.GuiScreen;
 import net.specialattack.settling.client.util.KeyBinding;
 import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.lang.LanguageRegistry;
@@ -34,9 +33,9 @@ public class GuiControls extends GuiScreen {
             KeyBinding binding = this.buttons[this.currentKey].key;
             binding.key = key;
 
-            this.buttons[currentKey].label = LanguageRegistry.translate(binding.id) + ": " + Keyboard.getKeyName(binding.key);
+            this.buttons[this.currentKey].label = LanguageRegistry.translate(binding.id) + ": " + Keyboard.getKeyName(binding.key);
 
-            this.buttons[currentKey].changing = false;
+            this.buttons[this.currentKey].changing = false;
             this.currentKey = -1;
 
             Settings.saveSettings();
@@ -45,32 +44,32 @@ public class GuiControls extends GuiScreen {
 
     @Override
     public void onResize(int newWidth, int newHeight) {
-        buttonReturn.posX = newWidth / 2 - 150;
+        this.buttonReturn.posX = newWidth / 2 - 150;
 
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].posX = newWidth / 2 - 310 + 320 * (i % 2);
+        for (int i = 0; i < this.buttons.length; i++) {
+            this.buttons[i].posX = newWidth / 2 - 360 + 370 * (i % 2);
         }
     }
 
     @Override
     public void onInit() {
-        buttons = new GuiButtonKey[Settings.keys.size()];
+        this.buttons = new GuiButtonKey[Settings.keys.size()];
 
         int i = 0;
 
-        for (i = 0; i < buttons.length; i++) {
+        for (i = 0; i < this.buttons.length; i++) {
             KeyBinding binding = Settings.keys.get(i);
 
-            buttons[i] = new GuiButtonKey(LanguageRegistry.translate(binding.id) + ": " + Keyboard.getKeyName(binding.key), width / 2 - 310 + 320 * (i % 2), 50 + (i / 2) * 60, 300, 50, binding, this);
+            this.buttons[i] = new GuiButtonKey(LanguageRegistry.translate(binding.id) + ": " + Keyboard.getKeyName(binding.key), this.width / 2 - 360 + 370 * (i % 2), 50 + (i / 2) * 60, 350, 50, binding, this);
 
-            this.elements.add(buttons[i]);
+            this.elements.add(this.buttons[i]);
         }
 
         i++;
 
-        buttonReturn = new GuiButton(LanguageRegistry.translate("gui.return"), width / 2 - 150, 50 + ((i + 0) / 2) * 60, 300, 50, this);
+        this.buttonReturn = new GuiButton(LanguageRegistry.translate("gui.return"), this.width / 2 - 150, 50 + ((i + 0) / 2) * 60, 300, 50, this);
 
-        this.elements.add(buttonReturn);
+        this.elements.add(this.buttonReturn);
     }
 
     @Override
@@ -78,8 +77,8 @@ public class GuiControls extends GuiScreen {
 
     @Override
     protected void onClickAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
-        if (element == buttonReturn) {
-            SettlingClient.instance.displayScreen(parent);
+        if (element == this.buttonReturn) {
+            SettlingClient.instance.displayScreen(this.parent);
         }
 
         for (int i = 0; i < this.buttons.length; i++) {

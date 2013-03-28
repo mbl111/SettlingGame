@@ -4,7 +4,6 @@ package net.specialattack.settling.client.gui;
 import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.gui.element.GuiButton;
 import net.specialattack.settling.client.gui.element.GuiElement;
-import net.specialattack.settling.client.gui.element.GuiScreen;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.world.WorldDemo;
 import net.specialattack.settling.common.Settling;
@@ -27,14 +26,14 @@ public class GuiScreenMainMenu extends GuiScreen {
 
     @Override
     public void onInit() {
-        buttonPlay = new GuiButton(LanguageRegistry.translate("gui.mainscreen.play"), this.width / 2 - 200, 300, 400, 50, this);
-        buttonOptions = new GuiButton(LanguageRegistry.translate("gui.options"), this.width / 2 - 200, 360, 400, 50, this);
-        buttonExit = new GuiButton(LanguageRegistry.translate("gui.mainscreen.exit"), this.width / 2 - 200, 420, 400, 50, this);
+        this.buttonPlay = new GuiButton(LanguageRegistry.translate("gui.mainscreen.play"), this.width / 2 - 200, 300, 400, 50, this);
+        this.buttonOptions = new GuiButton(LanguageRegistry.translate("gui.options"), this.width / 2 - 200, 360, 400, 50, this);
+        this.buttonExit = new GuiButton(LanguageRegistry.translate("gui.mainscreen.exit"), this.width / 2 - 200, 420, 400, 50, this);
         //serverAddress = new GuiTextbox(this.width / 2 - 200, 200, 400, 50, this);
 
-        this.elements.add(buttonPlay);
-        this.elements.add(buttonOptions);
-        this.elements.add(buttonExit);
+        this.elements.add(this.buttonPlay);
+        this.elements.add(this.buttonOptions);
+        this.elements.add(this.buttonExit);
         //this.elements.add(serverAddress);
     }
 
@@ -47,21 +46,21 @@ public class GuiScreenMainMenu extends GuiScreen {
     public void onRender(int mouseX, int mouseY) {
         TextureRegistry.getTexture("/textures/settling.png").bindTexture();
 
-        GuiHelper.drawTexturedRectangle((float) width / 2.0F - 300, 40.0F, 600.0F, 250.0F, 0.0F, 0.0F, 1.0F, 1.0F);
+        GuiHelper.drawTexturedRectangle((float) this.width / 2.0F - 300, 40.0F, 600.0F, 250.0F, 0.0F, 0.0F, 1.0F, 1.0F);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected void onClickAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
-        if (element == buttonPlay) {
+        if (element == this.buttonPlay) {
             SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
             SettlingClient.instance.markChunksDirty();
             SettlingClient.instance.displayScreen(null);
         }
-        if (element == buttonOptions) {
+        if (element == this.buttonOptions) {
             SettlingClient.instance.displayScreen(new GuiOptions(this));
         }
-        if (element == buttonExit) {
+        if (element == this.buttonExit) {
             Settling.getInstance().attemptShutdown();
         }
     }

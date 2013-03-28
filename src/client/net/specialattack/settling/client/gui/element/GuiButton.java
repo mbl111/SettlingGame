@@ -2,6 +2,7 @@
 package net.specialattack.settling.client.gui.element;
 
 import net.specialattack.settling.client.gui.GuiHelper;
+import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.texture.TextureRegistry;
 
 import org.lwjgl.opengl.GL11;
@@ -42,17 +43,17 @@ public class GuiButton extends GuiElement {
             color = 0xFFFF00FF;
         }
 
-        if (!enabled) {
+        if (!this.enabled) {
             vAdd = 0.125F;
             color = 0x888888FF;
         }
 
-        GuiHelper.drawTexturedRectangle(posX, posY, width, height, 0.0F, 0.0F + vAdd, 0.5F, 0.0625F + vAdd);
+        GuiHelper.drawTexturedRectangle(this.posX, this.posY, this.width, this.height, 0.0F, 0.0F + vAdd, 0.5F, 0.0625F + vAdd);
 
         float textTop = (float) this.posY + (float) this.height / 2.0F - this.screen.font.fontSize / 2.0F;
-        float textLeft = (float) this.posX + (float) this.width / 2.0F - (float) this.screen.font.getStringWidth(label) / 2.0F;
+        float textLeft = (float) this.posX + (float) this.width / 2.0F - (float) this.screen.font.getStringWidth(this.label) / 2.0F;
 
-        this.screen.font.renderStringWithShadow(label, (int) textLeft, (int) textTop, color);
+        this.screen.font.renderStringWithShadow(this.label, (int) textLeft, (int) textTop, color);
 
     }
 

@@ -3,6 +3,7 @@ package net.specialattack.settling.client.gui.element;
 
 import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.gui.GuiHelper;
+import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.texture.TextureRegistry;
 
 import org.lwjgl.input.Keyboard;
@@ -38,14 +39,14 @@ public class GuiTextbox extends GuiElement {
 
         float vAdd = 0.125F;
 
-        GuiHelper.drawTexturedRectangle(posX, posY, width, height, 0.0F, 0.0F + vAdd, 0.5F, 0.0625F + vAdd);
+        GuiHelper.drawTexturedRectangle(this.posX, this.posY, this.width, this.height, 0.0F, 0.0F + vAdd, 0.5F, 0.0625F + vAdd);
 
-        this.screen.font.renderStringWithShadow(text, this.posX + 4, this.posY + (this.height / 2) - 8, 0xFFFFFFFF);
-        if (active) {
+        this.screen.font.renderStringWithShadow(this.text, this.posX + 4, this.posY + (this.height / 2) - 8, 0xFFFFFFFF);
+        if (this.active) {
             if (SettlingClient.instance.timer.totalTicks / 400 % 2 == 0) {
                 // TODO: Add a | char to the text file
                 // TODO: Add characters for anything other than the uppercase letters
-                this.screen.font.renderStringWithShadow(":", this.posX + (text.length() == 0 ? 0 : this.screen.font.getStringWidth(text)) + 8, this.posY + (this.height / 2) - 8, 0xFFFFFFFF);
+                this.screen.font.renderStringWithShadow(":", this.posX + (this.text.length() == 0 ? 0 : this.screen.font.getStringWidth(this.text)) + 8, this.posY + (this.height / 2) - 8, 0xFFFFFFFF);
             }
         }
     }
@@ -64,18 +65,18 @@ public class GuiTextbox extends GuiElement {
     @Override
     public boolean keyPressed(int keyCode, char character) {
         if (keyCode == Keyboard.KEY_BACK) {
-            if (text.length() > 0) {
-                text = text.substring(0, text.length() - 1);
+            if (this.text.length() > 0) {
+                this.text = this.text.substring(0, this.text.length() - 1);
             }
         }
         else {
             String txt = character > 32 ? Character.toString(character) : "";
             if (txt.length() == 1) {
-                text += txt;
+                this.text += txt;
             }
         }
 
-        return active;
+        return this.active;
     }
 
     @Override

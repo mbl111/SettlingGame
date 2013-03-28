@@ -37,11 +37,11 @@ public class Item {
     }
 
     public int getMaxStackSize() {
-        return maxStackSize;
+        return this.maxStackSize;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String[] getTextureNames() {

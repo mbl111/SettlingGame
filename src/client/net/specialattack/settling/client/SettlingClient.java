@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
 import net.specialattack.settling.client.gui.GuiScreenMenu;
-import net.specialattack.settling.client.gui.element.GuiScreen;
 import net.specialattack.settling.client.item.ClientItemDelegate;
 import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
@@ -17,6 +17,7 @@ import net.specialattack.settling.client.shaders.Shader;
 import net.specialattack.settling.client.shaders.ShaderLoader;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.util.KeyBinding;
+import net.specialattack.settling.client.util.ScreenResolution;
 import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.item.CommonItemDelegate;
@@ -32,6 +33,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -56,9 +58,57 @@ public class SettlingClient extends Settling {
     private int tps;
     private GuiScreen currentScreen = null;
     private boolean mouseGrabbed = false;
+    private boolean fullscreen = false;
 
     public SettlingClient() {
         instance = this;
+    }
+
+    public void setFullscreen(boolean state) {
+        if (!fullscreen && state) {
+            try {
+                DisplayMode mode = Settings.displayMode.getMode();
+
+                Display.setDisplayModeAndFullscreen(mode);
+
+                this.resize(mode.getWidth(), mode.getHeight());
+
+                fullscreen = true;
+            }
+            catch (LWJGLException e) {
+                Settling.log.log(Level.SEVERE, "Failed enabling fullscreen mode", e);
+
+                setFullscreen(false);
+            }
+        }
+        else if (fullscreen && !state) {
+            try {
+                Display.setFullscreen(false);
+
+                this.resize(this.canvas.getWidth(), this.canvas.getHeight());
+
+                fullscreen = false;
+            }
+            catch (LWJGLException e) {
+                Settling.log.log(Level.SEVERE, "Failed disabling fullscreen mode", e);
+            }
+        }
+    }
+
+    public void updateFullscreen() {
+        if (fullscreen) {
+            try {
+                DisplayMode mode = Settings.displayMode.getMode();
+
+                Display.setDisplayModeAndFullscreen(mode);
+
+                this.resize(mode.getWidth(), mode.getHeight());
+            }
+            catch (LWJGLException e) {
+                Settling.log.log(Level.SEVERE, "Failed updating fullscreen mode", e);
+            }
+
+        }
     }
 
     public void setCanvas(Canvas canvas) {
@@ -101,19 +151,19 @@ public class SettlingClient extends Settling {
     }
 
     public void displayScreen(GuiScreen screen) {
-        if (this.currentScreen == null && screen != null && mouseGrabbed) {
-            mouseGrabbed = false;
+        if (this.currentScreen == null && screen != null && this.mouseGrabbed) {
+            this.mouseGrabbed = false;
             Mouse.setGrabbed(false);
         }
-        if (this.currentScreen != null && screen == null && !mouseGrabbed) {
-            mouseGrabbed = true;
+        if (this.currentScreen != null && screen == null && !this.mouseGrabbed) {
+            this.mouseGrabbed = true;
             Mouse.setGrabbed(true);
         }
 
         this.currentScreen = screen;
 
         if (this.currentScreen != null) {
-            this.currentScreen.initialize(displayWidth, displayHeight);
+            this.currentScreen.initialize(this.displayWidth, this.displayHeight);
         }
 
         if (screen == null && this.currentWorld == null) {
@@ -126,6 +176,7 @@ public class SettlingClient extends Settling {
         try {
             Display.setParent(this.canvas);
             Display.create();
+            ScreenResolution.initialize();
         }
         catch (LWJGLException e) {
             Settling.log.log(Level.SEVERE, "Failed starting Settling", e);
@@ -168,8 +219,12 @@ public class SettlingClient extends Settling {
 
         Shader.unbindShader();
 
-        LanguageRegistry.loadLang(Settings.language.getValue());
+        LanguageRegistry.loadLang("en_US");
         Settings.loadSettings();
+
+        if (Settings.fullscreen.getState()) {
+            this.setFullscreen(true);
+        }
 
         //this.currentWorld = new WorldDemo(new File("./demo/"));
 
@@ -215,7 +270,7 @@ public class SettlingClient extends Settling {
             for (int i = 0; i < this.timer.remainingTicks; i++) {
                 ticks++;
                 this.tick();
-                updateChunks();
+                this.updateChunks();
             }
 
             frames++;
@@ -228,9 +283,6 @@ public class SettlingClient extends Settling {
             while (Mouse.next()) {
                 if (Mouse.getEventButton() != -1 && this.currentScreen != null && Mouse.isButtonDown(Mouse.getEventButton())) {
                     this.currentScreen.mousePressed(Mouse.getEventButton(), Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
-                }
-                else if (Mouse.getEventDWheel() != 0) {
-                    this.currentScreen.mouseScrolled(Mouse.getEventDWheel());
                 }
             }
 
@@ -275,7 +327,7 @@ public class SettlingClient extends Settling {
     }
 
     private void render() {
-        if (this.displayWidth != this.canvas.getWidth() || this.displayHeight != this.canvas.getHeight()) {
+        if (!fullscreen && (this.displayWidth != this.canvas.getWidth() || this.displayHeight != this.canvas.getHeight())) {
             this.resize(this.canvas.getWidth(), this.canvas.getHeight());
         }
         float scale = 1F;
@@ -399,8 +451,8 @@ public class SettlingClient extends Settling {
                 ChunkRenderer chunkRenderer;
                 boolean isRenderedAlready = false;
 
-                if (chunkList.containsKey(toRender)) {
-                    chunkRenderer = chunkList.get(toRender);
+                if (this.chunkList.containsKey(toRender)) {
+                    chunkRenderer = this.chunkList.get(toRender);
                     isRenderedAlready = true;
                 }
                 else {

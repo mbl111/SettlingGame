@@ -14,6 +14,8 @@ gui.options=Options
 gui.controls=Controls
 gui.video=Video Settings
 gui.language=Language
+gui.on=On
+gui.off=Off
 
 #Controls
 movement.forward=Forward
@@ -23,3 +25,6 @@ movement.right=Right
 movement.jump=Jump
 movement.sneak=Sneak
 movement.sprint=Sprint
+
+#Video Settings
+gui.video.fullscreen=Fullscreen: %s

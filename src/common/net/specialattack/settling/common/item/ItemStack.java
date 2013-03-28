@@ -32,11 +32,11 @@ public class ItemStack {
     }
 
     public int getAmount() {
-        return count;
+        return this.count;
     }
 
     public int getItemId() {
-        return itemId;
+        return this.itemId;
     }
 
     public int getMaxStackSize() {
@@ -60,16 +60,17 @@ public class ItemStack {
     }
 
     public void setDisplayName(String name) {
-        metaData.put("display", name);
+        this.metaData.put("display", name);
     }
 
     public boolean hasDisplayName() {
-        return this.metaData.size() > 0 ? (metaData.containsKey("display")) : false;
+        return this.metaData.size() > 0 ? (this.metaData.containsKey("display")) : false;
     }
 
     public String getDisplayName() {
-        if (this.hasDisplayName())
-            return metaData.get("display");
+        if (this.hasDisplayName()) {
+            return this.metaData.get("display");
+        }
         return this.getItemName();
     }
 

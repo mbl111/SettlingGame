@@ -40,8 +40,8 @@ public class FontRenderer {
         int blue = (color >> 8) & 0xFF / 2;
         int alpha = color & 0xFF;
 
-        renderString(text, posX + 2, posY + 2, (red << 24) | (green << 16) | (blue << 8) | alpha);
-        renderString(text, posX, posY, color);
+        this.renderString(text, posX + 2, posY + 2, (red << 24) | (green << 16) | (blue << 8) | alpha);
+        this.renderString(text, posX, posY, color);
     }
 
     public void renderString(String text, int posX, int posY, int color) {
@@ -57,7 +57,7 @@ public class FontRenderer {
         GL11.glColor4f((float) red / 256.0F, (float) green / 256.0F, (float) blue / 256.0F, (float) alpha / 256.0F);
 
         for (int i = 0; i < chars.length; i++) {
-            nextPosX = renderChar(chars[i], nextPosX, posY);
+            nextPosX = this.renderChar(chars[i], nextPosX, posY);
         }
     }
 
@@ -78,17 +78,17 @@ public class FontRenderer {
         GL11.glVertex3f(posX, posY, 0.0F);
 
         GL11.glTexCoord2f(end[0], start[1]);
-        GL11.glVertex3f(posX + (float) widths[charIndex] * fontSize / 16.0F, posY, 0.0F);
+        GL11.glVertex3f(posX + (float) widths[charIndex] * this.fontSize / 16.0F, posY, 0.0F);
 
         GL11.glTexCoord2f(end[0], end[1]);
-        GL11.glVertex3f(posX + (float) widths[charIndex] * fontSize / 16.0F, posY + fontSize, 0.0F);
+        GL11.glVertex3f(posX + (float) widths[charIndex] * this.fontSize / 16.0F, posY + this.fontSize, 0.0F);
 
         GL11.glTexCoord2f(start[0], end[1]);
-        GL11.glVertex3f(posX, posY + fontSize, 0.0F);
+        GL11.glVertex3f(posX, posY + this.fontSize, 0.0F);
 
         GL11.glEnd();
 
-        return posX + (int) ((float) widths[charIndex] * fontSize / 16.0F) + 2;
+        return posX + (int) ((float) widths[charIndex] * this.fontSize / 16.0F) + 2;
     }
 
     public int getStringWidth(String text) {
@@ -97,7 +97,7 @@ public class FontRenderer {
         int width = 0;
 
         for (int i = 0; i < chars.length; i++) {
-            width += getCharWidth(chars[i]) + 2;
+            width += this.getCharWidth(chars[i]) + 2;
         }
 
         return width;
@@ -106,7 +106,7 @@ public class FontRenderer {
     public int getCharWidth(char character) {
         int charIndex = character & 0xFF;
 
-        return (int) ((float) widths[charIndex] * fontSize / 16.0F);
+        return (int) ((float) widths[charIndex] * this.fontSize / 16.0F);
     }
 
 }

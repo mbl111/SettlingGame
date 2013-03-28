@@ -68,8 +68,8 @@ public class Chunk {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + chunkX;
-        result = prime * result + chunkZ;
+        result = prime * result + this.chunkX;
+        result = prime * result + this.chunkZ;
         return result;
     }
 
@@ -81,14 +81,14 @@ public class Chunk {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         Chunk other = (Chunk) obj;
-        if (chunkX != other.chunkX) {
+        if (this.chunkX != other.chunkX) {
             return false;
         }
-        if (chunkZ != other.chunkZ) {
+        if (this.chunkZ != other.chunkZ) {
             return false;
         }
         return true;

@@ -24,7 +24,9 @@ public final class Settings {
     public static KeyBinding sneak = new KeyBinding(29, "movement.sneak");
     public static KeyBinding jump = new KeyBinding(57, "movement.jump");
     public static KeyBinding sprint = new KeyBinding(42, "movement.sprint");
-    public static LanguageSetting language = new LanguageSetting("en_US"); //language.current
+    public static LanguageSetting language = new LanguageSetting("en_US"); // language.current
+    public static DisplayModeSetting displayMode = new DisplayModeSetting(); // display.mode
+    public static BooleanSetting fullscreen = new BooleanSetting(false, "display.fullscreen");
 
     public static void loadSettings() {
         BufferedReader reader = null;
@@ -77,7 +79,7 @@ public final class Settings {
             writer = new BufferedWriter(new FileWriter(file));
 
             for (String key : settings.keySet()) {
-                writer.write(key + "=" + settings.get(key).getValue() + "\n\r");
+                writer.write(key + "=" + settings.get(key).getValue() + "\r\n");
             }
         }
         catch (IOException e) {

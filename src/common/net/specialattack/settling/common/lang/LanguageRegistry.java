@@ -21,7 +21,6 @@ public final class LanguageRegistry {
     //With this being the standard english
 
     static {
-
         BufferedReader reader = openResource("/lang/lang.registery");
 
         availableLangs = new TreeMap<String, String>();
@@ -51,7 +50,6 @@ public final class LanguageRegistry {
             }
         }
         System.out.println("Loaded (" + availableLangs.size() + ") languages");
-
     }
 
     public static void loadLang(String language) {
@@ -59,7 +57,6 @@ public final class LanguageRegistry {
             entries = langs.get(language);
         }
         else {
-
             BufferedReader reader = openResource("/lang/" + language + ".lang");
 
             entries = new TreeMap<String, String>();
@@ -88,7 +85,7 @@ public final class LanguageRegistry {
                     catch (IOException e) {}
                 }
             }
-            //Yay! Cache
+            // Yay! Cache
             langs.put(language, entries);
         }
         Settings.language.set(language);
@@ -153,6 +150,15 @@ public final class LanguageRegistry {
             return key;
         }
         try {
+            for (int i = 0; i < args.length; i++) {
+                try {
+                    if (entries.containsKey(args[i])) {
+                        args[i] = translate((String) args[i]);
+                    }
+                }
+                catch (ClassCastException e) {}
+            }
+
             return String.format(entries.get(key), args);
         }
         catch (IllegalFormatException e) {
@@ -165,17 +171,11 @@ public final class LanguageRegistry {
     }
 
     public static void loadLang(int selectedIndex) {
-        if (selectedIndex >= availableLangs.size() && selectedIndex > -1)
+        if (selectedIndex >= availableLangs.size() && selectedIndex > -1) {
             return;
+        }
         String lang = (String) availableLangs.values().toArray()[selectedIndex];
         loadLang(lang);
-    }
-
-    private static void setCurrentLanguageIndex(int selectedIndex) {
-        if (selectedIndex >= availableLangs.size() && selectedIndex > -1)
-            return;
-        String lang = (String) availableLangs.values().toArray()[selectedIndex];
-        Settings.language.set(lang);
     }
 
 }

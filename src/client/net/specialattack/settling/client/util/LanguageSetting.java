@@ -9,31 +9,31 @@ public class LanguageSetting implements ISetting {
 
     public LanguageSetting(String name) {
         this.name = name;
-        Settings.settings.put("language.selected", this);
+        Settings.settings.put("language.current", this);
     }
 
     @Override
     public String getKey() {
-        return "";
+        return "language.current";
     }
 
     @Override
     public String getValue() {
-        return name;
+        return this.name;
     }
 
     public int getIndex() {
-        return LanguageRegistry.getIndexFromLangName(name);
+        return LanguageRegistry.getIndexFromLangName(this.name);
     }
 
+    @Override
     public void loadValue(String obj) {
         this.name = obj;
         LanguageRegistry.loadLang(obj);
     }
 
-    public void update() {
-
-    }
+    @Override
+    public void update() {}
 
     public void set(String lang) {
         this.name = lang;

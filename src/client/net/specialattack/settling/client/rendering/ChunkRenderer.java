@@ -18,20 +18,20 @@ public class ChunkRenderer {
     }
 
     public void markDirty() {
-        dirty = true;
+        this.dirty = true;
     }
 
     public void createGlChunk() {
         ItemTile grass = Items.grass;
-        if (glCallList < 0) {
-            glCallList = GL11.glGenLists(1);
+        if (this.glCallList < 0) {
+            this.glCallList = GL11.glGenLists(1);
         }
-        GL11.glNewList(glCallList, GL11.GL_COMPILE);
+        GL11.glNewList(this.glCallList, GL11.GL_COMPILE);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                int height = chunk.getHeight(chunk.chunkX * 16 + x, chunk.chunkZ * 16 + z);
-                int rx = chunk.chunkX * 16 + x - 16;
-                int rz = chunk.chunkZ * 16 + z - 16;
+                int height = this.chunk.getHeight(this.chunk.chunkX * 16 + x, this.chunk.chunkZ * 16 + z);
+                int rx = this.chunk.chunkX * 16 + x - 16;
+                int rz = this.chunk.chunkZ * 16 + z - 16;
 
                 TileRenderer.renderTileNorthFace(grass, rx, height, rz);
                 TileRenderer.renderTileFloor(grass, rx, height, rz);
@@ -39,12 +39,12 @@ public class ChunkRenderer {
         }
         GL11.glEndList();
 
-        dirty = false;
+        this.dirty = false;
     }
 
     public void renderChunk() {
-        if (glCallList > 0 && !dirty) {
-            GL11.glCallList(glCallList);
+        if (this.glCallList > 0 && !this.dirty) {
+            GL11.glCallList(this.glCallList);
         }
     }
 
@@ -52,7 +52,7 @@ public class ChunkRenderer {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((chunk == null) ? 0 : chunk.hashCode());
+        result = prime * result + ((this.chunk == null) ? 0 : this.chunk.hashCode());
         return result;
     }
 
@@ -64,16 +64,16 @@ public class ChunkRenderer {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         ChunkRenderer other = (ChunkRenderer) obj;
-        if (chunk == null) {
+        if (this.chunk == null) {
             if (other.chunk != null) {
                 return false;
             }
         }
-        else if (!chunk.equals(other.chunk)) {
+        else if (!this.chunk.equals(other.chunk)) {
             return false;
         }
         return true;

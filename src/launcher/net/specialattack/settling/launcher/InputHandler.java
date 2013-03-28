@@ -18,25 +18,31 @@ public class InputHandler implements MouseListener, MouseMotionListener {
     static Boolean released = false;
     public static int MouseButton;
 
+    @Override
     public void mouseDragged(MouseEvent e) {
         MouseDx = e.getX();
         MouseDy = e.getY();
 
     }
 
+    @Override
     public void mouseMoved(MouseEvent e) {
         MouseX = e.getX();
         MouseY = e.getY();
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
 
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {}
 
+    @Override
     public void mouseExited(MouseEvent e) {}
 
+    @Override
     public void mousePressed(MouseEvent e) {
         MouseButton = e.getButton();
         MousePx = e.getX();
@@ -46,6 +52,7 @@ public class InputHandler implements MouseListener, MouseMotionListener {
         dragged = true;
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         MouseButton = 0;
         dragged = false;

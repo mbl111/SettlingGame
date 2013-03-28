@@ -1,10 +1,10 @@
 
-package net.specialattack.settling.client.gui.element;
+package net.specialattack.settling.client.gui;
 
 import java.util.ArrayList;
 
 import net.specialattack.settling.client.SettlingClient;
-import net.specialattack.settling.client.gui.GuiHelper;
+import net.specialattack.settling.client.gui.element.GuiElement;
 import net.specialattack.settling.client.rendering.FontRenderer;
 import net.specialattack.settling.client.util.KeyBinding;
 
@@ -87,7 +87,7 @@ public abstract class GuiScreen {
     }
 
     public void drawBackground() {
-        GuiHelper.renderRectangle(0, 0, width, height, 0x22222299);
+        GuiHelper.renderRectangle(0, 0, this.width, this.height, 0x22222299);
     }
 
     protected abstract void onResize(int newWidth, int newHeight);

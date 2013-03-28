@@ -4,11 +4,11 @@ package net.specialattack.settling.client.gui.element;
 import net.specialattack.settling.client.gui.GuiHelper;
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.texture.TextureRegistry;
-import net.specialattack.settling.client.util.KeyBinding;
+import net.specialattack.settling.common.util.Table;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiButtonKey extends GuiElement {
+public class GuiToggleButton<T> extends GuiElement {
 
     public String label;
     public int posX;
@@ -16,19 +16,38 @@ public class GuiButtonKey extends GuiElement {
     public int width;
     public int height;
     public GuiScreen screen;
-    public KeyBinding key;
-    public boolean changing = false;
+    public Table<Integer, String, T> possibleValues;
+    public int selectedValue;
+    public T selected;
 
     public boolean enabled = true;
 
-    public GuiButtonKey(String label, int posX, int posY, int width, int height, KeyBinding key, GuiScreen screen) {
-        this.label = label;
+    public GuiToggleButton(int posX, int posY, int width, int height, GuiScreen screen) {
+        this.label = "";
         this.posX = posX;
         this.posY = posY;
         this.width = width;
         this.height = height;
-        this.key = key;
         this.screen = screen;
+        this.possibleValues = new Table<Integer, String, T>();
+        this.selectedValue = 0;
+        this.selected = null;
+    }
+
+    public void addOption(String name, T value) {
+        this.possibleValues.insert(this.possibleValues.size(), name, value);
+
+        if (this.possibleValues.size() == 1) {
+            this.label = name;
+        }
+    }
+
+    public void setValue(String name) {
+        if (this.possibleValues.containsValue1(name)) {
+            this.selectedValue = this.possibleValues.getKey1(name);
+
+            this.label = this.possibleValues.getValue(this.selectedValue).getValue1();
+        }
     }
 
     @Override
@@ -47,11 +66,6 @@ public class GuiButtonKey extends GuiElement {
             color = 0xFFFF00FF;
         }
 
-        if (this.changing) {
-            vAdd = 0.0625F;
-            color = 0xFF880088;
-        }
-
         if (!this.enabled) {
             vAdd = 0.125F;
             color = 0x888888FF;
@@ -63,15 +77,33 @@ public class GuiButtonKey extends GuiElement {
         float textLeft = (float) this.posX + (float) this.width / 2.0F - (float) this.screen.font.getStringWidth(this.label) / 2.0F;
 
         this.screen.font.renderStringWithShadow(this.label, (int) textLeft, (int) textTop, color);
+
     }
 
     @Override
     public boolean mouseClicked(int mouseButton, int mouseX, int mouseY) {
-        if (!this.enabled || mouseButton != 0) {
+        if (!this.enabled || (mouseButton != 0 && mouseButton != 1)) {
             return false;
         }
 
         if (mouseX >= this.posX && mouseX <= this.posX + this.width && mouseY >= this.posY && mouseY <= this.posY + this.height) {
+            if (mouseButton == 0) {
+                this.selectedValue++;
+            }
+            else {
+                this.selectedValue--;
+            }
+
+            if (this.selectedValue >= this.possibleValues.size()) {
+                this.selectedValue = 0;
+            }
+            if (this.selectedValue < 0) {
+                this.selectedValue = this.possibleValues.size() - 1;
+            }
+
+            this.label = this.possibleValues.getValue(this.selectedValue).getValue1();
+            this.selected = this.possibleValues.getValue(this.selectedValue).getValue2();
+
             return true;
         }
 
@@ -85,7 +117,6 @@ public class GuiButtonKey extends GuiElement {
 
     @Override
     public boolean mouseScrolled(int dir) {
-        // TODO Auto-generated method stub
         return false;
     }
 }

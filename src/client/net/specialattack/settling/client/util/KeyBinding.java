@@ -29,8 +29,8 @@ public class KeyBinding implements ISetting {
     }
 
     public boolean isTapped() {
-        if (!aknowledged) {
-            aknowledged = true;
+        if (!this.aknowledged) {
+            this.aknowledged = true;
 
             return true;
         }
@@ -39,14 +39,14 @@ public class KeyBinding implements ISetting {
     }
 
     public boolean isPressed() {
-        return Keyboard.isKeyDown(key);
+        return Keyboard.isKeyDown(this.key);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + id.hashCode();
+        result = prime * result + this.id.hashCode();
         return result;
     }
 
@@ -58,11 +58,11 @@ public class KeyBinding implements ISetting {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         KeyBinding other = (KeyBinding) obj;
-        if (id != other.id) {
+        if (this.id != other.id) {
             return false;
         }
         return true;
@@ -90,15 +90,15 @@ public class KeyBinding implements ISetting {
 
     @Override
     public void update() {
-        if (Keyboard.isKeyDown(key)) {
-            if (!pressed) {
-                pressed = true;
-                aknowledged = false;
+        if (Keyboard.isKeyDown(this.key)) {
+            if (!this.pressed) {
+                this.pressed = true;
+                this.aknowledged = false;
             }
         }
-        else if (pressed) {
-            pressed = false;
-            aknowledged = true;
+        else if (this.pressed) {
+            this.pressed = false;
+            this.aknowledged = true;
         }
     }
 

@@ -48,7 +48,7 @@ public class PlayerView {
 
         float mod = 1.0F;
 
-        if (Settings.sneak.isPressed()) {
+        if (Settings.sprint.isPressed()) {
             mod = 10.0F;
         }
 
@@ -73,7 +73,7 @@ public class PlayerView {
             this.location.y += this.vSpeed * mod;
         }
 
-        if (Settings.sprint.isPressed()) {
+        if (Settings.sneak.isPressed()) {
             this.location.y -= this.vSpeed * mod;
         }
 

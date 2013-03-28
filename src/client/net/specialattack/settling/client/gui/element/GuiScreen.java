@@ -76,7 +76,7 @@ public abstract class GuiScreen {
         }
 
     }
-    
+
     public void mouseScrolled(int wheel) {
         for (GuiElement element : this.elements) {
             if (element.mouseScrolled(wheel)) {

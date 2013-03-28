@@ -228,11 +228,12 @@ public class SettlingClient extends Settling {
             while (Mouse.next()) {
                 if (Mouse.getEventButton() != -1 && this.currentScreen != null && Mouse.isButtonDown(Mouse.getEventButton())) {
                     this.currentScreen.mousePressed(Mouse.getEventButton(), Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
-                }else if (Mouse.getEventDWheel() != 0){
+                }
+                else if (Mouse.getEventDWheel() != 0) {
                     this.currentScreen.mouseScrolled(Mouse.getEventDWheel());
                 }
             }
-            
+
             while (Keyboard.next()) {
                 if (Keyboard.getEventKeyState() && !Keyboard.isRepeatEvent()) {
                     if (this.currentScreen != null) {

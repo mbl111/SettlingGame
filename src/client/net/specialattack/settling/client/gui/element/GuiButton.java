@@ -53,7 +53,7 @@ public class GuiButton extends GuiElement {
         float textLeft = (float) this.posX + (float) this.width / 2.0F - (float) this.screen.font.getStringWidth(label) / 2.0F;
 
         this.screen.font.renderStringWithShadow(label, (int) textLeft, (int) textTop, color);
-        
+
     }
 
     @Override

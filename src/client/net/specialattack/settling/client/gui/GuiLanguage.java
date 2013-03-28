@@ -3,15 +3,10 @@ package net.specialattack.settling.client.gui;
 
 import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.gui.element.GuiButton;
-import net.specialattack.settling.client.gui.element.GuiButtonKey;
 import net.specialattack.settling.client.gui.element.GuiElement;
 import net.specialattack.settling.client.gui.element.GuiLanguageList;
 import net.specialattack.settling.client.gui.element.GuiScreen;
-import net.specialattack.settling.client.util.KeyBinding;
-import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.lang.LanguageRegistry;
-
-import org.lwjgl.input.Keyboard;
 
 public class GuiLanguage extends GuiScreen {
 
@@ -38,10 +33,10 @@ public class GuiLanguage extends GuiScreen {
         list = new GuiLanguageList(width / 2 - 250, 100, 500, 14 * 20, this);
         buttonReturn = new GuiButton(LanguageRegistry.translate("gui.done"), width / 2 - 150, height - 80, 300, 50, this);
 
-        for (String element : LanguageRegistry.getLanguages().keySet()){
+        for (String element : LanguageRegistry.getLanguages().keySet()) {
             list.add(element);
         }
-        
+
         this.elements.add(buttonReturn);
         this.elements.add(list);
     }
@@ -55,8 +50,8 @@ public class GuiLanguage extends GuiScreen {
             SettlingClient.instance.displayScreen(parent);
             LanguageRegistry.setCurrentLanguageIndex(list.selectedIndex);
         }
-        
-        if (element == list){
+
+        if (element == list) {
             LanguageRegistry.loadLang(list.selectedIndex);
             buttonReturn.label = LanguageRegistry.translate("gui.done");
         }
@@ -67,7 +62,6 @@ public class GuiLanguage extends GuiScreen {
     protected void onKeyAction(GuiElement element, int key) {}
 
     @Override
-    protected void onMouseScrolled(int wheel) {
-    }
+    protected void onMouseScrolled(int wheel) {}
 
 }

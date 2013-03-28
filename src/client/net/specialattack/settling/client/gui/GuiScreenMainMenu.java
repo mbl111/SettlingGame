@@ -72,7 +72,7 @@ public class GuiScreenMainMenu extends GuiScreen {
     @Override
     protected void onMouseScrolled(int wheel) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

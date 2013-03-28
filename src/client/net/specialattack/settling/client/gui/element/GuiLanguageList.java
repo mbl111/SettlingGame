@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.specialattack.settling.client.gui.GuiHelper;
-import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.common.lang.LanguageRegistry;
 
 import org.lwjgl.opengl.GL11;

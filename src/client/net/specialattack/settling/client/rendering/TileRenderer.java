@@ -18,7 +18,7 @@ public class TileRenderer {
 
     public static void renderTileFloor(ItemTile item, int posX, int posY, int posZ) {
         SubTexture texture = TextureRegistry.getSubTexture(item.textureName);
-        
+
         if (currentTexture != texture.getParent().getTextureId()) {
             currentTexture = texture.bindTexture();
         }

@@ -1,0 +1,25 @@
+#Main screen
+gui.mainscreen.exit=Sortir
+gui.mainscreen.play=Jouez Hors Ligne
+gui.mainscreen.multiplayer=Connect to SpA server
+
+#Menu screen
+gui.menu.resume=Revenir
+gui.menu.disconnect=Couper
+
+#Guis
+gui.return=Reculer
+gui.done=Fini
+gui.options=Options de
+gui.controls=Contrôles
+gui.video=Paramètres vidéo
+gui.language=Langage
+
+#Controls
+movement.forward=En Avant
+movement.back=En Arrière
+movement.left=à gauche
+movement.right=à droite
+movement.jump=Sauter
+movement.sneak=Se Glisser
+movement.sprint=Sprinter

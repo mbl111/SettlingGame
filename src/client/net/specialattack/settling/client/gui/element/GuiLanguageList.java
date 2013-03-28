@@ -34,6 +34,7 @@ public class GuiLanguageList extends GuiElement {
         this.height = height;
         this.screen = screen;
         elements = new ArrayList<String>();
+        selectedIndex = LanguageRegistry.getCurrentLanguageIndex();
     }
 
     @Override
@@ -83,12 +84,13 @@ public class GuiLanguageList extends GuiElement {
 
     public void add(String string) {
         elements.add(string);
-        float percent = (14F / elements.size());
-        scrollBarHeight = (int) (percent * (this.height - 4));
-
-        selectedIndex = 15;//LanguageRegistry.getCurrentLanguageIndex();
-        int scrollMax = elements.size() - 14 <= 0 ? 0 : elements.size() - 14;
-        scroll = (selectedIndex / (elements.size())) * scrollMax;
+        if (elements.size() < 14) {
+            scrollBarHeight = this.height - 4;
+        }
+        else {
+            float percent = (14F / elements.size());
+            scrollBarHeight = (int) (percent * (this.height - 4));
+        }
     }
 
     @Override

@@ -9,9 +9,11 @@ gui.menu.disconnect=Disconnect
 
 #Guis
 gui.return=Back
+gui.done=Done
 gui.options=Options
 gui.controls=Controls
 gui.video=Video Settings
+gui.language=Language
 
 #Controls
 movement.forward=Forward

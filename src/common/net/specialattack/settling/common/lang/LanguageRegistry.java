@@ -52,7 +52,7 @@ public final class LanguageRegistry {
         }
         System.out.println("Loaded (" + availableLangs.size() + ") languages");
 
-        currentLang = getIndexFromLangName("en_US.lang");
+        currentLang = getIndexFromLangName("en_US");
 
     }
 
@@ -91,10 +91,10 @@ public final class LanguageRegistry {
                 }
             }
             //Yay! Cache
-            currentLang = getIndexFromLangName(language);
-            System.out.println(currentLang);
             langs.put(language, entries);
         }
+        currentLang = getIndexFromLangName(language);
+        System.out.println(currentLang);
     }
 
     private static int getIndexFromLangName(String name) {
@@ -168,10 +168,14 @@ public final class LanguageRegistry {
     }
 
     public static void loadLang(int selectedIndex) {
-        if (selectedIndex >= availableLangs.size())
+        if (selectedIndex >= availableLangs.size() && selectedIndex > -1)
             return;
         String lang = (String) availableLangs.values().toArray()[selectedIndex];
         loadLang(lang);
+    }
+
+    public static void setCurrentLanguageIndex(int selectedIndex) {
+        currentLang = selectedIndex;
     }
 
 }

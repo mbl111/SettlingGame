@@ -53,10 +53,12 @@ public class GuiLanguage extends GuiScreen {
     protected void onClickAction(GuiElement element, int mouseX, int mouseZ, int mouseButton) {
         if (element == buttonReturn) {
             SettlingClient.instance.displayScreen(parent);
+            LanguageRegistry.setCurrentLanguageIndex(list.selectedIndex);
         }
         
         if (element == list){
             LanguageRegistry.loadLang(list.selectedIndex);
+            buttonReturn.label = LanguageRegistry.translate("gui.done");
         }
 
     }
@@ -66,8 +68,6 @@ public class GuiLanguage extends GuiScreen {
 
     @Override
     protected void onMouseScrolled(int wheel) {
-        // TODO Auto-generated method stub
-        
     }
 
 }

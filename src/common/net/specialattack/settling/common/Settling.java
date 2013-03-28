@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 
 import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Items;
+import net.specialattack.settling.common.util.ConsoleLogHandler;
+import net.specialattack.settling.common.util.LogFormatter;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.OpenGLException;
@@ -44,6 +46,13 @@ public abstract class Settling implements Runnable {
         if (this.running) {
             return;
         }
+
+        log.setUseParentHandlers(false);
+
+        ConsoleLogHandler handler = new ConsoleLogHandler();
+        handler.setFormatter(new LogFormatter());
+
+        log.addHandler(handler);
 
         this.startup();
 

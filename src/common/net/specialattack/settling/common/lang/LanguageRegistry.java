@@ -49,7 +49,7 @@ public final class LanguageRegistry {
                 catch (IOException e) {}
             }
         }
-        System.out.println("Loaded (" + availableLangs.size() + ") languages");
+        Settling.log.log(Level.INFO, "Loaded (" + availableLangs.size() + ") languages");
     }
 
     public static void loadLang(String language) {

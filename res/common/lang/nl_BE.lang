@@ -1,0 +1,25 @@
+#Main screen
+gui.mainscreen.exit=Exit
+gui.mainscreen.play=Speel alleen
+gui.mainscreen.multiplayer=Verbind met SpA server
+
+#Menu screen
+gui.menu.resume=Ga verder
+gui.menu.disconnect=Log uit
+
+#Guis
+gui.return=Terug
+gui.done=Klaar
+gui.options=Opties
+gui.controls=Bindingen
+gui.video=Video instellingen
+gui.language=Taal
+
+#Controls
+movement.forward=Voorwaarts
+movement.back=Achterwaarts
+movement.left=Links
+movement.right=Rechts
+movement.jump=Spring
+movement.sneak=Sluip
+movement.sprint=Sprint

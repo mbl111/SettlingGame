@@ -47,6 +47,8 @@ public abstract class GuiScreen {
     public void render(int mouseX, int mouseY) {
         this.drawBackground();
 
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
         for (GuiElement element : this.elements) {
             element.render(mouseX, mouseY);
         }
@@ -87,6 +89,8 @@ public abstract class GuiScreen {
     }
 
     public void drawBackground() {
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+
         GuiHelper.renderRectangle(0, 0, this.width, this.height, 0x22222299);
     }
 

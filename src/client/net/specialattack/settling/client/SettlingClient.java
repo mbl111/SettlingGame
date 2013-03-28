@@ -339,7 +339,6 @@ public class SettlingClient extends Settling {
 
     private void render2D() {
         this.initGL2();
-        GL11.glLoadIdentity();
 
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -380,7 +379,6 @@ public class SettlingClient extends Settling {
         this.levelRender();
 
         GL11.glPopMatrix();
-
     }
 
     // Our 3d rendering
@@ -419,6 +417,8 @@ public class SettlingClient extends Settling {
         GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, -1.0D, 1.0D);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     // Clear the canvas

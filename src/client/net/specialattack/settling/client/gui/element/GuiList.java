@@ -37,13 +37,16 @@ public class GuiList extends GuiElement {
 
     @Override
     public void render(int mouseX, int mouseY) {
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-        GuiHelper.renderRectangle(this.width - 22 + this.posX, this.posY - 2, 24, this.height, 0x444444FF);
-        GuiHelper.renderRectangle(this.width - 20 + this.posX, this.posY, 20, this.height - 2, 0x666666FF);
-        GuiHelper.renderRectangle(this.width - 19 + this.posX, this.posY + (this.height / this.elements.size()) * this.scroll, 18, this.scrollBarHeight, 0xAAAAAAFF);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+        GuiHelper.renderRectangle(this.posX + this.width - 22, this.posY, 24, this.height, 0x444444FF);
+        GuiHelper.renderRectangle(this.width - 20 + this.posX, this.posY + 2, 20, this.height - 4, 0x666666FF);
+        GuiHelper.renderRectangle(this.width - 19 + this.posX, this.posY + 2 + (this.height / this.elements.size()) * this.scroll, 18, this.scrollBarHeight, 0xAAAAAAFF);
 
         int lengthToRender = this.elements.size() >= this.scroll + this.height / 20 ? this.scroll + this.height / 20 : this.elements.size();
+
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         for (int i = this.scroll; i < lengthToRender; i++) {
             String s = this.elements.get(i);

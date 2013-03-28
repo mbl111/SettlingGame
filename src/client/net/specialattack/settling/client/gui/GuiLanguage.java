@@ -60,7 +60,6 @@ public class GuiLanguage extends GuiScreen {
             this.buttonReturn.label = LanguageRegistry.translate("gui.done");
             Settings.saveSettings();
         }
-
     }
 
     @Override

@@ -1,7 +1,8 @@
 
-package net.specialattack.settling.client.gui;
+package net.specialattack.settling.client.gui.element;
 
 import net.specialattack.settling.client.SettlingClient;
+import net.specialattack.settling.client.gui.GuiHelper;
 import net.specialattack.settling.client.texture.TextureRegistry;
 
 import org.lwjgl.input.Keyboard;
@@ -75,5 +76,11 @@ public class GuiTextbox extends GuiElement {
         }
 
         return active;
+    }
+
+    @Override
+    public boolean mouseScrolled(int dir) {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

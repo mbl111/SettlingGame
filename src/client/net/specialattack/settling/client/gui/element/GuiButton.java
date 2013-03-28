@@ -1,6 +1,7 @@
 
-package net.specialattack.settling.client.gui;
+package net.specialattack.settling.client.gui.element;
 
+import net.specialattack.settling.client.gui.GuiHelper;
 import net.specialattack.settling.client.texture.TextureRegistry;
 
 import org.lwjgl.opengl.GL11;
@@ -52,6 +53,7 @@ public class GuiButton extends GuiElement {
         float textLeft = (float) this.posX + (float) this.width / 2.0F - (float) this.screen.font.getStringWidth(label) / 2.0F;
 
         this.screen.font.renderStringWithShadow(label, (int) textLeft, (int) textTop, color);
+        
     }
 
     @Override
@@ -69,6 +71,12 @@ public class GuiButton extends GuiElement {
 
     @Override
     public boolean keyPressed(int keyCode, char character) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean mouseScrolled(int dir) {
         // TODO Auto-generated method stub
         return false;
     }

@@ -1,6 +1,7 @@
 
-package net.specialattack.settling.client.gui;
+package net.specialattack.settling.client.gui.element;
 
+import net.specialattack.settling.client.gui.GuiHelper;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.util.KeyBinding;
 
@@ -77,6 +78,12 @@ public class GuiButtonKey extends GuiElement {
     }
 
     public boolean keyPressed(int keyCode, char character) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseScrolled(int dir) {
+        // TODO Auto-generated method stub
         return false;
     }
 }

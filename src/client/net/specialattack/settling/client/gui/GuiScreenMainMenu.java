@@ -2,6 +2,9 @@
 package net.specialattack.settling.client.gui;
 
 import net.specialattack.settling.client.SettlingClient;
+import net.specialattack.settling.client.gui.element.GuiButton;
+import net.specialattack.settling.client.gui.element.GuiElement;
+import net.specialattack.settling.client.gui.element.GuiScreen;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.world.WorldDemo;
 import net.specialattack.settling.common.Settling;
@@ -65,5 +68,11 @@ public class GuiScreenMainMenu extends GuiScreen {
 
     @Override
     protected void onKeyAction(GuiElement element, int key) {}
+
+    @Override
+    protected void onMouseScrolled(int wheel) {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

@@ -1,9 +1,10 @@
 
-package net.specialattack.settling.client.gui;
+package net.specialattack.settling.client.gui.element;
 
 import java.util.ArrayList;
 
 import net.specialattack.settling.client.SettlingClient;
+import net.specialattack.settling.client.gui.GuiHelper;
 import net.specialattack.settling.client.rendering.FontRenderer;
 import net.specialattack.settling.client.util.KeyBinding;
 
@@ -75,6 +76,15 @@ public abstract class GuiScreen {
         }
 
     }
+    
+    public void mouseScrolled(int wheel) {
+        for (GuiElement element : this.elements) {
+            if (element.mouseScrolled(wheel)) {
+                this.onMouseScrolled(wheel);
+            }
+        }
+
+    }
 
     public void drawBackground() {
         GuiHelper.renderRectangle(0, 0, width, height, 0x22222299);
@@ -90,5 +100,7 @@ public abstract class GuiScreen {
 
     //Can just be ignored.. Perhaps if there is a hotkey pressed for a button or something. Tends to just be used with a textbox
     protected abstract void onKeyAction(GuiElement element, int key);
+
+    protected abstract void onMouseScrolled(int wheel);
 
 }

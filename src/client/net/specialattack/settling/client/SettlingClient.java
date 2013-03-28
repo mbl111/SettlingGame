@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
 import net.specialattack.settling.client.gui.GuiScreenMenu;
+import net.specialattack.settling.client.gui.element.GuiScreen;
 import net.specialattack.settling.client.item.ClientItemDelegate;
 import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
@@ -228,9 +228,11 @@ public class SettlingClient extends Settling {
             while (Mouse.next()) {
                 if (Mouse.getEventButton() != -1 && this.currentScreen != null && Mouse.isButtonDown(Mouse.getEventButton())) {
                     this.currentScreen.mousePressed(Mouse.getEventButton(), Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
+                }else if (Mouse.getEventDWheel() != 0){
+                    this.currentScreen.mouseScrolled(Mouse.getEventDWheel());
                 }
             }
-
+            
             while (Keyboard.next()) {
                 if (Keyboard.getEventKeyState() && !Keyboard.isRepeatEvent()) {
                     if (this.currentScreen != null) {

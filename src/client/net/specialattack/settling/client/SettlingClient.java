@@ -17,6 +17,7 @@ import net.specialattack.settling.client.shaders.Shader;
 import net.specialattack.settling.client.shaders.ShaderLoader;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.util.KeyBinding;
+import net.specialattack.settling.client.util.MovingObject;
 import net.specialattack.settling.client.util.ScreenResolution;
 import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.Settling;
@@ -25,6 +26,7 @@ import net.specialattack.settling.common.item.Item;
 import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.lang.LanguageRegistry;
+import net.specialattack.settling.common.util.MathHelper;
 import net.specialattack.settling.common.util.TickTimer;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.World;
@@ -48,7 +50,7 @@ public class SettlingClient extends Settling {
     public TickTimer timer = new TickTimer(20.0F);
     private PlayerView player;
     private Shader shader;
-    public static final boolean firstPerson = true;
+    public static final boolean firstPerson = false;
     public World currentWorld = null;
     public FontRenderer fontRenderer;
     private HashMap<Chunk, ChunkRenderer> chunkList;
@@ -59,6 +61,7 @@ public class SettlingClient extends Settling {
     private GuiScreen currentScreen = null;
     private boolean mouseGrabbed = false;
     private boolean fullscreen = false;
+    private MovingObject screenLocation;
 
     public SettlingClient() {
         instance = this;
@@ -151,13 +154,15 @@ public class SettlingClient extends Settling {
     }
 
     public void displayScreen(GuiScreen screen) {
-        if (this.currentScreen == null && screen != null && this.mouseGrabbed) {
-            this.mouseGrabbed = false;
-            Mouse.setGrabbed(false);
-        }
-        if (this.currentScreen != null && screen == null && !this.mouseGrabbed) {
-            this.mouseGrabbed = true;
-            Mouse.setGrabbed(true);
+        if (firstPerson) {
+            if (this.currentScreen == null && screen != null && this.mouseGrabbed) {
+                this.mouseGrabbed = false;
+                Mouse.setGrabbed(false);
+            }
+            if (this.currentScreen != null && screen == null && !this.mouseGrabbed) {
+                this.mouseGrabbed = true;
+                Mouse.setGrabbed(true);
+            }
         }
 
         this.currentScreen = screen;
@@ -235,6 +240,7 @@ public class SettlingClient extends Settling {
         this.renderedChunks = new ArrayList<ChunkRenderer>();
 
         this.player = new PlayerView();
+        this.screenLocation = new MovingObject(0.0D, 0.0D, 0.0D, 2.0F);
 
         this.displayScreen(new GuiScreenMainMenu());
 
@@ -307,9 +313,26 @@ public class SettlingClient extends Settling {
         }
     }
 
+    @SuppressWarnings("unused")
     private void tick() {
         if (firstPerson && this.currentScreen == null && this.currentWorld != null) {
             this.player.tick(this.currentWorld);
+        }
+        else if (this.currentScreen == null && this.currentWorld != null) {
+            if (Settings.forward.isPressed()) {
+                this.screenLocation.motionX -= 2.0F;
+            }
+            if (Settings.back.isPressed()) {
+                this.screenLocation.motionX += 2.0F;
+            }
+            if (Settings.left.isPressed()) {
+                this.screenLocation.motionZ += 2.0F;
+            }
+            if (Settings.right.isPressed()) {
+                this.screenLocation.motionZ -= 2.0F;
+            }
+
+            this.screenLocation.update();
         }
 
         KeyBinding.escape.update();
@@ -368,11 +391,16 @@ public class SettlingClient extends Settling {
             this.player.lookThrough(this.timer.renderPartialTicks);
         }
         else {
-            GL11.glTranslatef(0.0F, (float) this.displayHeight / 2.0F, 0.0F);
+            GL11.glTranslatef((float) this.displayWidth / 2.0F, (float) this.displayHeight / 2.0F, 0.0F);
 
             GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
             GL11.glRotatef(60.0F, 1.0F, 1.0F, 0.0F);
-            // GL11.glScalef(25.0F, 25.0F, 25.0F);
+            GL11.glScalef(20.0F, 20.0F, 20.0F);
+
+            double posX = this.screenLocation.posZ * MathHelper.sin(0.5F) + this.screenLocation.posX * MathHelper.cos(0.5F);
+            double posY = this.screenLocation.posZ * MathHelper.cos(0.5F) - this.screenLocation.posX * MathHelper.sin(0.5F);
+
+            GL11.glTranslated(posX, posY, 0.0D);
         }
         // This would go to the world/level class
 

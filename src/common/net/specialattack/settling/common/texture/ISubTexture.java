@@ -2,13 +2,21 @@
 package net.specialattack.settling.common.texture;
 
 public interface ISubTexture {
-    public abstract int getStartU();
+    public abstract int getFullStartU();
 
-    public abstract int getStartV();
+    public abstract int getFullStartV();
 
-    public abstract int getEndU();
+    public abstract int getFullEndU();
 
-    public abstract int getEndV();
+    public abstract int getFullEndV();
+
+    public abstract float getStartU();
+
+    public abstract float getStartV();
+
+    public abstract float getEndU();
+
+    public abstract float getEndV();
 
     public abstract int getWidth();
 

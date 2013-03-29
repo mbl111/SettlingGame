@@ -166,4 +166,9 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
         }
     }
 
+    @Override
+    public float getPadding() {
+        // TODO: return 0.5F / (float) this.getWidth();
+        return 0.0F;
+    }
 }

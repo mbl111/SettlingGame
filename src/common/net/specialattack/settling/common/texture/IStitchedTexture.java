@@ -7,4 +7,6 @@ public interface IStitchedTexture {
     public abstract ISubTexture loadTexture(BufferedImage imageData, String name, int width, int height);
 
     public abstract ISubTexture getSubTexture(String name);
+
+    public abstract float getPadding();
 }

@@ -28,10 +28,10 @@ public class ItemRenderer {
             currentTexture = texture.bindTexture();
         }
 
-        float startU = 1.0F * (float) texture.getStartU() / (float) texture.getParent().getWidth();
-        float startV = 1.0F * (float) texture.getStartV() / (float) texture.getParent().getHeight();
-        float endU = 1.0F * (float) texture.getEndU() / (float) texture.getParent().getWidth();
-        float endV = 1.0F * (float) texture.getEndV() / (float) texture.getParent().getHeight();
+        float startU = 1.0F * (float) texture.getFullStartU() / (float) texture.getParent().getWidth();
+        float startV = 1.0F * (float) texture.getFullStartV() / (float) texture.getParent().getHeight();
+        float endU = 1.0F * (float) texture.getFullEndU() / (float) texture.getParent().getWidth();
+        float endV = 1.0F * (float) texture.getFullEndV() / (float) texture.getParent().getHeight();
 
         float startX = (float) x;
         float startY = (float) y;

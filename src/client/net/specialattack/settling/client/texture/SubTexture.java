@@ -24,23 +24,43 @@ public class SubTexture implements ISubTexture {
     }
 
     @Override
-    public int getStartU() {
+    public int getFullStartU() {
         return this.startU;
     }
 
     @Override
-    public int getStartV() {
+    public int getFullStartV() {
         return this.startV;
     }
 
     @Override
-    public int getEndU() {
+    public int getFullEndU() {
         return this.endU;
     }
 
     @Override
-    public int getEndV() {
+    public int getFullEndV() {
         return this.endV;
+    }
+
+    @Override
+    public float getStartU() {
+        return (float) this.startU / (float) this.parent.getWidth() + this.parent.getPadding();
+    }
+
+    @Override
+    public float getStartV() {
+        return (float) this.startV / (float) this.parent.getHeight() + this.parent.getPadding();
+    }
+
+    @Override
+    public float getEndU() {
+        return (float) this.endU / (float) this.parent.getWidth() - this.parent.getPadding();
+    }
+
+    @Override
+    public float getEndV() {
+        return (float) this.endV / (float) this.parent.getHeight() - this.parent.getPadding();
     }
 
     @Override

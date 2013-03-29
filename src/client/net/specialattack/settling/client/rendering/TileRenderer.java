@@ -25,10 +25,10 @@ public class TileRenderer {
 
         GL11.glBegin(GL11.GL_QUADS);
 
-        float startU = 1.0F * (float) texture.getStartU() / (float) texture.getParent().getWidth();
-        float startV = 1.0F * (float) texture.getStartV() / (float) texture.getParent().getHeight();
-        float endU = 1.0F * (float) texture.getEndU() / (float) texture.getParent().getWidth();
-        float endV = 1.0F * (float) texture.getEndV() / (float) texture.getParent().getHeight();
+        float startU = texture.getStartU();
+        float startV = texture.getStartV();
+        float endU = texture.getEndU();
+        float endV = texture.getEndV();
 
         float startX = (float) posX;
         float startY = (float) posY;
@@ -76,10 +76,10 @@ public class TileRenderer {
 
         GL11.glBegin(GL11.GL_QUADS);
 
-        float startU = 1.0F * (float) texture.getStartU() / (float) texture.getParent().getWidth();
-        float startV = 1.0F * (float) texture.getStartV() / (float) texture.getParent().getHeight();
-        float endU = 1.0F * (float) texture.getEndU() / (float) texture.getParent().getWidth();
-        float endV = 1.0F * (float) texture.getEndV() / (float) texture.getParent().getHeight();
+        float startU = 1.0F * (float) texture.getFullStartU() / (float) texture.getParent().getWidth();
+        float startV = 1.0F * (float) texture.getFullStartV() / (float) texture.getParent().getHeight();
+        float endU = 1.0F * (float) texture.getFullEndU() / (float) texture.getParent().getWidth();
+        float endV = 1.0F * (float) texture.getFullEndV() / (float) texture.getParent().getHeight();
 
         float startX = (float) posX + 1;
         float startY = (float) posY;

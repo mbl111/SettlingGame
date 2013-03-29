@@ -3,6 +3,7 @@ package net.specialattack.settling.client.gui.element;
 
 import java.util.ArrayList;
 
+import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.gui.GuiHelper;
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.common.lang.LanguageRegistry;
@@ -42,7 +43,7 @@ public class GuiList extends GuiElement {
 
         GuiHelper.renderRectangle(this.posX + this.width - 22, this.posY, 24, this.height, 0x444444FF);
         GuiHelper.renderRectangle(this.width - 20 + this.posX, this.posY + 2, 20, this.height - 4, 0x666666FF);
-        GuiHelper.renderRectangle(this.width - 19 + this.posX, this.posY + 2 + (this.height / this.elements.size()) * this.scroll, 18, this.scrollBarHeight, 0xAAAAAAFF);
+        GuiHelper.renderRectangle(this.width - 19 + this.posX, this.posY + 2 + ((this.height - 4) / this.elements.size()) * this.scroll, 18, this.scrollBarHeight, 0xAAAAAAFF);
 
         int lengthToRender = this.elements.size() >= this.scroll + this.height / 20 ? this.scroll + this.height / 20 : this.elements.size();
 
@@ -113,8 +114,7 @@ public class GuiList extends GuiElement {
             this.scroll = 0;
         }
 
-        int scrollMax = this.elements.size() - 14 <= 0 ? 0 : this.elements.size() - 14;
-
+        int scrollMax = (int) Math.ceil((this.elements.size() - (this.height / 20.0) <= 0 ? 0 : this.elements.size() - (this.height / 20.0)));
         if (this.scroll > scrollMax) {
             this.scroll = scrollMax;
         }

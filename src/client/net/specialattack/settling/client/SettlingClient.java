@@ -281,8 +281,11 @@ public class SettlingClient extends Settling {
             Keyboard.poll();
 
             while (Mouse.next()) {
+                int dWheel = Mouse.getDWheel();
                 if (Mouse.getEventButton() != -1 && this.currentScreen != null && Mouse.isButtonDown(Mouse.getEventButton())) {
                     this.currentScreen.mousePressed(Mouse.getEventButton(), Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
+                }else if(Mouse.hasWheel() && dWheel != 0){
+                    this.currentScreen.mouseScrolled(dWheel);
                 }
             }
 

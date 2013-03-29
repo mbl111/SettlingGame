@@ -15,6 +15,7 @@ import net.specialattack.settling.client.rendering.FontRenderer;
 import net.specialattack.settling.client.rendering.TileRenderer;
 import net.specialattack.settling.client.shaders.Shader;
 import net.specialattack.settling.client.shaders.ShaderLoader;
+import net.specialattack.settling.client.sound.Sound;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.util.KeyBinding;
 import net.specialattack.settling.client.util.MovingObject;
@@ -201,6 +202,8 @@ public class SettlingClient extends Settling {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         // GL11.glEnable(GL11.GL_TEXTURE_2D);
 
+        Sound.init();
+        
         try {
             Mouse.create();
         }
@@ -287,8 +290,11 @@ public class SettlingClient extends Settling {
             Keyboard.poll();
 
             while (Mouse.next()) {
+                int dWheel = Mouse.getDWheel();
                 if (Mouse.getEventButton() != -1 && this.currentScreen != null && Mouse.isButtonDown(Mouse.getEventButton())) {
                     this.currentScreen.mousePressed(Mouse.getEventButton(), Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
+                }else if(Mouse.hasWheel() && dWheel != 0){
+                    this.currentScreen.mouseScrolled(dWheel);
                 }
             }
 

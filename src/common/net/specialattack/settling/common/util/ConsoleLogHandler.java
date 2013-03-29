@@ -15,6 +15,12 @@ public class ConsoleLogHandler extends ConsoleHandler {
         else {
             System.out.println(this.getFormatter().format(record));
         }
+
+        Throwable thrown = record.getThrown();
+
+        if (thrown != null) {
+            thrown.printStackTrace();
+        }
     }
 
 }

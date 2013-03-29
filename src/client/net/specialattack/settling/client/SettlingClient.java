@@ -62,6 +62,7 @@ public class SettlingClient extends Settling {
     private boolean mouseGrabbed = false;
     private boolean fullscreen = false;
     private MovingObject screenLocation;
+    private float zoom = 20.0F;
 
     public SettlingClient() {
         instance = this;
@@ -288,11 +289,15 @@ public class SettlingClient extends Settling {
 
             while (Mouse.next()) {
                 int dWheel = Mouse.getDWheel();
+                dWheel = dWheel > 0 ? 1 : dWheel < 0 ? -1 : 0;
                 if (Mouse.getEventButton() != -1 && this.currentScreen != null && Mouse.isButtonDown(Mouse.getEventButton())) {
                     this.currentScreen.mousePressed(Mouse.getEventButton(), Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
                 }
-                else if (Mouse.hasWheel() && dWheel != 0) {
+                else if (Mouse.hasWheel() && dWheel != 0 && this.currentScreen != null) {
                     this.currentScreen.mouseScrolled(dWheel);
+                }
+                else if (Mouse.hasWheel() && dWheel != 0) {
+                    this.zoom += dWheel;
                 }
             }
 
@@ -399,12 +404,14 @@ public class SettlingClient extends Settling {
 
             GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
             GL11.glRotatef(60.0F, 1.0F, 1.0F, 0.0F);
-            GL11.glScalef(20.0F, 20.0F, 20.0F);
+
+            GL11.glScalef(zoom, zoom, zoom);
 
             double posX = this.screenLocation.posZ * MathHelper.sin(0.5F) + this.screenLocation.posX * MathHelper.cos(0.5F);
             double posY = this.screenLocation.posZ * MathHelper.cos(0.5F) - this.screenLocation.posX * MathHelper.sin(0.5F);
 
             GL11.glTranslated(posX, posY, 0.0D);
+
         }
         // This would go to the world/level class
 
@@ -425,7 +432,7 @@ public class SettlingClient extends Settling {
         else {
             GL11.glMatrixMode(GL11.GL_PROJECTION);
             GL11.glLoadIdentity();
-            GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, 1000.0D, -1000.0D);
+            GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, 2000.0D, -2000.0D);
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
         }
 

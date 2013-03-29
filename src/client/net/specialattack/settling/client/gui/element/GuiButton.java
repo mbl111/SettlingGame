@@ -72,13 +72,11 @@ public class GuiButton extends GuiElement {
 
     @Override
     public boolean keyPressed(int keyCode, char character) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean mouseScrolled(int dir) {
-        // TODO Auto-generated method stub
         return false;
     }
 }

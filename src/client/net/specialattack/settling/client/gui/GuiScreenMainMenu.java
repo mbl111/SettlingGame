@@ -69,9 +69,6 @@ public class GuiScreenMainMenu extends GuiScreen {
     protected void onKeyAction(GuiElement element, int key) {}
 
     @Override
-    protected void onMouseScrolled(int wheel) {
-        // TODO Auto-generated method stub
-
-    }
+    protected void onMouseScrolled(int wheel) {}
 
 }

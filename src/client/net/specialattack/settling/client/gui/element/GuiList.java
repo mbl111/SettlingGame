@@ -108,7 +108,7 @@ public class GuiList extends GuiElement {
 
     @Override
     public boolean mouseScrolled(int dir) {
-        this.scroll += (dir / 120) * -1;
+        this.scroll -= dir;
         if (this.scroll < 0) {
             this.scroll = 0;
         }

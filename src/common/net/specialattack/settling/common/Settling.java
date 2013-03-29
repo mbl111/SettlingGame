@@ -53,6 +53,8 @@ public abstract class Settling implements Runnable {
         handler.setFormatter(new LogFormatter());
 
         log.addHandler(handler);
+        log.setLevel(Level.ALL);
+        handler.setLevel(Level.ALL);
 
         this.startup();
 

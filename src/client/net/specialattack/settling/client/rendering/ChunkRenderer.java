@@ -33,7 +33,6 @@ public class ChunkRenderer {
                 int rx = this.chunk.chunkX * 16 + x - 16;
                 int rz = this.chunk.chunkZ * 16 + z - 16;
 
-                TileRenderer.renderTileNorthFace(grass, rx, height, rz);
                 TileRenderer.renderTileFloor(grass, rx, height, rz);
             }
         }

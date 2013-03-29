@@ -15,6 +15,7 @@ import net.specialattack.settling.client.rendering.FontRenderer;
 import net.specialattack.settling.client.rendering.TileRenderer;
 import net.specialattack.settling.client.shaders.Shader;
 import net.specialattack.settling.client.shaders.ShaderLoader;
+import net.specialattack.settling.client.sound.Sound;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.util.KeyBinding;
 import net.specialattack.settling.client.util.ScreenResolution;
@@ -196,6 +197,8 @@ public class SettlingClient extends Settling {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         // GL11.glEnable(GL11.GL_TEXTURE_2D);
 
+        Sound.init();
+        
         try {
             Mouse.create();
         }

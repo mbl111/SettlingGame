@@ -3,7 +3,6 @@ package net.specialattack.settling.client.gui.element;
 
 import net.specialattack.settling.client.gui.GuiHelper;
 import net.specialattack.settling.client.gui.GuiScreen;
-import net.specialattack.settling.client.sound.Sound;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.common.util.Table;
 
@@ -105,8 +104,6 @@ public class GuiToggleButton<T> extends GuiElement {
             this.label = this.possibleValues.getValue(this.selectedValue).getValue1();
             this.selected = this.possibleValues.getValue(this.selectedValue).getValue2();
 
-            Sound.click.play();
-            
             return true;
         }
 

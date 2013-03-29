@@ -3,7 +3,6 @@ package net.specialattack.settling.client.gui.element;
 
 import net.specialattack.settling.client.gui.GuiHelper;
 import net.specialattack.settling.client.gui.GuiScreen;
-import net.specialattack.settling.client.sound.Sound;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.util.KeyBinding;
 
@@ -73,7 +72,6 @@ public class GuiButtonKey extends GuiElement {
         }
 
         if (mouseX >= this.posX && mouseX <= this.posX + this.width && mouseY >= this.posY && mouseY <= this.posY + this.height) {
-            Sound.click.play();
             return true;
         }
 

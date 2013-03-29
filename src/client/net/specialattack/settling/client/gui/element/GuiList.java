@@ -3,7 +3,6 @@ package net.specialattack.settling.client.gui.element;
 
 import java.util.ArrayList;
 
-import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.gui.GuiHelper;
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.common.lang.LanguageRegistry;

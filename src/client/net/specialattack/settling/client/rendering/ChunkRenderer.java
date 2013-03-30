@@ -29,20 +29,16 @@ public class ChunkRenderer {
         GL11.glNewList(this.glCallList, GL11.GL_COMPILE);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = 0; y < chunk.getNumSections() * 16; y++) {
-                    int rx = this.chunk.chunkX * 16 + x - 16;
-                    int rz = this.chunk.chunkZ * 16 + z - 16;
+                int rx = this.chunk.chunkX * 16 + x - 16;
+                int rz = this.chunk.chunkZ * 16 + z - 16;
 
-                    short tile = chunk.getTileAt(x, y, z);
+                short tile = chunk.getTileAt(x, z);
 
-                    if (tile > 0) {
-                        Item item = Items.itemList[tile];
+                if (tile > 0) {
+                    Item item = Items.itemList[tile];
 
-                        if (item instanceof ItemTile) {
-                            if (chunk.getTileAt(x, y + 1, z) == 0) {
-                                TileRenderer.renderTileFloor((ItemTile) Items.itemList[tile], rx, y, rz);
-                            }
-                        }
+                    if (item instanceof ItemTile) {
+                        TileRenderer.renderTile((ItemTile) Items.itemList[tile], rx, rz);
                     }
                 }
             }

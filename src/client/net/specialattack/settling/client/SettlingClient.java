@@ -17,7 +17,6 @@ import net.specialattack.settling.client.shaders.Shader;
 import net.specialattack.settling.client.shaders.ShaderLoader;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.util.KeyBinding;
-import net.specialattack.settling.client.util.MovingObject;
 import net.specialattack.settling.client.util.ScreenResolution;
 import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.Settling;
@@ -27,6 +26,7 @@ import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.lang.LanguageRegistry;
 import net.specialattack.settling.common.util.MathHelper;
+import net.specialattack.settling.common.util.MovingObject;
 import net.specialattack.settling.common.util.TickTimer;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.World;
@@ -241,6 +241,7 @@ public class SettlingClient extends Settling {
         this.renderedChunks = new ArrayList<ChunkRenderer>();
 
         this.player = new PlayerView();
+        this.screenLocation = new MovingObject(0.0D, 0.0D, 0.0D, 2.0F);
 
         this.displayScreen(new GuiScreenMainMenu());
 
@@ -520,15 +521,17 @@ public class SettlingClient extends Settling {
         if (this.currentWorld != null) {
             for (int x = -8; x < 8; x++) {
                 for (int z = -8; z < 8; z++) {
-                    this.dirtyChunks.add(this.currentWorld.getChunkAt(x, z, true));
+                    Chunk chunk = this.currentWorld.getChunkAt(x, z, true);
+
+                    if (chunk != null) {
+                        this.dirtyChunks.add(chunk);
+                    }
+                    else {
+                        Settling.log.fine("Null chunk");
+                    }
                 }
             }
         }
-    }
-
-    @Deprecated
-    public void updateScreen() {
-        this.screenLocation = new MovingObject(0.0D, 0.0D, 0.0D, 2.0F, currentWorld.getMinXBorder(), 0.0D, currentWorld.getMinZBorder(), currentWorld.getMaxXBorder(), 0.0D, currentWorld.getMaxZBorder());
     }
 
     private void levelRender() {

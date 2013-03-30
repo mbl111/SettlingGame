@@ -2,63 +2,21 @@
 package net.specialattack.settling.common.world;
 
 public class Chunk {
-    private Section[] sections;
-    private short[] heights; // Calculated once, stores the natural height of the chunk and used to determine how far up to generate terrain
     public final int chunkX;
     public final int chunkZ;
     private boolean isGenerated = false;
+    private short[] tiles;
+    private short[] colors;
 
     public Chunk(World world, int chunkX, int chunkZ) {
-        // 0 is the lowest
-        this.sections = new Section[world.getWorldHeight() >> 4];
-
-        for (int i = 0; i < sections.length; i++) {
-            this.sections[i] = new Section(this, i);
-        }
-
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
+
+        this.tiles = new short[256];
+        this.colors = new short[256];
     }
 
-    public short getHighestBlock(int tileX, int tileZ) {
-        tileX = tileX % 16;
-        tileZ = tileZ % 16;
-
-        if (tileX < 0) {
-            tileX = tileX + 16;
-        }
-        if (tileZ < 0) {
-            tileZ = tileZ + 16;
-        }
-
-        int highest = sections.length << 4;
-        boolean highestNotFound = true;
-
-        while (highestNotFound) {
-            short tile = sections[sections.length - highest % 16].tiles[tileX + tileZ * 16];
-            if (tile != 0) {
-                return tile;
-            }
-        }
-
-        return 0;
-    }
-
-    public short getHeight(int tileX, int tileZ) {
-        tileX = tileX % 16;
-        tileZ = tileZ % 16;
-
-        if (tileX < 0) {
-            tileX = tileX + 16;
-        }
-        if (tileZ < 0) {
-            tileZ = tileZ + 16;
-        }
-
-        return this.heights[tileX + tileZ * 16];
-    }
-
-    public short getTileAt(int x, int y, int z) {
+    public short getTileAt(int x, int z) {
         x = x % 16;
         z = z % 16;
 
@@ -68,17 +26,11 @@ public class Chunk {
         if (z < 0) {
             z = z + 16;
         }
-        if (y < 0) {
-            y = 0;
-        }
-        if (y > this.sections.length * 16) {
-            y = this.sections.length * 16;
-        }
 
-        return this.sections[(y - y & 0xF) >> 4].tiles[x + z * 16];
+        return this.tiles[x + z * 16];
     }
 
-    public void setTileAt(int x, int y, int z, short type) {
+    public void setTileAt(int x, int z, short type) {
         x = x % 16;
         z = z % 16;
 
@@ -88,26 +40,8 @@ public class Chunk {
         if (z < 0) {
             z = z + 16;
         }
-        if (y < 0) {
-            y = 0;
-        }
-        if (y > this.sections.length * 16) {
-            y = this.sections.length * 16;
-        }
 
-        this.sections[(y - y & 0xF) >> 4].tiles[x + z * 16] = type;
-    }
-
-    public void populateHeight(short[] heights) {
-        this.heights = heights;
-    }
-
-    public Section getSection(int section) {
-        return null;
-    }
-
-    public int getNumSections() {
-        return this.sections.length;
+        this.tiles[x + z * 16] = type;
     }
 
     public void tick() {

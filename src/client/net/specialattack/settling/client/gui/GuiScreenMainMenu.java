@@ -55,7 +55,6 @@ public class GuiScreenMainMenu extends GuiScreen {
         if (element == this.buttonPlay) {
             SettlingClient.instance.currentWorld = new WorldDemo(null); // XXX: Not the way this will be done
             SettlingClient.instance.markChunksDirty();
-            SettlingClient.instance.updateScreen();
             SettlingClient.instance.displayScreen(null);
         }
         if (element == this.buttonOptions) {

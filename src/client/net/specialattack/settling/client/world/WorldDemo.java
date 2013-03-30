@@ -7,7 +7,6 @@ import net.specialattack.settling.client.world.gen.TestWorldGenerator;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.world.Chunk;
-import net.specialattack.settling.common.world.Section;
 import net.specialattack.settling.common.world.World;
 
 public class WorldDemo extends World {
@@ -25,8 +24,6 @@ public class WorldDemo extends World {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 this.chunks[x + z * 16] = new Chunk(this, x - 7, z - 7);
-
-                this.chunks[x + z * 16].populateHeight(this.generator.getHeights(x - 7, z - 7));
             }
         }
     }
@@ -73,9 +70,7 @@ public class WorldDemo extends World {
 
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
-                    for (int y = 0; y < chunk.getHeight(x, y); y++) {
-                        chunk.setTileAt(x, y, z, Items.dirt.identifier);
-                    }
+                    chunk.setTileAt(x, z, Items.dirt.identifier);
                 }
             }
 
@@ -85,11 +80,6 @@ public class WorldDemo extends World {
         }
 
         return null;
-    }
-
-    @Override
-    public Section getSectionAt(int chunkX, int chunkZ, int sectionY) {
-        return this.getChunkAt(chunkX, chunkZ, false).getSection(sectionY);
     }
 
 }

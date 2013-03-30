@@ -16,7 +16,7 @@ public class TileRenderer {
         currentTexture = -1;
     }
 
-    public static void renderTileFloor(ItemTile item, int posX, int posY, int posZ) {
+    public static void renderTile(ItemTile item, int posX, int posZ) {
         SubTexture texture = TextureRegistry.getSubTexture(item.textureName);
 
         if (currentTexture != texture.getParent().getTextureId()) {
@@ -31,7 +31,7 @@ public class TileRenderer {
         float endV = texture.getEndV();
 
         float startX = (float) posX;
-        float startY = (float) posY;
+        float startY = 0.0F;
         float startZ = (float) posZ;
         float endX = startX + 1.0F;
         float endZ = startZ + 1.0F;

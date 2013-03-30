@@ -33,7 +33,7 @@ public class TextureRegistry {
         BufferedImage base = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
 
         Graphics graphics = base.getGraphics();
-        graphics.setColor(Color.white);
+        graphics.setColor(Color.black);
         graphics.fillRect(0, 0, 256, 256);
         graphics.dispose();
 
@@ -62,7 +62,7 @@ public class TextureRegistry {
             image = ImageIO.read(url);
         }
         catch (IOException e) {
-            Settling.log.log(Level.SEVERE, "Failed opening resource '" + path + "'", e);
+            Settling.log.log(Level.WARNING, "Failed opening resource '" + path + "'", e);
 
             image = missingTexture;
         }

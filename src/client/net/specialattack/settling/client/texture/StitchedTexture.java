@@ -32,7 +32,10 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
         this.textures = new HashMap<String, SubTexture>();
 
         this.slots = new boolean[this.availableSlots];
+    }
 
+    @Override
+    public void loadImageData() {
         if (imageData == null || textureId < 0) {
             return;
         }
@@ -63,6 +66,7 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, imageData.getWidth(), imageData.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
     }
 
     @Override

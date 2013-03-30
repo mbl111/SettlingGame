@@ -241,7 +241,6 @@ public class SettlingClient extends Settling {
         this.renderedChunks = new ArrayList<ChunkRenderer>();
 
         this.player = new PlayerView();
-        this.screenLocation = new MovingObject(0.0D, 0.0D, 0.0D, 2.0F);
 
         this.displayScreen(new GuiScreenMainMenu());
 
@@ -393,6 +392,10 @@ public class SettlingClient extends Settling {
     }
 
     private void render3D() {
+        if (this.currentWorld == null) {
+            return;
+        }
+
         this.initGL3();
         GL11.glPushMatrix();
 
@@ -521,6 +524,11 @@ public class SettlingClient extends Settling {
                 }
             }
         }
+    }
+
+    @Deprecated
+    public void updateScreen() {
+        this.screenLocation = new MovingObject(0.0D, 0.0D, 0.0D, 2.0F, currentWorld.getMinXBorder(), 0.0D, currentWorld.getMinZBorder(), currentWorld.getMaxXBorder(), 0.0D, currentWorld.getMaxZBorder());
     }
 
     private void levelRender() {

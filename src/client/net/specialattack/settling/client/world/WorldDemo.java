@@ -4,6 +4,8 @@ package net.specialattack.settling.client.world;
 import java.io.File;
 
 import net.specialattack.settling.client.world.gen.TestWorldGenerator;
+import net.specialattack.settling.common.Settling;
+import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.Section;
 import net.specialattack.settling.common.world.World;
@@ -61,7 +63,28 @@ public class WorldDemo extends World {
 
     @Override
     public Chunk getChunkAt(int chunkX, int chunkZ, boolean generateIfMissing) {
-        return this.chunks[(chunkX + 8) + (chunkZ + 8) * 16];
+        Chunk chunk = this.chunks[(chunkX + 8) + (chunkZ + 8) * 16];
+
+        if (chunk != null && chunk.hasBeenGenerated()) {
+            return chunk;
+        }
+        else if (chunk != null && generateIfMissing) {
+            Settling.log.finest("Generating chunk @" + chunkX + ";" + chunkZ);
+
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    for (int y = 0; y < chunk.getHeight(x, y); y++) {
+                        chunk.setTileAt(x, y, z, Items.dirt.identifier);
+                    }
+                }
+            }
+
+            chunk.setGenerated();
+
+            return chunk;
+        }
+
+        return null;
     }
 
     @Override

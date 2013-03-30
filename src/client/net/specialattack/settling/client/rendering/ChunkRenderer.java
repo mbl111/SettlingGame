@@ -1,6 +1,7 @@
 
 package net.specialattack.settling.client.rendering;
 
+import net.specialattack.settling.common.item.Item;
 import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.world.Chunk;
@@ -22,18 +23,28 @@ public class ChunkRenderer {
     }
 
     public void createGlChunk() {
-        ItemTile grass = Items.grass;
         if (this.glCallList < 0) {
             this.glCallList = GL11.glGenLists(1);
         }
         GL11.glNewList(this.glCallList, GL11.GL_COMPILE);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                int height = this.chunk.getHeight(this.chunk.chunkX * 16 + x, this.chunk.chunkZ * 16 + z);
-                int rx = this.chunk.chunkX * 16 + x - 16;
-                int rz = this.chunk.chunkZ * 16 + z - 16;
+                for (int y = 0; y < chunk.getNumSections() * 16; y++) {
+                    int rx = this.chunk.chunkX * 16 + x - 16;
+                    int rz = this.chunk.chunkZ * 16 + z - 16;
 
-                TileRenderer.renderTileFloor(grass, rx, height, rz);
+                    short tile = chunk.getTileAt(x, y, z);
+
+                    if (tile > 0) {
+                        Item item = Items.itemList[tile];
+
+                        if (item instanceof ItemTile) {
+                            if (chunk.getTileAt(x, y + 1, z) == 0) {
+                                TileRenderer.renderTileFloor((ItemTile) Items.itemList[tile], rx, y, rz);
+                            }
+                        }
+                    }
+                }
             }
         }
         GL11.glEndList();

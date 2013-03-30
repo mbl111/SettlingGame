@@ -520,7 +520,7 @@ public class SettlingClient extends Settling {
         if (this.currentWorld != null) {
             for (int x = -8; x < 8; x++) {
                 for (int z = -8; z < 8; z++) {
-                    this.dirtyChunks.add(this.currentWorld.getChunkAt(x, z, false));
+                    this.dirtyChunks.add(this.currentWorld.getChunkAt(x, z, true));
                 }
             }
         }

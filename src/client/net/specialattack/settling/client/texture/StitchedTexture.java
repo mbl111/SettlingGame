@@ -32,6 +32,8 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
         this.textures = new HashMap<String, SubTexture>();
 
         this.slots = new boolean[this.availableSlots];
+
+        loadImageData();
     }
 
     @Override

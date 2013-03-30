@@ -4,7 +4,7 @@ package net.specialattack.settling.common.item;
 import net.specialattack.settling.common.Settling;
 
 public class Item {
-    public final int identifier;
+    public final short identifier;
     public final String name;
     public String fulltextureName;
     public String textureName;
@@ -18,7 +18,7 @@ public class Item {
 
         Items.itemList[identifier] = this;
 
-        this.identifier = identifier;
+        this.identifier = (short) identifier;
         this.name = name;
         this.fulltextureName = "/textures/items/" + textureName + ".png";
         this.textureName = textureName;

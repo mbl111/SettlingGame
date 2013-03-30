@@ -6,10 +6,15 @@ public class Chunk {
     private short[] heights; // Calculated once, stores the natural height of the chunk and used to determine how far up to generate terrain
     public final int chunkX;
     public final int chunkZ;
+    private boolean isGenerated = false;
 
     public Chunk(World world, int chunkX, int chunkZ) {
         // 0 is the lowest
         this.sections = new Section[world.getWorldHeight() >> 4];
+
+        for (int i = 0; i < sections.length; i++) {
+            this.sections[i] = new Section(this, i);
+        }
 
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
@@ -30,11 +35,12 @@ public class Chunk {
         boolean highestNotFound = true;
 
         while (highestNotFound) {
-            short tile = sections[sections.length - highest % 16].tiles[tileX * highest * tileZ];
+            short tile = sections[sections.length - highest % 16].tiles[tileX + tileZ * 16];
             if (tile != 0) {
                 return tile;
             }
         }
+
         return 0;
     }
 
@@ -52,6 +58,46 @@ public class Chunk {
         return this.heights[tileX + tileZ * 16];
     }
 
+    public short getTileAt(int x, int y, int z) {
+        x = x % 16;
+        z = z % 16;
+
+        if (x < 0) {
+            x = x + 16;
+        }
+        if (z < 0) {
+            z = z + 16;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+        if (y > this.sections.length * 16) {
+            y = this.sections.length * 16;
+        }
+
+        return this.sections[(y - y & 0xF) >> 4].tiles[x + z * 16];
+    }
+
+    public void setTileAt(int x, int y, int z, short type) {
+        x = x % 16;
+        z = z % 16;
+
+        if (x < 0) {
+            x = x + 16;
+        }
+        if (z < 0) {
+            z = z + 16;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+        if (y > this.sections.length * 16) {
+            y = this.sections.length * 16;
+        }
+
+        this.sections[(y - y & 0xF) >> 4].tiles[x + z * 16] = type;
+    }
+
     public void populateHeight(short[] heights) {
         this.heights = heights;
     }
@@ -60,8 +106,20 @@ public class Chunk {
         return null;
     }
 
+    public int getNumSections() {
+        return this.sections.length;
+    }
+
     public void tick() {
 
+    }
+
+    public boolean hasBeenGenerated() {
+        return this.isGenerated;
+    }
+
+    public void setGenerated() {
+        this.isGenerated = true;
     }
 
     @Override

@@ -46,4 +46,12 @@ public class WorldGenLayerFuzzyZoom extends WorldGenLayer {
         return result;
     }
 
+    public static WorldGenLayerFuzzyZoom zoom(long seed, WorldGenLayer genLayer, int amount) {
+
+        for (int i = 0; i < amount; ++i) {
+            genLayer = new WorldGenLayerFuzzyZoom(seed + (long) i, genLayer);
+        }
+
+        return (WorldGenLayerFuzzyZoom) genLayer;
+    }
 }

@@ -28,6 +28,7 @@ public class StandaloneLauncherFrame extends Frame implements Runnable {
     public static StandaloneLauncherFrame instance;
     private LauncherStub launcher;
     private Applet applet;
+    @SuppressWarnings("unused")
     private BufferedImage menuImage;
     private BufferedImage globe;
     private BufferedImage playNormal;

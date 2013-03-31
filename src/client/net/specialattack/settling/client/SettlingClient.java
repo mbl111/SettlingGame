@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import javax.swing.JTextArea;
+
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
 import net.specialattack.settling.client.gui.GuiScreenMenu;
@@ -20,6 +22,8 @@ import net.specialattack.settling.client.util.KeyBinding;
 import net.specialattack.settling.client.util.ScreenResolution;
 import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.Settling;
+import net.specialattack.settling.common.crash.CrashReport;
+import net.specialattack.settling.common.crash.CrashReportSectionThrown;
 import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
 import net.specialattack.settling.common.item.ItemTile;
@@ -322,6 +326,23 @@ public class SettlingClient extends Settling {
         }
     }
 
+    @Override
+    public void handleError(Throwable thrown) {
+        this.attemptShutdownCrash();
+
+        Display.destroy();
+
+        JTextArea text = new JTextArea();
+        text.setEditable(false);
+
+        CrashReport report = new CrashReport();
+        report.addSection(new CrashReportSectionThrown(thrown));
+
+        text.setText(report.getData());
+
+        SettlingApplet.instance.display(text);
+    }
+
     @SuppressWarnings("unused")
     private void tick() {
         if (firstPerson && this.currentScreen == null && this.currentWorld != null) {
@@ -413,6 +434,8 @@ public class SettlingClient extends Settling {
 
             double posX = this.screenLocation.posZ * MathHelper.sin(0.5F) + this.screenLocation.posX * MathHelper.cos(0.5F);
             double posY = this.screenLocation.posZ * MathHelper.cos(0.5F) - this.screenLocation.posX * MathHelper.sin(0.5F);
+            this.player.location.setX(posX);
+            this.player.location.setZ(posY);
 
             GL11.glTranslated(posX, posY, 0.0D);
 
@@ -475,11 +498,11 @@ public class SettlingClient extends Settling {
 
     private void updateChunks() {
         if (this.dirtyChunks.size() > 0) {
-            float distance = -1.0F;
+            double distance = -1.0F;
             Chunk toRender = null;
 
             for (Chunk chunk : this.dirtyChunks) {
-                float cDistance = (-this.player.location.x / 16.0F + 0.5F - (float) chunk.chunkX) * (-this.player.location.x / 16.0F + 0.5F - (float) chunk.chunkX);
+                double cDistance = (-this.player.location.x / 16.0F + 0.5F - (float) chunk.chunkX) * (-this.player.location.x / 16.0F + 0.5F - (float) chunk.chunkX);
                 cDistance += (-this.player.location.z / 16.0F + 0.5F - (float) chunk.chunkZ) * (-this.player.location.z / 16.0F + 0.5F - (float) chunk.chunkZ);
 
                 if (cDistance < distance || distance < 0) {
@@ -519,11 +542,12 @@ public class SettlingClient extends Settling {
         this.renderedChunks.clear();
 
         if (this.currentWorld != null) {
-            for (int x = -8; x < 8; x++) {
-                for (int z = -8; z < 8; z++) {
+            for (int x = this.currentWorld.getMinXBorder() / 16; x < this.currentWorld.getMaxXBorder() / 16; x++) {
+                for (int z = this.currentWorld.getMinZBorder() / 16; z < this.currentWorld.getMaxZBorder() / 16; z++) {
                     Chunk chunk = this.currentWorld.getChunkAt(x, z, true);
 
                     if (chunk != null) {
+                        Settling.log.finer("Chunk @ " + x + ";" + z + ": " + chunk);
                         this.dirtyChunks.add(chunk);
                     }
                     else {
@@ -540,7 +564,7 @@ public class SettlingClient extends Settling {
         int renderChunkRadius = 16;
 
         for (ChunkRenderer chunkRenderer : this.renderedChunks) {
-            float distance = (-this.player.location.x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX) * (-this.player.location.x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX);
+            double distance = (-this.player.location.x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX) * (-this.player.location.x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX);
             distance += (-this.player.location.z / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkZ) * (-this.player.location.z / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkZ);
 
             if (distance < renderChunkRadius * renderChunkRadius) {

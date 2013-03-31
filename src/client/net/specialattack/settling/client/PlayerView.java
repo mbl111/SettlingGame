@@ -100,10 +100,10 @@ public class PlayerView {
         float yaw = this.prevLocation.yaw + (this.location.yaw - this.prevLocation.yaw) * partialTicks;
         GL11.glRotatef(yaw, 0.0F, 1.0F, 0.0F);
         // translate to the position vector's location
-        float x = this.prevLocation.x + (this.location.x - this.prevLocation.x) * partialTicks;
-        float y = this.prevLocation.y + (this.location.y - this.prevLocation.y) * partialTicks;
-        float z = this.prevLocation.z + (this.location.z - this.prevLocation.z) * partialTicks;
-        GL11.glTranslatef(x, -y - 2.4F, z);
+        double x = this.prevLocation.x + (this.location.x - this.prevLocation.x) * partialTicks;
+        double y = this.prevLocation.y + (this.location.y - this.prevLocation.y) * partialTicks;
+        double z = this.prevLocation.z + (this.location.z - this.prevLocation.z) * partialTicks;
+        GL11.glTranslated(x, -y - 2.4F, z);
     }
 
 }

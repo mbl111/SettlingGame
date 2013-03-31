@@ -16,6 +16,7 @@ public abstract class Settling implements Runnable {
 
     private boolean running = false;
     private boolean shuttingDown = false;
+    private boolean crashing = false;
     protected static Settling instance;
     public static final Logger log = Logger.getLogger("Settling");
 
@@ -27,8 +28,14 @@ public abstract class Settling implements Runnable {
         return instance;
     }
 
+    public void attemptShutdownCrash() {
+        this.shuttingDown = true;
+        this.crashing = true;
+    }
+
     public void attemptShutdown() {
         this.shuttingDown = true;
+        this.running = false;
     }
 
     protected abstract void runGameLoop() throws LWJGLException, OpenGLException;
@@ -40,6 +47,8 @@ public abstract class Settling implements Runnable {
     public abstract CommonItemDelegate getItemDelegate();
 
     public abstract void finishItems();
+
+    public abstract void handleError(Throwable thrown);
 
     @Override
     public void run() {
@@ -59,34 +68,43 @@ public abstract class Settling implements Runnable {
         this.startup();
 
         try {
+            this.running = true;
             Items.class.getName();
         }
         catch (Exception e) {
             Settling.log.log(Level.SEVERE, "Failed loading items, aborting", e);
             this.attemptShutdown();
+            this.running = false;
         }
-
-        this.running = true;
 
         try {
             this.runGameLoop();
         }
-        catch (OpenGLException e) {
-            Settling.log.log(Level.SEVERE, "Error while running Settling. Shutting down", e);
-            this.attemptShutdown();
-        }
-        catch (LWJGLException e) {
-            Settling.log.log(Level.SEVERE, "Error while running Settling. Shutting down", e);
-            this.attemptShutdown();
-        }
         catch (Exception e) {
             Settling.log.log(Level.SEVERE, "Error while running Settling. Shutting down", e);
-            this.attemptShutdown();
+            this.handleError(e);
         }
 
-        System.out.println("Shutting down...");
+        log.info("Shutting down...");
 
-        this.running = false;
+        if (this.crashing) {
+            Thread idleThread = new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        while (Settling.this.running) {
+                            Thread.sleep(1L);
+                        }
+                    }
+                    catch (InterruptedException e) {}
+                }
+            }, "Idling thread");
+
+            idleThread.start();
+
+            return;
+        }
 
         Thread shutdownThread = new Thread(new Runnable() {
 

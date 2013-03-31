@@ -3,9 +3,10 @@ package net.specialattack.settling.common.util;
 
 public class Location {
 
-    public float x, y, z, pitch, yaw;
+    public double x, y, z;
+    public float pitch, yaw;
 
-    public Location(float x, float y, float z, float pitch, float yaw) {
+    public Location(double x, double y, double z, float pitch, float yaw) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -13,7 +14,7 @@ public class Location {
         this.yaw = yaw;
     }
 
-    public Location(float x, float y, float z) {
+    public Location(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -25,15 +26,15 @@ public class Location {
         this.z = z;
     }
 
-    public float getX() {
+    public double getX() {
         return this.x;
     }
 
-    public float getY() {
+    public double getY() {
         return this.y;
     }
 
-    public float getZ() {
+    public double getZ() {
         return this.z;
     }
 
@@ -45,15 +46,15 @@ public class Location {
         return this.yaw;
     }
 
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public void setZ(float z) {
+    public void setZ(double z) {
         this.z = z;
     }
 

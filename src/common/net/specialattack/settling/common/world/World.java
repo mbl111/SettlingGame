@@ -13,10 +13,6 @@ public abstract class World {
 
     public World(File saveFolder) {
         this.saveFolder = saveFolder;
-
-        if (this.getWorldHeight() % 16 != 0) {
-            throw new RuntimeException("World height has to be a multiple of 16!");
-        }
     }
 
     public abstract boolean isLimited();
@@ -28,8 +24,6 @@ public abstract class World {
     public abstract int getMinZBorder();
 
     public abstract int getMaxZBorder();
-
-    public abstract short getWorldHeight();
 
     public abstract Chunk getChunkAt(int chunkX, int chunkZ, boolean generateIfMissing);
 

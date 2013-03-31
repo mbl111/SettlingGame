@@ -3,12 +3,21 @@ package net.specialattack.settling.client;
 
 import java.applet.Applet;
 import java.awt.BorderLayout;
+import java.awt.Component;
+
+import javax.swing.JPanel;
 
 public class SettlingApplet extends Applet {
     private static final long serialVersionUID = -887417069382703883L;
     private SettlingCanvas canvas;
     private Thread instanceThread;
     private SettlingClient settling;
+    protected static SettlingApplet instance;
+    private JPanel panel;
+
+    public SettlingApplet() {
+        instance = this;
+    }
 
     @Override
     public void destroy() {
@@ -18,9 +27,13 @@ public class SettlingApplet extends Applet {
     @Override
     public void init() {
         this.canvas = new SettlingCanvas(this);
+        this.panel = new JPanel();
 
         this.setLayout(new BorderLayout());
-        this.add(this.canvas, "Center");
+        this.panel.setLayout(new BorderLayout());
+        this.panel.add(this.canvas, "Center");
+
+        this.add(this.panel, "Center");
         this.canvas.setFocusable(true);
         this.canvas.setFocusTraversalKeysEnabled(false);
         this.validate();
@@ -74,5 +87,16 @@ public class SettlingApplet extends Applet {
                 this.instanceThread = null;
             }
         }
+    }
+
+    public void display(Component component) {
+        this.canvas = null;
+
+        this.panel.removeAll();
+
+        this.panel.setLayout(new BorderLayout());
+        this.panel.add(component, "Center");
+        this.validate();
+        this.repaint();
     }
 }

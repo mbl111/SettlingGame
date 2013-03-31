@@ -61,6 +61,7 @@ public class Chunk {
 
         for (int i = 0; i < 256; i++) {
             this.tiles[i] = (short) ints[i];
+            this.colors[i] = (short) 0xFFFFFF;
         }
     }
 

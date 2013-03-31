@@ -17,17 +17,17 @@ public class WorldDemo extends World {
     public WorldDemo(File saveFolder) {
         super(saveFolder);
 
-        this.genLayer = new WorldGenLayerIslands(1L);
-        this.genLayer = new WorldGenLayerFuzzyZoom(1000L, this.genLayer);
-        this.genLayer = WorldGenLayerZoom.zoom(2000L, genLayer, 5);
+        this.genLayer = new WorldGenLayerIslands(1L, 20); // Island frequency
+        this.genLayer = WorldGenLayerFuzzyZoom.zoom(1000L, this.genLayer, 2); // Island randomness
+        this.genLayer = WorldGenLayerZoom.zoom(2000L, genLayer, 3); // Island size
 
         this.genLayer.initGlobalSeed(100L);
 
-        this.chunks = new Chunk[265];
+        this.chunks = new Chunk[(getMaxXBorder() - getMinXBorder()) * (getMaxZBorder() - getMinZBorder()) / 256];
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                this.chunks[x + z * 16] = new Chunk(this, x - 7, z - 7);
+        for (int x = 0; x < (getMaxXBorder() - getMinXBorder()) / 16; x++) {
+            for (int z = 0; z < (getMaxZBorder() - getMinZBorder()) / 16; z++) {
+                this.chunks[x + z * (getMaxXBorder() - getMinXBorder()) / 16] = new Chunk(this, x + getMinXBorder() / 16, z + getMinZBorder() / 16);
             }
         }
     }
@@ -39,32 +39,27 @@ public class WorldDemo extends World {
 
     @Override
     public int getMinXBorder() {
-        return -128;
+        return -256;
     }
 
     @Override
     public int getMaxXBorder() {
-        return 128;
+        return 256;
     }
 
     @Override
     public int getMinZBorder() {
-        return -128;
+        return -256;
     }
 
     @Override
     public int getMaxZBorder() {
-        return 128;
-    }
-
-    @Override
-    public short getWorldHeight() {
-        return 512;
+        return 256;
     }
 
     @Override
     public Chunk getChunkAt(int chunkX, int chunkZ, boolean generateIfMissing) {
-        Chunk chunk = this.chunks[(chunkX + 8) + (chunkZ + 8) * 16];
+        Chunk chunk = this.chunks[(chunkX - this.getMinXBorder() / 16) + (chunkZ - this.getMinZBorder() / 16) * (getMaxXBorder() - getMinXBorder()) / 16];
 
         if (chunk != null && chunk.hasBeenGenerated()) {
             return chunk;

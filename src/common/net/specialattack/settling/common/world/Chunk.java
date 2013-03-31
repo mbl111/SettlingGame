@@ -4,6 +4,7 @@ package net.specialattack.settling.common.world;
 public class Chunk {
     public final int chunkX;
     public final int chunkZ;
+    public final World world;
     private boolean isGenerated = false;
     private short[] tiles;
     private short[] colors;
@@ -11,6 +12,7 @@ public class Chunk {
     public Chunk(World world, int chunkX, int chunkZ) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
+        this.world = world;
 
         this.tiles = new short[256];
         this.colors = new short[256];
@@ -52,8 +54,14 @@ public class Chunk {
         return this.isGenerated;
     }
 
-    public void setGenerated() {
+    public void generate() {
         this.isGenerated = true;
+
+        int[] ints = this.world.genLayer.getInts(this.chunkX * 16, this.chunkZ * 16, 16, 16);
+
+        for (int i = 0; i < 256; i++) {
+            this.tiles[i] = (short) ints[i];
+        }
     }
 
     @Override

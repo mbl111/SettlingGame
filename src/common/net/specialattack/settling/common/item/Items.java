@@ -8,6 +8,7 @@ public class Items {
 
     public static ItemTile grass = new ItemTile(1, "Grass", "grass");
     public static ItemTile dirt = new ItemTile(2, "Dirt", "dirt");
+    public static ItemTile water = new ItemTile(3, "Water", "water");
 
     static {
         Settling.getInstance().finishItems();

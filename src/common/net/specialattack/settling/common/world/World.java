@@ -3,10 +3,13 @@ package net.specialattack.settling.common.world;
 
 import java.io.File;
 
+import net.specialattack.settling.common.world.gen.WorldGenLayer;
+
 public abstract class World {
 
     protected File saveFolder;
     protected long seed;
+    protected WorldGenLayer genLayer;
 
     public World(File saveFolder) {
         this.saveFolder = saveFolder;

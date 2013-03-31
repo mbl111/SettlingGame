@@ -3,21 +3,25 @@ package net.specialattack.settling.client.world;
 
 import java.io.File;
 
-import net.specialattack.settling.client.world.gen.TestWorldGenerator;
 import net.specialattack.settling.common.Settling;
-import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.World;
+import net.specialattack.settling.common.world.gen.WorldGenLayerFuzzyZoom;
+import net.specialattack.settling.common.world.gen.WorldGenLayerIslands;
+import net.specialattack.settling.common.world.gen.WorldGenLayerZoom;
 
 public class WorldDemo extends World {
 
     private Chunk[] chunks;
-    private TestWorldGenerator generator;
 
     public WorldDemo(File saveFolder) {
         super(saveFolder);
 
-        this.generator = new TestWorldGenerator(System.currentTimeMillis());
+        this.genLayer = new WorldGenLayerIslands(1L);
+        this.genLayer = new WorldGenLayerFuzzyZoom(1000L, this.genLayer);
+        this.genLayer = WorldGenLayerZoom.zoom(2000L, genLayer, 5);
+
+        this.genLayer.initGlobalSeed(100L);
 
         this.chunks = new Chunk[265];
 
@@ -68,13 +72,7 @@ public class WorldDemo extends World {
         else if (chunk != null && generateIfMissing) {
             Settling.log.finest("Generating chunk @" + chunkX + ";" + chunkZ);
 
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    chunk.setTileAt(x, z, Items.dirt.identifier);
-                }
-            }
-
-            chunk.setGenerated();
+            chunk.generate();
 
             return chunk;
         }

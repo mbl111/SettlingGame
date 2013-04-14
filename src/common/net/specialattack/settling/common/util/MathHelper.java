@@ -47,4 +47,12 @@ public final class MathHelper {
         return number < 0.0D ? -number : number;
     }
 
+    public static float interpolate(float origin, float target, int steps, int maxSteps) {
+        return origin + (target - origin) * (float) steps / (float) maxSteps;
+    }
+
+    public static double interpolate(double origin, double target, int steps, int maxSteps) {
+        return origin + (target - origin) * (double) steps / (double) maxSteps;
+    }
+
 }

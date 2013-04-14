@@ -1,6 +1,7 @@
 
 package net.specialattack.settling.common.util;
 
+@Deprecated
 public class MovingObject {
 
     public double posX;

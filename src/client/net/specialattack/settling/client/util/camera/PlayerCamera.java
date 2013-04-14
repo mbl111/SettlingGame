@@ -1,6 +1,7 @@
 
-package net.specialattack.settling.client;
+package net.specialattack.settling.client.util.camera;
 
+import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.util.Location;
 import net.specialattack.settling.common.world.World;
@@ -8,19 +9,20 @@ import net.specialattack.settling.common.world.World;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-public class PlayerView {
+public class PlayerCamera implements ICamera {
 
-    public Location location;
-    public Location prevLocation;
-    public float vSpeed = 0.2F;
-    public float hSpeed = 0.2F;
+    private Location location;
+    private Location prevLocation;
+    private float vSpeed = 0.2F;
+    private float hSpeed = 0.2F;
 
-    public PlayerView() {
+    public PlayerCamera() {
         this.location = new Location(0.0F, 0.0F, 0.0F, 0.0F, 90.0F);
         this.prevLocation = new Location(0.0F, 0.0F, 0.0F, 0.0F, 90.0F);
     }
 
-    public void tick(World world) {
+    @Override
+    public void tick(World world, SettlingClient settling) {
         this.prevLocation.clone(this.location);
 
         float mouseDX = Mouse.getDX() * 0.8F * 0.16F;
@@ -92,6 +94,7 @@ public class PlayerView {
 
     }
 
+    @Override
     public void lookThrough(float partialTicks) {
         // roatate the pitch around the X axis
         float pitch = this.prevLocation.pitch + (this.location.pitch - this.prevLocation.pitch) * partialTicks;
@@ -104,6 +107,16 @@ public class PlayerView {
         double y = this.prevLocation.y + (this.location.y - this.prevLocation.y) * partialTicks;
         double z = this.prevLocation.z + (this.location.z - this.prevLocation.z) * partialTicks;
         GL11.glTranslated(x, -y - 2.4F, z);
+    }
+
+    @Override
+    public float getFOV(float partialTicks) {
+        return 90.0F;
+    }
+
+    @Override
+    public Location getLocation() {
+        return this.location;
     }
 
 }

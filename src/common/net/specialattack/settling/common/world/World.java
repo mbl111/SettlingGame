@@ -3,6 +3,7 @@ package net.specialattack.settling.common.world;
 
 import java.io.File;
 
+import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.world.gen.WorldGenLayer;
 
 public abstract class World {
@@ -29,15 +30,14 @@ public abstract class World {
 
     public Chunk getChunkAtTile(int tileX, int tileZ) {
         if (tileX < this.getMinXBorder() || tileX > this.getMaxXBorder()) {
-            System.err.println("Request for out of reach tile.");
+            Settling.log.warning("Request for out of reach tile.");
             return null;
         }
         if (tileZ < this.getMinZBorder() || tileZ > this.getMaxZBorder()) {
-            System.err.println("Request for out of reach tile.");
+            Settling.log.warning("Request for out of reach tile.");
             return null;
         }
 
         return this.getChunkAt(tileX >> 4, tileZ >> 4, false);
     }
-
 }

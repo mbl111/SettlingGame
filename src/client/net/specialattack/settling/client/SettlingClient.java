@@ -10,7 +10,6 @@ import javax.swing.JTextArea;
 
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
-import net.specialattack.settling.client.gui.GuiScreenMenu;
 import net.specialattack.settling.client.item.ClientItemDelegate;
 import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
@@ -21,6 +20,10 @@ import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.util.KeyBinding;
 import net.specialattack.settling.client.util.ScreenResolution;
 import net.specialattack.settling.client.util.Settings;
+import net.specialattack.settling.client.util.camera.ICamera;
+import net.specialattack.settling.client.util.camera.LinearTransitionCamera;
+import net.specialattack.settling.client.util.camera.OverviewCamera;
+import net.specialattack.settling.client.util.camera.PlayerCamera;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.crash.CrashReport;
 import net.specialattack.settling.common.crash.CrashReportSectionThrown;
@@ -29,8 +32,7 @@ import net.specialattack.settling.common.item.Item;
 import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.lang.LanguageRegistry;
-import net.specialattack.settling.common.util.MathHelper;
-import net.specialattack.settling.common.util.MovingObject;
+import net.specialattack.settling.common.util.Location;
 import net.specialattack.settling.common.util.TickTimer;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.World;
@@ -52,9 +54,8 @@ public class SettlingClient extends Settling {
     private int displayWidth;
     private int displayHeight;
     public TickTimer timer = new TickTimer(20.0F);
-    private PlayerView player;
     private Shader shader;
-    public static final boolean firstPerson = false;
+    public boolean firstPerson = true;
     public World currentWorld = null;
     public FontRenderer fontRenderer;
     private HashMap<Chunk, ChunkRenderer> chunkList;
@@ -65,8 +66,9 @@ public class SettlingClient extends Settling {
     private GuiScreen currentScreen = null;
     private boolean mouseGrabbed = false;
     private boolean fullscreen = false;
-    private MovingObject screenLocation;
-    private float zoom = 20.0F;
+    public ICamera camera;
+    private ICamera playerCamera;
+    private ICamera overviewCamera;
 
     public SettlingClient() {
         instance = this;
@@ -236,7 +238,7 @@ public class SettlingClient extends Settling {
             this.setFullscreen(true);
         }
 
-        //this.currentWorld = new WorldDemo(new File("./demo/"));
+        // this.currentWorld = new WorldDemo(new File("./demo/"));
 
         this.fontRenderer = new FontRenderer();
 
@@ -244,9 +246,14 @@ public class SettlingClient extends Settling {
         this.dirtyChunks = new ArrayList<Chunk>();
         this.renderedChunks = new ArrayList<ChunkRenderer>();
 
-        this.player = new PlayerView();
-        this.screenLocation = new MovingObject(0.0D, 0.0D, 0.0D, 2.0F);
-
+        this.playerCamera = new PlayerCamera();
+        this.overviewCamera = new OverviewCamera();
+        if (firstPerson) {
+            this.camera = this.playerCamera;
+        }
+        else {
+            this.camera = this.overviewCamera;
+        }
         this.displayScreen(new GuiScreenMainMenu());
 
         return true;
@@ -300,9 +307,6 @@ public class SettlingClient extends Settling {
                 else if (Mouse.hasWheel() && dWheel != 0 && this.currentScreen != null) {
                     this.currentScreen.mouseScrolled(dWheel);
                 }
-                else if (Mouse.hasWheel() && dWheel != 0) {
-                    this.zoom += dWheel;
-                }
             }
 
             while (Keyboard.next()) {
@@ -343,26 +347,24 @@ public class SettlingClient extends Settling {
         SettlingApplet.instance.display(text);
     }
 
-    @SuppressWarnings("unused")
     private void tick() {
-        if (firstPerson && this.currentScreen == null && this.currentWorld != null) {
-            this.player.tick(this.currentWorld);
-        }
-        else if (this.currentScreen == null && this.currentWorld != null) {
-            if (Settings.forward.isPressed()) {
-                this.screenLocation.motionX -= 2.0F;
-            }
-            if (Settings.back.isPressed()) {
-                this.screenLocation.motionX += 2.0F;
-            }
-            if (Settings.left.isPressed()) {
-                this.screenLocation.motionZ += 2.0F;
-            }
-            if (Settings.right.isPressed()) {
-                this.screenLocation.motionZ -= 2.0F;
-            }
+        if (this.currentScreen == null && this.currentWorld != null) {
+            this.camera.tick(this.currentWorld, this);
 
-            this.screenLocation.update();
+            // if (Settings.forward.isPressed()) {
+            // this.screenLocation.motionX -= 2.0F;
+            // }
+            // if (Settings.back.isPressed()) {
+            // this.screenLocation.motionX += 2.0F;
+            // }
+            // if (Settings.left.isPressed()) {
+            // this.screenLocation.motionZ += 2.0F;
+            // }
+            // if (Settings.right.isPressed()) {
+            // this.screenLocation.motionZ -= 2.0F;
+            // }
+            // 
+            // this.screenLocation.update();
         }
 
         KeyBinding.escape.update();
@@ -375,7 +377,8 @@ public class SettlingClient extends Settling {
             this.displayScreen(null);
         }
         else if (this.currentWorld != null && escapeTapped) {
-            this.displayScreen(new GuiScreenMenu());
+            // this.displayScreen(new GuiScreenMenu());
+            this.swapCameras();
         }
     }
 
@@ -402,6 +405,8 @@ public class SettlingClient extends Settling {
 
         this.fontRenderer.renderStringWithShadow("Settling pre-alpha 0.1", 0, 2, 0xFFFFFFFF);
         this.fontRenderer.renderStringWithShadow("FPS: " + this.fps + " TPS: " + this.tps, 0, 18, 0xFFFFFFFF);
+        Location loc = this.camera.getLocation();
+        this.fontRenderer.renderStringWithShadow("Yaw: " + loc.yaw + " Pitch: " + loc.pitch, 0, 34, 0xFFFFFFFF);
 
         long maxMemory = Runtime.getRuntime().maxMemory();
         long totalMemory = Runtime.getRuntime().totalMemory();
@@ -421,25 +426,22 @@ public class SettlingClient extends Settling {
         this.initGL3();
         GL11.glPushMatrix();
 
-        if (firstPerson) {
-            this.player.lookThrough(this.timer.renderPartialTicks);
-        }
-        else {
-            GL11.glTranslatef((float) this.displayWidth / 2.0F, (float) this.displayHeight / 2.0F, 0.0F);
+        this.camera.lookThrough(this.timer.renderPartialTicks);
 
-            GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
-            GL11.glRotatef(60.0F, 1.0F, 1.0F, 0.0F);
+        // GL11.glTranslatef((float) this.displayWidth / 2.0F, (float) this.displayHeight / 2.0F, 0.0F);
+        // 
+        // GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
+        // GL11.glRotatef(60.0F, 1.0F, 1.0F, 0.0F);
+        // 
+        // GL11.glScalef(zoom, zoom, zoom);
+        // 
+        // double posX = this.screenLocation.posZ * MathHelper.sin(0.5F) + this.screenLocation.posX * MathHelper.cos(0.5F);
+        // double posY = this.screenLocation.posZ * MathHelper.cos(0.5F) - this.screenLocation.posX * MathHelper.sin(0.5F);
+        // this.camera.getLocation().setX(posX);
+        // this.camera.getLocation().setZ(posY);
+        // 
+        // GL11.glTranslated(posX, posY, 0.0D);
 
-            GL11.glScalef(zoom, zoom, zoom);
-
-            double posX = this.screenLocation.posZ * MathHelper.sin(0.5F) + this.screenLocation.posX * MathHelper.cos(0.5F);
-            double posY = this.screenLocation.posZ * MathHelper.cos(0.5F) - this.screenLocation.posX * MathHelper.sin(0.5F);
-            this.player.location.setX(posX);
-            this.player.location.setZ(posY);
-
-            GL11.glTranslated(posX, posY, 0.0D);
-
-        }
         // This would go to the world/level class
 
         this.levelRender();
@@ -449,19 +451,11 @@ public class SettlingClient extends Settling {
 
     // Our 3d rendering
     public void initGL3() {
-        if (firstPerson) {
-            GL11.glMatrixMode(GL11.GL_PROJECTION);
-            GL11.glLoadIdentity();
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
 
-            GLU.gluPerspective(90.0F, (float) this.displayWidth / (float) this.displayHeight, 0.5F, 2000.0F);
-            GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        }
-        else {
-            GL11.glMatrixMode(GL11.GL_PROJECTION);
-            GL11.glLoadIdentity();
-            GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, 2000.0D, -2000.0D);
-            GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        }
+        GLU.gluPerspective(this.camera.getFOV(this.timer.renderPartialTicks), (float) this.displayWidth / (float) this.displayHeight, 0.5F, 2000.0F);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -502,8 +496,8 @@ public class SettlingClient extends Settling {
             Chunk toRender = null;
 
             for (Chunk chunk : this.dirtyChunks) {
-                double cDistance = (-this.player.location.x / 16.0F + 0.5F - (float) chunk.chunkX) * (-this.player.location.x / 16.0F + 0.5F - (float) chunk.chunkX);
-                cDistance += (-this.player.location.z / 16.0F + 0.5F - (float) chunk.chunkZ) * (-this.player.location.z / 16.0F + 0.5F - (float) chunk.chunkZ);
+                double cDistance = (-this.camera.getLocation().x / 16.0F + 0.5F - (float) chunk.chunkX) * (-this.camera.getLocation().x / 16.0F + 0.5F - (float) chunk.chunkX);
+                cDistance += (-this.camera.getLocation().z / 16.0F + 0.5F - (float) chunk.chunkZ) * (-this.camera.getLocation().z / 16.0F + 0.5F - (float) chunk.chunkZ);
 
                 if (cDistance < distance || distance < 0) {
                     distance = cDistance;
@@ -547,11 +541,7 @@ public class SettlingClient extends Settling {
                     Chunk chunk = this.currentWorld.getChunkAt(x, z, true);
 
                     if (chunk != null) {
-                        Settling.log.finer("Chunk @ " + x + ";" + z + ": " + chunk);
                         this.dirtyChunks.add(chunk);
-                    }
-                    else {
-                        Settling.log.fine("Null chunk");
                     }
                 }
             }
@@ -564,8 +554,8 @@ public class SettlingClient extends Settling {
         int renderChunkRadius = 16;
 
         for (ChunkRenderer chunkRenderer : this.renderedChunks) {
-            double distance = (-this.player.location.x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX) * (-this.player.location.x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX);
-            distance += (-this.player.location.z / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkZ) * (-this.player.location.z / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkZ);
+            double distance = (-this.camera.getLocation().x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX) * (-this.camera.getLocation().x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX);
+            distance += (-this.camera.getLocation().z / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkZ) * (-this.camera.getLocation().z / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkZ);
 
             if (distance < renderChunkRadius * renderChunkRadius) {
                 chunkRenderer.renderChunk();
@@ -573,4 +563,14 @@ public class SettlingClient extends Settling {
         }
     }
 
+    public void swapCameras() {
+        if (this.firstPerson) {
+            this.camera = new LinearTransitionCamera(this.camera, this.overviewCamera);
+        }
+        else {
+            this.camera = new LinearTransitionCamera(this.camera, this.playerCamera);
+        }
+
+        this.firstPerson = !this.firstPerson;
+    }
 }

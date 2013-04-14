@@ -3,7 +3,6 @@ package net.specialattack.settling.client.world;
 
 import java.io.File;
 
-import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.World;
 import net.specialattack.settling.common.world.gen.WorldGenLayerFuzzyZoom;
@@ -65,8 +64,6 @@ public class WorldDemo extends World {
             return chunk;
         }
         else if (chunk != null && generateIfMissing) {
-            Settling.log.finest("Generating chunk @" + chunkX + ";" + chunkZ);
-
             chunk.generate();
 
             return chunk;

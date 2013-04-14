@@ -37,7 +37,7 @@ public class TileRenderer {
         float endZ = startZ + 1.0F;
         float endY = startY;
 
-        if (!SettlingClient.firstPerson) {
+        if (false) {
             float temp = startY;
             startY = startZ;
             startZ = temp;
@@ -88,7 +88,7 @@ public class TileRenderer {
         float endZ = startZ + 1.0F;
         float endY = startY + 1.0F;
 
-        if (!SettlingClient.firstPerson) {
+        if (false) {
             float temp = startY;
             startY = startZ;
             startZ = temp;

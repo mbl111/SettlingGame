@@ -126,7 +126,7 @@ public class Chunk {
         int[] ints = this.world.genLayer.getInts(this.chunkX * 16, this.chunkZ * 16, 16, 16);
 
         for (int i = 0; i < 256; i++) {
-            this.sections[i].tiles[i] = (short) ints[i];
+            this.sections[0].tiles[i] = (short) ints[i];
         }
     }
 

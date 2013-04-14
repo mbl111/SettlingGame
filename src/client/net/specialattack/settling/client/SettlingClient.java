@@ -254,6 +254,7 @@ public class SettlingClient extends Settling {
         else {
             this.camera = this.overviewCamera;
         }
+
         this.displayScreen(new GuiScreenMainMenu());
 
         return true;
@@ -543,6 +544,7 @@ public class SettlingClient extends Settling {
                     if (chunk != null) {
                         this.dirtyChunks.add(chunk);
                     }
+
                 }
             }
         }

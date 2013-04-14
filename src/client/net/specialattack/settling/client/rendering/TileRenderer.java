@@ -1,7 +1,6 @@
 
 package net.specialattack.settling.client.rendering;
 
-import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.texture.SubTexture;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.common.item.ItemTile;
@@ -16,7 +15,7 @@ public class TileRenderer {
         currentTexture = -1;
     }
 
-    public static void renderTile(ItemTile item, int posX, int posZ) {
+    public static void renderTileFloor(ItemTile item, int posX, int posY, int posZ) {
         SubTexture texture = TextureRegistry.getSubTexture(item.textureName);
 
         if (currentTexture != texture.getParent().getTextureId()) {
@@ -31,42 +30,42 @@ public class TileRenderer {
         float endV = texture.getEndV();
 
         float startX = (float) posX;
-        float startY = 0.0F;
+        float startY = (float) posY;
         float startZ = (float) posZ;
         float endX = startX + 1.0F;
         float endZ = startZ + 1.0F;
         float endY = startY;
 
-        if (false) {
-            float temp = startY;
-            startY = startZ;
-            startZ = temp;
-
-            temp = endY;
-            endY = endZ;
-            endZ = temp;
-        }
+        // if (false) {
+        // float temp = startY;
+        // startY = startZ;
+        // startZ = temp;
+        // 
+        // temp = endY;
+        // endY = endZ;
+        // endZ = temp;
+        // }
 
         GL11.glTexCoord2f(startU, startV);
-        //GL11.glVertex3f(25.0F, 0.0F, 0.0F);
+        // GL11.glVertex3f(25.0F, 0.0F, 0.0F);
         GL11.glVertex3f(startX, startY, startZ);
 
         GL11.glTexCoord2f(endU, startV);
-        //GL11.glVertex3f(50.0F, 12.5F, 0.0F);
+        // GL11.glVertex3f(50.0F, 12.5F, 0.0F);
         GL11.glVertex3f(endX, startY, startZ);
 
         GL11.glTexCoord2f(endU, endV);
-        //GL11.glVertex3f(25.5F, 25.2F, 0.0F); // 25.2F to prevent borders
+        // GL11.glVertex3f(25.5F, 25.2F, 0.0F); // 25.2F to prevent borders
         GL11.glVertex3f(endX, endY, endZ);
 
         GL11.glTexCoord2f(startU, endV);
-        //GL11.glVertex3f(0.0F, 12.5F, 0.0F);
+        // GL11.glVertex3f(0.0F, 12.5F, 0.0F);
         GL11.glVertex3f(startX, endY, endZ);
 
         GL11.glEnd();
     }
 
-    //teh north is X + 1
+    // teh north is X + 1
     public static void renderTileNorthFace(ItemTile item, int posX, int posY, int posZ) {
         SubTexture texture = TextureRegistry.getSubTexture(item.textureName);
 
@@ -88,30 +87,30 @@ public class TileRenderer {
         float endZ = startZ + 1.0F;
         float endY = startY + 1.0F;
 
-        if (false) {
-            float temp = startY;
-            startY = startZ;
-            startZ = temp;
-
-            temp = endY;
-            endY = endZ;
-            endZ = temp;
-        }
+        // if (false) {
+        // float temp = startY;
+        // startY = startZ;
+        // startZ = temp;
+        // 
+        // temp = endY;
+        // endY = endZ;
+        // endZ = temp;
+        // }
 
         GL11.glTexCoord2f(startU, startV);
-        //GL11.glVertex3f(25.0F, 0.0F, 0.0F);
+        // GL11.glVertex3f(25.0F, 0.0F, 0.0F);
         GL11.glVertex3f(startX, startY, startZ);
 
         GL11.glTexCoord2f(endU, startV);
-        //GL11.glVertex3f(50.0F, 12.5F, 0.0F);
+        // GL11.glVertex3f(50.0F, 12.5F, 0.0F);
         GL11.glVertex3f(startX, startY, endZ);
 
         GL11.glTexCoord2f(endU, endV);
-        //GL11.glVertex3f(25.5F, 25.2F, 0.0F); // 25.2F to prevent borders
+        // GL11.glVertex3f(25.5F, 25.2F, 0.0F); // 25.2F to prevent borders
         GL11.glVertex3f(endX, endY, endZ);
 
         GL11.glTexCoord2f(startU, endV);
-        //GL11.glVertex3f(0.0F, 12.5F, 0.0F);
+        // GL11.glVertex3f(0.0F, 12.5F, 0.0F);
         GL11.glVertex3f(startX, endY, startZ);
 
         GL11.glEnd();

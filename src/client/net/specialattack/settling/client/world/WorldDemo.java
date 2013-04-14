@@ -4,6 +4,7 @@ package net.specialattack.settling.client.world;
 import java.io.File;
 
 import net.specialattack.settling.common.world.Chunk;
+import net.specialattack.settling.common.world.Section;
 import net.specialattack.settling.common.world.World;
 import net.specialattack.settling.common.world.gen.WorldGenLayerFuzzyZoom;
 import net.specialattack.settling.common.world.gen.WorldGenLayerIslands;
@@ -57,6 +58,11 @@ public class WorldDemo extends World {
     }
 
     @Override
+    public short getWorldHeight() {
+        return 512;
+    }
+
+    @Override
     public Chunk getChunkAt(int chunkX, int chunkZ, boolean generateIfMissing) {
         Chunk chunk = this.chunks[(chunkX - this.getMinXBorder() / 16) + (chunkZ - this.getMinZBorder() / 16) * (getMaxXBorder() - getMinXBorder()) / 16];
 
@@ -70,6 +76,11 @@ public class WorldDemo extends World {
         }
 
         return null;
+    }
+
+    @Override
+    public Section getSectionAt(int chunkX, int chunkZ, int sectionY) {
+        return this.getChunkAt(chunkX, chunkZ, false).getSection(sectionY);
     }
 
 }

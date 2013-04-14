@@ -38,12 +38,12 @@ public class LinearTransitionCamera implements ICamera {
             return;
         }
 
-        this.FOV = MathHelper.interpolate(this.origin.getFOV(0.0F), this.target.getFOV(0.0F), ticks, 40);
-        this.location.x = MathHelper.interpolate(this.origin.getLocation().x, this.target.getLocation().x, ticks, 40);
-        this.location.y = MathHelper.interpolate(this.origin.getLocation().y, this.target.getLocation().y, ticks, 40);
-        this.location.z = MathHelper.interpolate(this.origin.getLocation().z, this.target.getLocation().z, ticks, 40);
-        this.location.pitch = MathHelper.interpolate(this.origin.getLocation().pitch, this.target.getLocation().pitch, ticks, 40);
-        this.location.yaw = MathHelper.interpolate(this.origin.getLocation().yaw, this.target.getLocation().yaw, ticks, 40);
+        this.FOV = MathHelper.lerp(this.origin.getFOV(0.0F), this.target.getFOV(0.0F), ticks, 40);
+        this.location.x = MathHelper.lerp(this.origin.getLocation().x, this.target.getLocation().x, ticks, 40);
+        this.location.y = MathHelper.lerp(this.origin.getLocation().y, this.target.getLocation().y, ticks, 40);
+        this.location.z = MathHelper.lerp(this.origin.getLocation().z, this.target.getLocation().z, ticks, 40);
+        this.location.pitch = MathHelper.lerp(this.origin.getLocation().pitch, this.target.getLocation().pitch, ticks, 40);
+        this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw, ticks, 40);
 
         ticks++;
     }

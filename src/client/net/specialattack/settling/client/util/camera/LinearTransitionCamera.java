@@ -43,7 +43,22 @@ public class LinearTransitionCamera implements ICamera {
         this.location.y = MathHelper.lerp(this.origin.getLocation().y, this.target.getLocation().y, ticks, 40);
         this.location.z = MathHelper.lerp(this.origin.getLocation().z, this.target.getLocation().z, ticks, 40);
         this.location.pitch = MathHelper.lerp(this.origin.getLocation().pitch, this.target.getLocation().pitch, ticks, 40);
-        this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw, ticks, 40);
+        if (this.target.getLocation().yaw > this.origin.getLocation().yaw) {
+            if (this.target.getLocation().yaw - this.origin.getLocation().yaw > 180.0F) {
+                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw - 360.0F, ticks, 40);
+            }
+            else {
+                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw, ticks, 40);
+            }
+        }
+        else {
+            if (this.origin.getLocation().yaw - this.target.getLocation().yaw > 180.0F) {
+                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw - 360.0F, this.target.getLocation().yaw, ticks, 40);
+            }
+            else {
+                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw, ticks, 40);
+            }
+        }
 
         ticks++;
     }

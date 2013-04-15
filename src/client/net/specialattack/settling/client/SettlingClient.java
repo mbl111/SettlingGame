@@ -408,6 +408,10 @@ public class SettlingClient extends Settling {
         this.fontRenderer.renderStringWithShadow("FPS: " + this.fps + " TPS: " + this.tps, 0, 18, 0xFFFFFFFF);
         Location loc = this.camera.getLocation();
         this.fontRenderer.renderStringWithShadow("Yaw: " + loc.yaw + " Pitch: " + loc.pitch, 0, 34, 0xFFFFFFFF);
+        loc = this.overviewCamera.getLocation();
+        this.fontRenderer.renderStringWithShadow("Yaw: " + loc.yaw + " Pitch: " + loc.pitch, 0, 50, 0xFFFFFFFF);
+        loc = this.playerCamera.getLocation();
+        this.fontRenderer.renderStringWithShadow("Yaw: " + loc.yaw + " Pitch: " + loc.pitch, 0, 66, 0xFFFFFFFF);
 
         long maxMemory = Runtime.getRuntime().maxMemory();
         long totalMemory = Runtime.getRuntime().totalMemory();
@@ -568,10 +572,17 @@ public class SettlingClient extends Settling {
     public void swapCameras() {
         if (this.firstPerson) {
             this.camera = new LinearTransitionCamera(this.camera, this.overviewCamera);
+            this.mouseGrabbed = false;
+            Mouse.setGrabbed(false);
         }
         else {
             this.camera = new LinearTransitionCamera(this.camera, this.playerCamera);
+            this.mouseGrabbed = true;
+            Mouse.setGrabbed(true);
         }
+
+        this.camera.tick(currentWorld, this);
+        this.camera.tick(currentWorld, this);
 
         this.firstPerson = !this.firstPerson;
     }

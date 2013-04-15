@@ -39,7 +39,7 @@ public class ChunkRenderer {
                         Item item = Items.itemList[tile];
 
                         if (item instanceof ItemTile) {
-                            if (chunk.getTileAt(x, y + 1, z) == 0) {
+                            if (y == 0) {
                                 TileRenderer.renderTileFloor((ItemTile) Items.itemList[tile], rx, y, rz);
                             }
                         }

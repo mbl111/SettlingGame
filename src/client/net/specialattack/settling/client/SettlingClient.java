@@ -75,7 +75,7 @@ public class SettlingClient extends Settling {
     }
 
     public void setFullscreen(boolean state) {
-        if (!fullscreen && state) {
+        if (!this.fullscreen && state) {
             try {
                 DisplayMode mode = Settings.displayMode.getMode();
 
@@ -83,21 +83,21 @@ public class SettlingClient extends Settling {
 
                 this.resize(mode.getWidth(), mode.getHeight());
 
-                fullscreen = true;
+                this.fullscreen = true;
             }
             catch (LWJGLException e) {
                 Settling.log.log(Level.SEVERE, "Failed enabling fullscreen mode", e);
 
-                setFullscreen(false);
+                this.setFullscreen(false);
             }
         }
-        else if (fullscreen && !state) {
+        else if (this.fullscreen && !state) {
             try {
                 Display.setFullscreen(false);
 
                 this.resize(this.canvas.getWidth(), this.canvas.getHeight());
 
-                fullscreen = false;
+                this.fullscreen = false;
             }
             catch (LWJGLException e) {
                 Settling.log.log(Level.SEVERE, "Failed disabling fullscreen mode", e);
@@ -106,7 +106,7 @@ public class SettlingClient extends Settling {
     }
 
     public void updateFullscreen() {
-        if (fullscreen) {
+        if (this.fullscreen) {
             try {
                 DisplayMode mode = Settings.displayMode.getMode();
 
@@ -161,7 +161,7 @@ public class SettlingClient extends Settling {
     }
 
     public void displayScreen(GuiScreen screen) {
-        if (firstPerson) {
+        if (this.firstPerson) {
             if (this.currentScreen == null && screen != null && this.mouseGrabbed) {
                 this.mouseGrabbed = false;
                 Mouse.setGrabbed(false);
@@ -248,7 +248,7 @@ public class SettlingClient extends Settling {
 
         this.playerCamera = new PlayerCamera();
         this.overviewCamera = new OverviewCamera();
-        if (firstPerson) {
+        if (this.firstPerson) {
             this.camera = this.playerCamera;
         }
         else {
@@ -384,7 +384,7 @@ public class SettlingClient extends Settling {
     }
 
     private void render() {
-        if (!fullscreen && (this.displayWidth != this.canvas.getWidth() || this.displayHeight != this.canvas.getHeight())) {
+        if (!this.fullscreen && (this.displayWidth != this.canvas.getWidth() || this.displayHeight != this.canvas.getHeight())) {
             this.resize(this.canvas.getWidth(), this.canvas.getHeight());
         }
         float scale = 1F;
@@ -578,8 +578,8 @@ public class SettlingClient extends Settling {
             Mouse.setGrabbed(true);
         }
 
-        this.camera.tick(currentWorld, this);
-        this.camera.tick(currentWorld, this);
+        this.camera.tick(this.currentWorld, this);
+        this.camera.tick(this.currentWorld, this);
 
         this.firstPerson = !this.firstPerson;
     }

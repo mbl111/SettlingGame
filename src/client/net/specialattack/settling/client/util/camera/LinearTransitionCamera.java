@@ -33,34 +33,34 @@ public class LinearTransitionCamera implements ICamera {
         this.prevLocation.clone(this.location);
         this.prevFOV = this.FOV;
 
-        if (ticks > 40) {
+        if (this.ticks > 40) {
             settling.camera = this.target;
             return;
         }
 
-        this.FOV = MathHelper.lerp(this.origin.getFOV(0.0F), this.target.getFOV(0.0F), ticks, 40);
-        this.location.x = MathHelper.lerp(this.origin.getLocation().x, this.target.getLocation().x, ticks, 40);
-        this.location.y = MathHelper.lerp(this.origin.getLocation().y, this.target.getLocation().y, ticks, 40);
-        this.location.z = MathHelper.lerp(this.origin.getLocation().z, this.target.getLocation().z, ticks, 40);
-        this.location.pitch = MathHelper.lerp(this.origin.getLocation().pitch, this.target.getLocation().pitch, ticks, 40);
+        this.FOV = MathHelper.lerp(this.origin.getFOV(0.0F), this.target.getFOV(0.0F), this.ticks, 40);
+        this.location.x = MathHelper.lerp(this.origin.getLocation().x, this.target.getLocation().x, this.ticks, 40);
+        this.location.y = MathHelper.lerp(this.origin.getLocation().y, this.target.getLocation().y, this.ticks, 40);
+        this.location.z = MathHelper.lerp(this.origin.getLocation().z, this.target.getLocation().z, this.ticks, 40);
+        this.location.pitch = MathHelper.lerp(this.origin.getLocation().pitch, this.target.getLocation().pitch, this.ticks, 40);
         if (this.target.getLocation().yaw > this.origin.getLocation().yaw) {
             if (this.target.getLocation().yaw - this.origin.getLocation().yaw > 180.0F) {
-                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw - 360.0F, ticks, 40);
+                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw - 360.0F, this.ticks, 40);
             }
             else {
-                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw, ticks, 40);
+                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw, this.ticks, 40);
             }
         }
         else {
             if (this.origin.getLocation().yaw - this.target.getLocation().yaw > 180.0F) {
-                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw - 360.0F, this.target.getLocation().yaw, ticks, 40);
+                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw - 360.0F, this.target.getLocation().yaw, this.ticks, 40);
             }
             else {
-                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw, ticks, 40);
+                this.location.yaw = MathHelper.lerp(this.origin.getLocation().yaw, this.target.getLocation().yaw, this.ticks, 40);
             }
         }
 
-        ticks++;
+        this.ticks++;
     }
 
     @Override

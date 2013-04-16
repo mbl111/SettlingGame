@@ -33,23 +33,23 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
 
         this.slots = new boolean[this.availableSlots];
 
-        loadImageData();
+        this.loadImageData();
     }
 
     @Override
     public void loadImageData() {
-        if (imageData == null || textureId < 0) {
+        if (this.imageData == null || this.textureId < 0) {
             return;
         }
 
-        int[] pixels = new int[imageData.getWidth() * imageData.getHeight()];
-        imageData.getRGB(0, 0, imageData.getWidth(), imageData.getHeight(), pixels, 0, imageData.getWidth());
+        int[] pixels = new int[this.imageData.getWidth() * this.imageData.getHeight()];
+        this.imageData.getRGB(0, 0, this.imageData.getWidth(), this.imageData.getHeight(), pixels, 0, this.imageData.getWidth());
 
-        ByteBuffer buffer = BufferUtils.createByteBuffer(imageData.getWidth() * imageData.getHeight() * 4);
+        ByteBuffer buffer = BufferUtils.createByteBuffer(this.imageData.getWidth() * this.imageData.getHeight() * 4);
 
-        for (int y = 0; y < imageData.getHeight(); y++) {
-            for (int x = 0; x < imageData.getWidth(); x++) {
-                int pixel = pixels[y * imageData.getWidth() + x];
+        for (int y = 0; y < this.imageData.getHeight(); y++) {
+            for (int x = 0; x < this.imageData.getWidth(); x++) {
+                int pixel = pixels[y * this.imageData.getWidth() + x];
                 buffer.put((byte) ((pixel >> 16) & 0xFF));
                 buffer.put((byte) ((pixel >> 8) & 0xFF));
                 buffer.put((byte) (pixel & 0xFF));
@@ -59,7 +59,7 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
 
         buffer.flip();
 
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
 
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
@@ -67,7 +67,7 @@ public class StitchedTexture extends Texture implements IStitchedTexture {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, imageData.getWidth(), imageData.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, this.imageData.getWidth(), this.imageData.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
     }
 

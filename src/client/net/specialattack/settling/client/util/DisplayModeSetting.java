@@ -19,7 +19,7 @@ public class DisplayModeSetting implements ISetting {
 
     @Override
     public String getValue() {
-        return ScreenResolution.getDisplayMode(mode);
+        return ScreenResolution.getDisplayMode(this.mode);
     }
 
     @Override

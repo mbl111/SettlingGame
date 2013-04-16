@@ -13,7 +13,7 @@ public class Chunk {
         // 0 is the lowest
         this.sections = new Section[world.getWorldHeight() >> 4];
 
-        for (int i = 0; i < sections.length; i++) {
+        for (int i = 0; i < this.sections.length; i++) {
             this.sections[i] = new Section(this, i);
         }
 
@@ -33,11 +33,11 @@ public class Chunk {
             tileZ = tileZ + 16;
         }
 
-        int highest = sections.length << 4;
+        int highest = this.sections.length << 4;
         boolean highestNotFound = true;
 
         while (highestNotFound) {
-            short tile = sections[sections.length - highest % 16].tiles[tileX + tileZ * 16];
+            short tile = this.sections[this.sections.length - highest % 16].tiles[tileX + tileZ * 16];
             if (tile != 0) {
                 return tile;
             }

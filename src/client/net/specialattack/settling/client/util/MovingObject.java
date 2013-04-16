@@ -74,23 +74,23 @@ public class MovingObject {
         }
 
         if (this.limited) {
-            if (posX < limitX1) {
-                posX = limitX1;
+            if (this.posX < this.limitX1) {
+                this.posX = this.limitX1;
             }
-            if (posX > limitX2) {
-                posX = limitX2;
+            if (this.posX > this.limitX2) {
+                this.posX = this.limitX2;
             }
-            if (posY < limitY1) {
-                posY = limitY1;
+            if (this.posY < this.limitY1) {
+                this.posY = this.limitY1;
             }
-            if (posY > limitY2) {
-                posY = limitY2;
+            if (this.posY > this.limitY2) {
+                this.posY = this.limitY2;
             }
-            if (posZ < limitZ1) {
-                posZ = limitZ1;
+            if (this.posZ < this.limitZ1) {
+                this.posZ = this.limitZ1;
             }
-            if (posZ > limitZ2) {
-                posZ = limitZ2;
+            if (this.posZ > this.limitZ2) {
+                this.posZ = this.limitZ2;
             }
         }
     }

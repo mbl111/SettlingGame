@@ -8,11 +8,11 @@ public class CrashReport {
     private ArrayList<CrashReportSection> sections;
 
     public CrashReport() {
-        sections = new ArrayList<CrashReportSection>();
+        this.sections = new ArrayList<CrashReportSection>();
     }
 
     public void addSection(CrashReportSection section) {
-        sections.add(section);
+        this.sections.add(section);
     }
 
     public String getData() {
@@ -21,7 +21,7 @@ public class CrashReport {
         result.append("==================================================").append("\r\n");
         result.append("  Settling has crashed!").append("\r\n").append("\r\n").append("\r\n");
 
-        for (CrashReportSection section : sections) {
+        for (CrashReportSection section : this.sections) {
             result.append("==============================").append("\r\n");
             result.append("==  ").append(section.name).append("\r\n");
             result.append("==============================").append("\r\n");

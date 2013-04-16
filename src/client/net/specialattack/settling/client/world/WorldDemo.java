@@ -19,15 +19,15 @@ public class WorldDemo extends World {
 
         this.genLayer = new WorldGenLayerIslands(1L, 20); // Island frequency
         this.genLayer = WorldGenLayerFuzzyZoom.zoom(1000L, this.genLayer, 2); // Island randomness
-        this.genLayer = WorldGenLayerZoom.zoom(2000L, genLayer, 3); // Island size
+        this.genLayer = WorldGenLayerZoom.zoom(2000L, this.genLayer, 3); // Island size
 
         this.genLayer.initGlobalSeed(100L);
 
-        this.chunks = new Chunk[(getMaxXBorder() - getMinXBorder()) * (getMaxZBorder() - getMinZBorder()) / 256];
+        this.chunks = new Chunk[(this.getMaxXBorder() - this.getMinXBorder()) * (this.getMaxZBorder() - this.getMinZBorder()) / 256];
 
-        for (int x = 0; x < (getMaxXBorder() - getMinXBorder()) / 16; x++) {
-            for (int z = 0; z < (getMaxZBorder() - getMinZBorder()) / 16; z++) {
-                this.chunks[x + z * (getMaxXBorder() - getMinXBorder()) / 16] = new Chunk(this, x + getMinXBorder() / 16, z + getMinZBorder() / 16);
+        for (int x = 0; x < (this.getMaxXBorder() - this.getMinXBorder()) / 16; x++) {
+            for (int z = 0; z < (this.getMaxZBorder() - this.getMinZBorder()) / 16; z++) {
+                this.chunks[x + z * (this.getMaxXBorder() - this.getMinXBorder()) / 16] = new Chunk(this, x + this.getMinXBorder() / 16, z + this.getMinZBorder() / 16);
             }
         }
     }
@@ -64,7 +64,7 @@ public class WorldDemo extends World {
 
     @Override
     public Chunk getChunkAt(int chunkX, int chunkZ, boolean generateIfMissing) {
-        Chunk chunk = this.chunks[(chunkX - this.getMinXBorder() / 16) + (chunkZ - this.getMinZBorder() / 16) * (getMaxXBorder() - getMinXBorder()) / 16];
+        Chunk chunk = this.chunks[(chunkX - this.getMinXBorder() / 16) + (chunkZ - this.getMinZBorder() / 16) * (this.getMaxXBorder() - this.getMinXBorder()) / 16];
 
         if (chunk != null && chunk.hasBeenGenerated()) {
             return chunk;

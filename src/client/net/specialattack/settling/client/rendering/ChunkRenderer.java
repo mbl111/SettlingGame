@@ -30,8 +30,8 @@ public class ChunkRenderer {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = 0; y < chunk.getNumSections() * 16; y++) {
-                    int rx = this.chunk.chunkX * 16 + x - 16;
-                    int rz = this.chunk.chunkZ * 16 + z - 16;
+                    //int rx = this.chunk.chunkX * 16 + x - 16;
+                    //int rz = this.chunk.chunkZ * 16 + z - 16;
 
                     short tile = chunk.getTileAt(x, y, z);
 
@@ -40,7 +40,7 @@ public class ChunkRenderer {
 
                         if (item instanceof ItemTile) {
                             if (y == 0) {
-                                TileRenderer.renderTileFloor((ItemTile) Items.itemList[tile], rx, y, rz);
+                                TileRenderer.renderTileFloor((ItemTile) Items.itemList[tile], x, y, z);
                             }
                         }
                     }
@@ -54,7 +54,10 @@ public class ChunkRenderer {
 
     public void renderChunk() {
         if (this.glCallList > 0 && !this.dirty) {
+            GL11.glPushMatrix();
+            GL11.glTranslated((float) this.chunk.chunkX * 16.0F, 0.0F, (float) this.chunk.chunkZ * 16.0F);
             GL11.glCallList(this.glCallList);
+            GL11.glPopMatrix();
         }
     }
 

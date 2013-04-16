@@ -408,10 +408,7 @@ public class SettlingClient extends Settling {
         this.fontRenderer.renderStringWithShadow("FPS: " + this.fps + " TPS: " + this.tps, 0, 18, 0xFFFFFFFF);
         Location loc = this.camera.getLocation();
         this.fontRenderer.renderStringWithShadow("Yaw: " + loc.yaw + " Pitch: " + loc.pitch, 0, 34, 0xFFFFFFFF);
-        loc = this.overviewCamera.getLocation();
-        this.fontRenderer.renderStringWithShadow("Yaw: " + loc.yaw + " Pitch: " + loc.pitch, 0, 50, 0xFFFFFFFF);
-        loc = this.playerCamera.getLocation();
-        this.fontRenderer.renderStringWithShadow("Yaw: " + loc.yaw + " Pitch: " + loc.pitch, 0, 66, 0xFFFFFFFF);
+        this.fontRenderer.renderStringWithShadow("X: " + loc.x + " Y: " + loc.y + " Z: " + loc.z, 0, 50, 0xFFFFFFFF);
 
         long maxMemory = Runtime.getRuntime().maxMemory();
         long totalMemory = Runtime.getRuntime().totalMemory();

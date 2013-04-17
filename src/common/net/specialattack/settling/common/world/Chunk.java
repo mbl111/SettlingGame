@@ -17,6 +17,8 @@ public class Chunk {
             this.sections[i] = new Section(this, i);
         }
 
+        this.heights = new short[256];
+
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.world = world;

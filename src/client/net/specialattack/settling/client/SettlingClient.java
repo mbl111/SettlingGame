@@ -2,11 +2,12 @@
 package net.specialattack.settling.client;
 
 import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.TextArea;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
-
-import javax.swing.JTextArea;
 
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
@@ -338,8 +339,10 @@ public class SettlingClient extends Settling {
 
         Display.destroy();
 
-        JTextArea text = new JTextArea();
+        TextArea text = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
         text.setEditable(false);
+        text.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        text.setBackground(Color.WHITE);
 
         CrashReport report = new CrashReport();
         report.addSection(new CrashReportSectionThrown(thrown));

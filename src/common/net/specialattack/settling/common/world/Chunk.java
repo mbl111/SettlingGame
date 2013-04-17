@@ -36,12 +36,12 @@ public class Chunk {
         int y = this.sections.length << 4;
 
         while (y > 0) {
-            short tile = this.sections[this.sections.length - (y ^ 0xF) >> 4].tiles[tileX + tileZ * 16 + (y % 16) * 256];
+            short tile = this.sections[this.sections.length - y >> 4].tiles[tileX + tileZ * 16 + (y % 16) * 256];
             if (tile != 0) {
                 return tile;
             }
 
-            y++;
+            y--;
         }
 
         return 0;
@@ -66,7 +66,7 @@ public class Chunk {
                 return y;
             }
 
-            y++;
+            y--;
         }
 
         return 0;

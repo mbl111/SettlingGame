@@ -25,7 +25,12 @@ public class CrashReport {
             result.append("==============================").append("\r\n");
             result.append("==  ").append(section.name).append("\r\n");
             result.append("==============================").append("\r\n");
-            result.append(section.getData()).append("\r\n");
+            try {
+                result.append(section.getData()).append("\r\n");
+            }
+            catch (Exception ex) {
+                result.append("Error while displaying crash section: ").append(ex).append("\r\n");
+            }
 
             result.append("\r\n");
         }

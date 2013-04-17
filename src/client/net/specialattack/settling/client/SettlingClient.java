@@ -26,6 +26,7 @@ import net.specialattack.settling.client.util.camera.OverviewCamera;
 import net.specialattack.settling.client.util.camera.PlayerCamera;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.crash.CrashReport;
+import net.specialattack.settling.common.crash.CrashReportSectionCamera;
 import net.specialattack.settling.common.crash.CrashReportSectionThrown;
 import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
@@ -342,6 +343,22 @@ public class SettlingClient extends Settling {
 
         CrashReport report = new CrashReport();
         report.addSection(new CrashReportSectionThrown(thrown));
+
+        if (this.currentWorld != null) {
+            if (this.camera == this.playerCamera) {
+                report.addSection(new CrashReportSectionCamera(this.playerCamera, "Active Camera / Player Camera"));
+                report.addSection(new CrashReportSectionCamera(this.overviewCamera, "Overview Camera"));
+            }
+            if (this.camera == this.overviewCamera) {
+                report.addSection(new CrashReportSectionCamera(this.overviewCamera, "Active Camera / Overview Camera"));
+                report.addSection(new CrashReportSectionCamera(this.playerCamera, "Player Camera"));
+            }
+            else {
+                report.addSection(new CrashReportSectionCamera(this.camera, "Active Camera"));
+                report.addSection(new CrashReportSectionCamera(this.playerCamera, "Player Camera"));
+                report.addSection(new CrashReportSectionCamera(this.overviewCamera, "Overview Camera"));
+            }
+        }
 
         text.setText(report.getData());
 

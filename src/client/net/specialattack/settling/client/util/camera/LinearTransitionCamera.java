@@ -88,4 +88,9 @@ public class LinearTransitionCamera implements ICamera {
         return this.location;
     }
 
+    @Override
+    public Location getPrevLocation() {
+        return this.prevLocation;
+    }
+
 }

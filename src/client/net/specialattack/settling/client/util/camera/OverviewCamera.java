@@ -127,8 +127,12 @@ public class OverviewCamera implements ICamera {
 
     @Override
     public Location getLocation() {
-        // TODO Auto-generated method stub
         return this.location;
+    }
+    
+    @Override
+    public Location getPrevLocation() {
+        return this.prevLocation;
     }
 
 }

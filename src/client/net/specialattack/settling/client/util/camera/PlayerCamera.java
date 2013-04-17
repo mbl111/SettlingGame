@@ -119,4 +119,9 @@ public class PlayerCamera implements ICamera {
         return this.location;
     }
 
+    @Override
+    public Location getPrevLocation() {
+        return this.prevLocation;
+    }
+
 }

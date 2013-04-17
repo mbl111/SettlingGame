@@ -73,7 +73,7 @@ public class OverviewCamera implements ICamera {
             this.motionY = 0.0F;
         }
 
-        if (MathHelper.abs(this.motionY) <= 0.1F) {
+        if (MathHelper.abs(this.motionY) <= 0.01F) {
             this.location.y = highest;
         }
 

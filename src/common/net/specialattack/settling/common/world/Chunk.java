@@ -33,20 +33,46 @@ public class Chunk {
             tileZ = tileZ + 16;
         }
 
-        int highest = this.sections.length << 4;
-        boolean highestNotFound = true;
+        int y = this.sections.length << 4;
 
-        while (highestNotFound) {
-            short tile = this.sections[this.sections.length - highest % 16].tiles[tileX + tileZ * 16];
+        while (y > 0) {
+            short tile = this.sections[this.sections.length - (y ^ 0xF) >> 4].tiles[tileX + tileZ * 16 + (y % 16) * 256];
             if (tile != 0) {
                 return tile;
             }
+
+            y++;
         }
 
         return 0;
     }
 
-    public short getHeight(int tileX, int tileZ) {
+    public int getHeight(int tileX, int tileZ) {
+        tileX = tileX % 16;
+        tileZ = tileZ % 16;
+
+        if (tileX < 0) {
+            tileX = tileX + 16;
+        }
+        if (tileZ < 0) {
+            tileZ = tileZ + 16;
+        }
+
+        int y = this.sections.length << 4;
+
+        while (y > 0) {
+            short tile = this.sections[this.sections.length - (y ^ 0xF) >> 4].tiles[tileX + tileZ * 16 + (y % 16) * 256];
+            if (tile != 0) {
+                return y;
+            }
+
+            y++;
+        }
+
+        return 0;
+    }
+
+    public int getGenerationHeight(int tileX, int tileZ) {
         tileX = tileX % 16;
         tileZ = tileZ % 16;
 

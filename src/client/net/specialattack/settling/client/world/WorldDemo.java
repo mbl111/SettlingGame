@@ -3,6 +3,7 @@ package net.specialattack.settling.client.world;
 
 import java.io.File;
 
+import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.Section;
 import net.specialattack.settling.common.world.World;
@@ -64,7 +65,17 @@ public class WorldDemo extends World {
 
     @Override
     public Chunk getChunkAt(int chunkX, int chunkZ, boolean generateIfMissing) {
-        Chunk chunk = this.chunks[(chunkX - this.getMinXBorder() / 16) + (chunkZ - this.getMinZBorder() / 16) * (this.getMaxXBorder() - this.getMinXBorder()) / 16];
+        int index = (chunkX - this.getMinXBorder() >> 4) + (chunkZ - this.getMinZBorder() >> 4) * (this.getMaxXBorder() - this.getMinXBorder()) / 16;
+
+        if (index < 0 || index >= this.chunks.length) {
+            Settling.log.warning("Incorrect chunk location: (" + chunkX + "; " + chunkZ + ")");
+            Settling.log.warning("Relative: (" + (chunkX - this.getMinXBorder() >> 4) + "; " + (chunkZ - this.getMinZBorder() >> 4) + ")");
+            Settling.log.warning("Index: " + index + " Size: " + this.chunks.length);
+
+            return null;
+        }
+
+        Chunk chunk = this.chunks[index];
 
         if (chunk != null && chunk.hasBeenGenerated()) {
             return chunk;

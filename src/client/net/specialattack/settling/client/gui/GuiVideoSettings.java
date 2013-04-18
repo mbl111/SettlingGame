@@ -17,6 +17,7 @@ public class GuiVideoSettings extends GuiScreen {
 
     private GuiButton buttonFullscreen;
     private GuiToggleButton<DisplayMode> buttonResolution;
+    private GuiButton buttonGrabMouse;
 
     private GuiScreen parent;
 
@@ -26,28 +27,38 @@ public class GuiVideoSettings extends GuiScreen {
 
     @Override
     protected void onResize(int newWidth, int newHeight) {
-        this.buttonFullscreen.posX = newWidth / 2 - 360;
-        this.buttonResolution.posX = newWidth / 2 + 10;
+        int i = 0;
+
+        this.buttonFullscreen.posX = newWidth / 2 - 360 + 370 * (i++ % 2);
+        this.buttonResolution.posX = newWidth / 2 - 360 + 370 * (i++ % 2);
+        this.buttonGrabMouse.posX = newWidth / 2 - 360 + 370 * (i++ % 2);
 
         this.buttonReturn.posX = newWidth / 2 - 150;
     }
 
     @Override
     protected void onInit() {
+        int i = 0;
+
         boolean fullscreen = Settings.fullscreen.getState();
-        this.buttonFullscreen = new GuiButton(LanguageRegistry.translate("gui.video.fullscreen", fullscreen ? "gui.on" : "gui.off"), this.width / 2 - 360, 50, 350, 50, this);
-        this.buttonResolution = new GuiToggleButton<DisplayMode>(this.width / 2 + 10, 50, 350, 50, this);
+        this.buttonFullscreen = new GuiButton(LanguageRegistry.translate("gui.video.fullscreen", fullscreen ? "gui.on" : "gui.off"), this.width / 2 - 360 + 370 * (i % 2), 50 + (i++ / 2) * 60, 350, 50, this);
+        this.buttonResolution = new GuiToggleButton<DisplayMode>(this.width / 2 - 360 + 370 * (i % 2), 50 + (i++ / 2) * 60, 350, 50, this);
 
         for (DisplayMode displayMode : ScreenResolution.getDisplayModes()) {
             this.buttonResolution.addOption(ScreenResolution.getReadableDisplayMode(displayMode), displayMode);
         }
-
         this.buttonResolution.setValue(ScreenResolution.getReadableDisplayMode(Settings.displayMode.getMode()));
+
+        boolean grabMouse = Settings.grabMouse.getState();
+        this.buttonGrabMouse = new GuiButton(LanguageRegistry.translate("gui.video.grabMouse", grabMouse ? "gui.on" : "gui.off"), this.width / 2 - 360 + 370 * (i % 2), 50 + (i++ / 2) * 60, 350, 50, this);
 
         this.elements.add(this.buttonFullscreen);
         this.elements.add(this.buttonResolution);
+        this.elements.add(this.buttonGrabMouse);
 
-        this.buttonReturn = new GuiButton(LanguageRegistry.translate("gui.return"), this.width / 2 - 150, 170, 300, 50, this);
+        i++;
+
+        this.buttonReturn = new GuiButton(LanguageRegistry.translate("gui.return"), this.width / 2 - 150, 50 + ((i + 0) / 2) * 60, 300, 50, this);
         this.elements.add(this.buttonReturn);
     }
 
@@ -72,6 +83,14 @@ public class GuiVideoSettings extends GuiScreen {
             Settings.displayMode.setMode(this.buttonResolution.selected);
 
             SettlingClient.instance.updateFullscreen();
+
+            Settings.saveSettings();
+        }
+        if (element == this.buttonGrabMouse) {
+            boolean grab = Settings.grabMouse.toggleState();
+            this.buttonGrabMouse.label = LanguageRegistry.translate("gui.video.grabMouse", grab ? "gui.on" : "gui.off");
+
+            SettlingClient.instance.updateGrab();
 
             Settings.saveSettings();
         }

@@ -28,3 +28,4 @@ movement.sprint=Sprint
 
 #Video Settings
 gui.video.fullscreen=Fullscreen: %s
+gui.video.grabMouse=Lock Mouse: %s

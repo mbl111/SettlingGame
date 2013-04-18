@@ -68,6 +68,7 @@ public class SettlingClient extends Settling {
     private GuiScreen currentScreen = null;
     private boolean mouseGrabbed = false;
     private boolean fullscreen = false;
+    private boolean mouseLocked = false;
     public ICamera camera;
     private ICamera playerCamera;
     private ICamera overviewCamera;
@@ -123,8 +124,24 @@ public class SettlingClient extends Settling {
         }
     }
 
+    public void updateGrab() {
+        if (Settings.grabMouse.getState()) {
+            if (!this.mouseLocked) {
+                Mouse.setGrabbed(true);
+                this.mouseLocked = true;
+            }
+        }
+        else {
+            if (this.mouseLocked) {
+                Mouse.setGrabbed(false);
+                this.mouseLocked = false;
+            }
+        }
+    }
+
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
+        canvas.requestFocusInWindow();
     }
 
     public void resize(int width, int height) {
@@ -166,11 +183,9 @@ public class SettlingClient extends Settling {
         if (this.firstPerson) {
             if (this.currentScreen == null && screen != null && this.mouseGrabbed) {
                 this.mouseGrabbed = false;
-                Mouse.setGrabbed(false);
             }
             if (this.currentScreen != null && screen == null && !this.mouseGrabbed) {
                 this.mouseGrabbed = true;
-                Mouse.setGrabbed(true);
             }
         }
 
@@ -239,6 +254,7 @@ public class SettlingClient extends Settling {
         if (Settings.fullscreen.getState()) {
             this.setFullscreen(true);
         }
+        this.updateGrab();
 
         // this.currentWorld = new WorldDemo(new File("./demo/"));
 
@@ -387,6 +403,12 @@ public class SettlingClient extends Settling {
             // 
             // this.screenLocation.update();
         }
+        if (this.mouseGrabbed) {
+            Mouse.setCursorPosition(this.displayWidth / 2, this.displayHeight / 2);
+        }
+        else if (this.mouseLocked) {
+            Mouse.setCursorPosition(Mouse.getX(), Mouse.getY());
+        }
 
         KeyBinding.escape.update();
 
@@ -438,6 +460,22 @@ public class SettlingClient extends Settling {
         String allocatedString = "Allocated memory: " + totalMemory * 100L / maxMemory + "% (" + totalMemory / 1024L / 1024L + "MB)";
         this.fontRenderer.renderStringWithShadow(usedString, this.displayWidth - this.fontRenderer.getStringWidth(usedString) - 1, 0, 0xFFFFFFFF);
         this.fontRenderer.renderStringWithShadow(allocatedString, this.displayWidth - this.fontRenderer.getStringWidth(allocatedString) - 1, 16, 0xFFFFFFFF);
+
+        if (!this.mouseGrabbed && this.mouseLocked) {
+            TextureRegistry.getTexture("/textures/gui/mouse.png").bindTexture();
+
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glBegin(GL11.GL_QUADS);
+            GL11.glTexCoord2f(0.0F, 0.0F);
+            GL11.glVertex2i(Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
+            GL11.glTexCoord2f(0.25F, 0.0F);
+            GL11.glVertex2i(Mouse.getX() + 32, this.displayHeight - 1 - Mouse.getY());
+            GL11.glTexCoord2f(0.25F, 0.25F);
+            GL11.glVertex2i(Mouse.getX() + 32, this.displayHeight + 31 - Mouse.getY());
+            GL11.glTexCoord2f(0.0F, 0.25F);
+            GL11.glVertex2i(Mouse.getX(), this.displayHeight + 31 - Mouse.getY());
+            GL11.glEnd();
+        }
     }
 
     private void render3D() {
@@ -590,13 +628,13 @@ public class SettlingClient extends Settling {
         if (this.firstPerson) {
             this.camera = new LinearTransitionCamera(this.camera, this.overviewCamera);
             this.mouseGrabbed = false;
-            Mouse.setGrabbed(false);
         }
         else {
             this.camera = new LinearTransitionCamera(this.camera, this.playerCamera);
             this.mouseGrabbed = true;
-            Mouse.setGrabbed(true);
         }
+
+        this.updateGrab();
 
         this.camera.tick(this.currentWorld, this);
         this.camera.tick(this.currentWorld, this);

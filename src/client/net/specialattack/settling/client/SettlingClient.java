@@ -11,6 +11,7 @@ import java.util.logging.Level;
 
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
+import net.specialattack.settling.client.gui.GuiScreenMenu;
 import net.specialattack.settling.client.item.ClientItemDelegate;
 import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
@@ -387,21 +388,6 @@ public class SettlingClient extends Settling {
     private void tick() {
         if (this.currentScreen == null && this.currentWorld != null) {
             this.camera.tick(this.currentWorld, this);
-
-            // if (Settings.forward.isPressed()) {
-            // this.screenLocation.motionX -= 2.0F;
-            // }
-            // if (Settings.back.isPressed()) {
-            // this.screenLocation.motionX += 2.0F;
-            // }
-            // if (Settings.left.isPressed()) {
-            // this.screenLocation.motionZ += 2.0F;
-            // }
-            // if (Settings.right.isPressed()) {
-            // this.screenLocation.motionZ -= 2.0F;
-            // }
-            // 
-            // this.screenLocation.update();
         }
         if (this.mouseGrabbed) {
             Mouse.setCursorPosition(this.displayWidth / 2, this.displayHeight / 2);
@@ -420,8 +406,7 @@ public class SettlingClient extends Settling {
             this.displayScreen(null);
         }
         else if (this.currentWorld != null && escapeTapped) {
-            // this.displayScreen(new GuiScreenMenu());
-            this.swapCameras();
+            this.displayScreen(new GuiScreenMenu());
         }
     }
 
@@ -487,20 +472,6 @@ public class SettlingClient extends Settling {
         GL11.glPushMatrix();
 
         this.camera.lookThrough(this.timer.renderPartialTicks);
-
-        // GL11.glTranslatef((float) this.displayWidth / 2.0F, (float) this.displayHeight / 2.0F, 0.0F);
-        // 
-        // GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
-        // GL11.glRotatef(60.0F, 1.0F, 1.0F, 0.0F);
-        // 
-        // GL11.glScalef(zoom, zoom, zoom);
-        // 
-        // double posX = this.screenLocation.posZ * MathHelper.sin(0.5F) + this.screenLocation.posX * MathHelper.cos(0.5F);
-        // double posY = this.screenLocation.posZ * MathHelper.cos(0.5F) - this.screenLocation.posX * MathHelper.sin(0.5F);
-        // this.camera.getLocation().setX(posX);
-        // this.camera.getLocation().setZ(posY);
-        // 
-        // GL11.glTranslated(posX, posY, 0.0D);
 
         // This would go to the world/level class
 

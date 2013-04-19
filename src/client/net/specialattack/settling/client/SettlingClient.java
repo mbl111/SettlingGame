@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import net.specialattack.settling.client.crash.CrashReportSectionCamera;
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
 import net.specialattack.settling.client.gui.GuiScreenMenu;
@@ -28,7 +29,6 @@ import net.specialattack.settling.client.util.camera.OverviewCamera;
 import net.specialattack.settling.client.util.camera.PlayerCamera;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.crash.CrashReport;
-import net.specialattack.settling.common.crash.CrashReportSectionCamera;
 import net.specialattack.settling.common.crash.CrashReportSectionThrown;
 import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Item;
@@ -58,7 +58,7 @@ public class SettlingClient extends Settling {
     private int displayHeight;
     public TickTimer timer = new TickTimer(20.0F);
     private Shader shader;
-    public boolean firstPerson = true;
+    public boolean firstPerson = false;
     public World currentWorld = null;
     public FontRenderer fontRenderer;
     private HashMap<Chunk, ChunkRenderer> chunkList;

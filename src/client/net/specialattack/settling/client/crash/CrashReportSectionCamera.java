@@ -1,7 +1,8 @@
 
-package net.specialattack.settling.common.crash;
+package net.specialattack.settling.client.crash;
 
 import net.specialattack.settling.client.util.camera.ICamera;
+import net.specialattack.settling.common.crash.CrashReportSection;
 import net.specialattack.settling.common.util.Location;
 
 public class CrashReportSectionCamera extends CrashReportSection {
@@ -19,7 +20,7 @@ public class CrashReportSectionCamera extends CrashReportSection {
 
         Location loc = this.camera.getLocation();
 
-        result.append("Camera type: ").append(this.camera.getClass().getName());
+        result.append("Camera type: ").append(this.camera.getClass().getName()).append("\r\n");
 
         result.append("Current Location: ");
         result.append("(").append(String.format("%.3g", loc.x));

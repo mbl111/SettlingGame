@@ -29,6 +29,7 @@ public class WorldDemo extends World {
         for (int x = 0; x < (this.getMaxXBorder() - this.getMinXBorder()) / 16; x++) {
             for (int z = 0; z < (this.getMaxZBorder() - this.getMinZBorder()) / 16; z++) {
                 this.chunks[x + z * (this.getMaxXBorder() - this.getMinXBorder()) / 16] = new Chunk(this, x + this.getMinXBorder() / 16, z + this.getMinZBorder() / 16);
+                this.chunks[x + z * (this.getMaxXBorder() - this.getMinXBorder()) / 16].generate();
             }
         }
     }

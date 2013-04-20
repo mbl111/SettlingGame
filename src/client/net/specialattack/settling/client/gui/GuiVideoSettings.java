@@ -17,7 +17,6 @@ public class GuiVideoSettings extends GuiScreen {
 
     private GuiButton buttonFullscreen;
     private GuiToggleButton<DisplayMode> buttonResolution;
-    private GuiButton buttonGrabMouse;
 
     private GuiScreen parent;
 
@@ -31,7 +30,6 @@ public class GuiVideoSettings extends GuiScreen {
 
         this.buttonFullscreen.posX = newWidth / 2 - 360 + 370 * (i++ % 2);
         this.buttonResolution.posX = newWidth / 2 - 360 + 370 * (i++ % 2);
-        this.buttonGrabMouse.posX = newWidth / 2 - 360 + 370 * (i++ % 2);
 
         this.buttonReturn.posX = newWidth / 2 - 150;
     }
@@ -49,12 +47,8 @@ public class GuiVideoSettings extends GuiScreen {
         }
         this.buttonResolution.setValue(ScreenResolution.getReadableDisplayMode(Settings.displayMode.getMode()));
 
-        boolean grabMouse = Settings.grabMouse.getState();
-        this.buttonGrabMouse = new GuiButton(LanguageRegistry.translate("gui.video.grabMouse", grabMouse ? "gui.on" : "gui.off"), this.width / 2 - 360 + 370 * (i % 2), 50 + (i++ / 2) * 60, 350, 50, this);
-
         this.elements.add(this.buttonFullscreen);
         this.elements.add(this.buttonResolution);
-        this.elements.add(this.buttonGrabMouse);
 
         i++;
 
@@ -83,14 +77,6 @@ public class GuiVideoSettings extends GuiScreen {
             Settings.displayMode.setMode(this.buttonResolution.selected);
 
             SettlingClient.instance.updateFullscreen();
-
-            Settings.saveSettings();
-        }
-        if (element == this.buttonGrabMouse) {
-            boolean grab = Settings.grabMouse.toggleState();
-            this.buttonGrabMouse.label = LanguageRegistry.translate("gui.video.grabMouse", grab ? "gui.on" : "gui.off");
-
-            SettlingClient.instance.updateGrab();
 
             Settings.saveSettings();
         }

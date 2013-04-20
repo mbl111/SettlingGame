@@ -66,7 +66,7 @@ public class WorldDemo extends World {
 
     @Override
     public Chunk getChunkAt(int chunkX, int chunkZ, boolean generateIfMissing) {
-        int index = (chunkX - this.getMinXBorder() >> 4) + (chunkZ - this.getMinZBorder() >> 4) * (this.getMaxXBorder() - this.getMinXBorder()) / 16;
+        int index = (chunkX - (this.getMinXBorder() >> 4)) + (chunkZ - (this.getMinZBorder() >> 4)) * (this.getMaxXBorder() - this.getMinXBorder()) / 16;
 
         if (index < 0 || index >= this.chunks.length) {
             Settling.log.warning("Incorrect chunk location: (" + chunkX + "; " + chunkZ + ")");

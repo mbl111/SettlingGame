@@ -105,7 +105,7 @@ public class Chunk {
             y = this.sections.length * 16;
         }
 
-        return this.sections[(y - y & 0xF) >> 4].tiles[x + z * 16];
+        return this.sections[y >> 4].tiles[x + z * 16];
     }
 
     public void setTileAt(int x, int y, int z, short type) {

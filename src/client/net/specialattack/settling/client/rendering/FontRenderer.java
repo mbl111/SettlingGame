@@ -68,7 +68,7 @@ public class FontRenderer {
 
         int u = charIndex & 0xF;
         int v = (charIndex - u) / 16;
-        
+
         //System.out.println(character + "|" + charIndex + "|" + u + "|" + v);
 
         float[] start = this.texture.getPixelLocations(u * 16, v * 16);

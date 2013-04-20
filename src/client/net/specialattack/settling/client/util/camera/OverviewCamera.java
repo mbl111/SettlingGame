@@ -2,7 +2,9 @@
 package net.specialattack.settling.client.util.camera;
 
 import net.specialattack.settling.client.SettlingClient;
+import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.common.util.Location;
+import net.specialattack.settling.common.util.MathHelper;
 import net.specialattack.settling.common.world.World;
 
 import org.lwjgl.opengl.GL11;
@@ -11,15 +13,100 @@ public class OverviewCamera implements ICamera {
 
     private Location location;
     private Location prevLocation;
+    private float hSpeed = 2.0F;
+    private float drag = 1.5F;
+    private float motionX;
+    private float motionZ;
+    private float motionY;
+    private boolean setup;
 
     public OverviewCamera() {
         this.location = new Location(0.0F, 60.0F, 0.0F, 60.0F, 45.0F);
         this.prevLocation = new Location(0.0F, 60.0F, 0.0F, 60.0F, 45.0F);
+        this.motionX = 0.0F;
+        this.motionZ = 0.0F;
+        this.motionY = 0.0F;
+        this.setup = false;
     }
 
     @Override
     public void tick(World world, SettlingClient settling) {
+        if (!this.setup) {
+            this.setup = true;
+            this.location.y = world.getChunkAtTile((int) this.location.x, (int) this.location.z, false).getHighestBlock((int) this.location.x, (int) this.location.z) + 20.0F;
+        }
+
         this.prevLocation.clone(this.location);
+
+        float mod = 1.0F;
+
+        if (Settings.sprint.isPressed()) {
+            mod = 3.0F;
+        }
+
+        if (Settings.back.isPressed()) {
+            this.motionX += Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+            this.motionZ += -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+        }
+        if (Settings.forward.isPressed()) {
+            this.motionX -= Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+            this.motionZ -= -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+        }
+        if (Settings.right.isPressed()) {
+            this.motionX += Math.sin((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+            this.motionZ += -Math.cos((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+        }
+        if (Settings.left.isPressed()) {
+            this.motionX += Math.sin((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+            this.motionZ += -Math.cos((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+        }
+
+        if (world.getChunkAtTile((int) this.location.x, (int) this.location.z, false) == null) {
+            this.getClass();
+        }
+
+        float highest = world.getChunkAtTile((int) this.location.x, (int) this.location.z, false).getHeight((int) this.location.x, (int) this.location.z) + 20;
+
+        if (this.location.y < highest) {
+            this.motionY = (highest - (float) this.location.y) / 2.0F;
+        }
+        else if (this.location.y > highest) {
+            this.motionY = -((float) this.location.y - highest) / 2.0F;
+        }
+        else {
+            this.motionY = 0.0F;
+        }
+
+        if (MathHelper.abs(this.motionY) <= 0.01F) {
+            this.location.y = highest;
+        }
+
+        this.location.x += this.motionX;
+        this.location.y += this.motionY;
+        this.location.z += this.motionZ;
+
+        this.motionX /= this.drag;
+        this.motionZ /= this.drag;
+
+        if (MathHelper.abs(this.motionX) < 0.01F) {
+            this.motionX = 0.0F;
+        }
+        if (MathHelper.abs(this.motionZ) < 0.01F) {
+            this.motionZ = 0.0F;
+        }
+
+        if (this.location.x > world.getMaxXBorder()) {
+            this.location.x = world.getMaxXBorder();
+        }
+        if (this.location.z > world.getMaxZBorder()) {
+            this.location.z = world.getMaxZBorder();
+        }
+        if (this.location.x < world.getMinXBorder()) {
+            this.location.x = world.getMinXBorder();
+        }
+        if (this.location.z < world.getMinZBorder()) {
+            this.location.z = world.getMinZBorder();
+        }
     }
 
     @Override
@@ -39,13 +126,17 @@ public class OverviewCamera implements ICamera {
 
     @Override
     public float getFOV(float partialTicks) {
-        return 45.0F;
+        return 60.0F;
     }
 
     @Override
     public Location getLocation() {
-        // TODO Auto-generated method stub
         return this.location;
+    }
+
+    @Override
+    public Location getPrevLocation() {
+        return this.prevLocation;
     }
 
 }

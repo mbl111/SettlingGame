@@ -3,6 +3,7 @@ package net.specialattack.settling.client.world;
 
 import java.io.File;
 
+import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.Section;
 import net.specialattack.settling.common.world.World;
@@ -19,15 +20,16 @@ public class WorldDemo extends World {
 
         this.genLayer = new WorldGenLayerIslands(1L, 20); // Island frequency
         this.genLayer = WorldGenLayerFuzzyZoom.zoom(1000L, this.genLayer, 2); // Island randomness
-        this.genLayer = WorldGenLayerZoom.zoom(2000L, genLayer, 3); // Island size
+        this.genLayer = WorldGenLayerZoom.zoom(2000L, this.genLayer, 3); // Island size
 
         this.genLayer.initGlobalSeed(100L);
 
-        this.chunks = new Chunk[(getMaxXBorder() - getMinXBorder()) * (getMaxZBorder() - getMinZBorder()) / 256];
+        this.chunks = new Chunk[(this.getMaxXBorder() - this.getMinXBorder()) * (this.getMaxZBorder() - this.getMinZBorder()) / 256];
 
-        for (int x = 0; x < (getMaxXBorder() - getMinXBorder()) / 16; x++) {
-            for (int z = 0; z < (getMaxZBorder() - getMinZBorder()) / 16; z++) {
-                this.chunks[x + z * (getMaxXBorder() - getMinXBorder()) / 16] = new Chunk(this, x + getMinXBorder() / 16, z + getMinZBorder() / 16);
+        for (int x = 0; x < (this.getMaxXBorder() - this.getMinXBorder()) / 16; x++) {
+            for (int z = 0; z < (this.getMaxZBorder() - this.getMinZBorder()) / 16; z++) {
+                this.chunks[x + z * (this.getMaxXBorder() - this.getMinXBorder()) / 16] = new Chunk(this, x + this.getMinXBorder() / 16, z + this.getMinZBorder() / 16);
+                this.chunks[x + z * (this.getMaxXBorder() - this.getMinXBorder()) / 16].generate();
             }
         }
     }
@@ -64,7 +66,17 @@ public class WorldDemo extends World {
 
     @Override
     public Chunk getChunkAt(int chunkX, int chunkZ, boolean generateIfMissing) {
-        Chunk chunk = this.chunks[(chunkX - this.getMinXBorder() / 16) + (chunkZ - this.getMinZBorder() / 16) * (getMaxXBorder() - getMinXBorder()) / 16];
+        int index = (chunkX - this.getMinXBorder() >> 4) + (chunkZ - this.getMinZBorder() >> 4) * (this.getMaxXBorder() - this.getMinXBorder()) / 16;
+
+        if (index < 0 || index >= this.chunks.length) {
+            Settling.log.warning("Incorrect chunk location: (" + chunkX + "; " + chunkZ + ")");
+            Settling.log.warning("Relative: (" + (chunkX - this.getMinXBorder() >> 4) + "; " + (chunkZ - this.getMinZBorder() >> 4) + ")");
+            Settling.log.warning("Index: " + index + " Size: " + this.chunks.length);
+
+            return null;
+        }
+
+        Chunk chunk = this.chunks[index];
 
         if (chunk != null && chunk.hasBeenGenerated()) {
             return chunk;

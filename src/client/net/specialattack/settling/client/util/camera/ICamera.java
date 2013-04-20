@@ -15,4 +15,6 @@ public interface ICamera {
 
     public abstract Location getLocation();
 
+    public abstract Location getPrevLocation();
+
 }

@@ -10,24 +10,24 @@ public class Table<K, V, W> {
     private final TreeMap<K, Value<V, W>> entries;
 
     public Table() {
-        entries = new TreeMap<K, Value<V, W>>();
+        this.entries = new TreeMap<K, Value<V, W>>();
     }
 
     public int size() {
-        return entries.size();
+        return this.entries.size();
     }
 
     public void insert(K key, V value1, W value2) {
-        entries.put(key, new Value<V, W>(value1, value2));
+        this.entries.put(key, new Value<V, W>(value1, value2));
     }
 
     public boolean containsKey(K key) {
-        return entries.containsKey(key);
+        return this.entries.containsKey(key);
     }
 
     public boolean containsValue1(V value1) {
-        for (K key : entries.keySet()) {
-            if (entries.get(key).getValue1().equals(value1)) {
+        for (K key : this.entries.keySet()) {
+            if (this.entries.get(key).getValue1().equals(value1)) {
                 return true;
             }
         }
@@ -36,8 +36,8 @@ public class Table<K, V, W> {
     }
 
     public boolean containsValue2(W value2) {
-        for (K key : entries.keySet()) {
-            if (entries.get(key).getValue2().equals(value2)) {
+        for (K key : this.entries.keySet()) {
+            if (this.entries.get(key).getValue2().equals(value2)) {
                 return true;
             }
         }
@@ -46,24 +46,24 @@ public class Table<K, V, W> {
     }
 
     public Value<V, W> deleteEntry(K key) {
-        return entries.remove(key);
+        return this.entries.remove(key);
     }
 
     public Value<V, W> getValue(K key) {
-        return entries.get(key);
+        return this.entries.get(key);
     }
 
     public V getValue1(K key) {
-        return entries.get(key).getValue1();
+        return this.entries.get(key).getValue1();
     }
 
     public W getValue2(K key) {
-        return entries.get(key).getValue2();
+        return this.entries.get(key).getValue2();
     }
 
     public K getKey1(V value1) {
-        for (K key : entries.keySet()) {
-            if (entries.get(key).getValue1().equals(value1)) {
+        for (K key : this.entries.keySet()) {
+            if (this.entries.get(key).getValue1().equals(value1)) {
                 return key;
             }
         }
@@ -72,8 +72,8 @@ public class Table<K, V, W> {
     }
 
     public K getKey2(W value2) {
-        for (K key : entries.keySet()) {
-            if (entries.get(key).getValue2().equals(value2)) {
+        for (K key : this.entries.keySet()) {
+            if (this.entries.get(key).getValue2().equals(value2)) {
                 return key;
             }
         }
@@ -84,7 +84,7 @@ public class Table<K, V, W> {
     public Collection<Entry<K, V, W>> getEntries() {
         TreeSet<Entry<K, V, W>> result = new TreeSet<Entry<K, V, W>>();
 
-        for (java.util.Map.Entry<K, Value<V, W>> entry : entries.entrySet()) {
+        for (java.util.Map.Entry<K, Value<V, W>> entry : this.entries.entrySet()) {
             result.add(new Entry<K, V, W>(entry.getKey(), entry.getValue().value1, entry.getValue().value2));
         }
 
@@ -102,11 +102,11 @@ public class Table<K, V, W> {
         }
 
         public V getValue1() {
-            return value1;
+            return this.value1;
         }
 
         public W getValue2() {
-            return value2;
+            return this.value2;
         }
 
     }
@@ -124,15 +124,15 @@ public class Table<K, V, W> {
         }
 
         public K getKey() {
-            return key;
+            return this.key;
         }
 
         public V getValue1() {
-            return value1;
+            return this.value1;
         }
 
         public W getValue2() {
-            return value2;
+            return this.value2;
         }
 
     }

@@ -2,14 +2,17 @@
 package net.specialattack.settling.client;
 
 import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.TextArea;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-import javax.swing.JTextArea;
-
+import net.specialattack.settling.client.crash.CrashReportSectionCamera;
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
+import net.specialattack.settling.client.gui.GuiScreenMenu;
 import net.specialattack.settling.client.item.ClientItemDelegate;
 import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
@@ -55,7 +58,7 @@ public class SettlingClient extends Settling {
     private int displayHeight;
     public TickTimer timer = new TickTimer(20.0F);
     private Shader shader;
-    public boolean firstPerson = true;
+    public boolean firstPerson = false;
     public World currentWorld = null;
     public FontRenderer fontRenderer;
     private HashMap<Chunk, ChunkRenderer> chunkList;
@@ -66,6 +69,7 @@ public class SettlingClient extends Settling {
     private GuiScreen currentScreen = null;
     private boolean mouseGrabbed = false;
     private boolean fullscreen = false;
+    private boolean mouseLocked = false;
     public ICamera camera;
     private ICamera playerCamera;
     private ICamera overviewCamera;
@@ -75,7 +79,7 @@ public class SettlingClient extends Settling {
     }
 
     public void setFullscreen(boolean state) {
-        if (!fullscreen && state) {
+        if (!this.fullscreen && state) {
             try {
                 DisplayMode mode = Settings.displayMode.getMode();
 
@@ -83,21 +87,21 @@ public class SettlingClient extends Settling {
 
                 this.resize(mode.getWidth(), mode.getHeight());
 
-                fullscreen = true;
+                this.fullscreen = true;
             }
             catch (LWJGLException e) {
                 Settling.log.log(Level.SEVERE, "Failed enabling fullscreen mode", e);
 
-                setFullscreen(false);
+                this.setFullscreen(false);
             }
         }
-        else if (fullscreen && !state) {
+        else if (this.fullscreen && !state) {
             try {
                 Display.setFullscreen(false);
 
                 this.resize(this.canvas.getWidth(), this.canvas.getHeight());
 
-                fullscreen = false;
+                this.fullscreen = false;
             }
             catch (LWJGLException e) {
                 Settling.log.log(Level.SEVERE, "Failed disabling fullscreen mode", e);
@@ -106,7 +110,7 @@ public class SettlingClient extends Settling {
     }
 
     public void updateFullscreen() {
-        if (fullscreen) {
+        if (this.fullscreen) {
             try {
                 DisplayMode mode = Settings.displayMode.getMode();
 
@@ -121,8 +125,24 @@ public class SettlingClient extends Settling {
         }
     }
 
+    public void updateGrab() {
+        if (Settings.grabMouse.getState()) {
+            if (!this.mouseLocked) {
+                Mouse.setGrabbed(true);
+                this.mouseLocked = true;
+            }
+        }
+        else {
+            if (this.mouseLocked) {
+                Mouse.setGrabbed(false);
+                this.mouseLocked = false;
+            }
+        }
+    }
+
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
+        canvas.requestFocusInWindow();
     }
 
     public void resize(int width, int height) {
@@ -161,14 +181,12 @@ public class SettlingClient extends Settling {
     }
 
     public void displayScreen(GuiScreen screen) {
-        if (firstPerson) {
+        if (this.firstPerson) {
             if (this.currentScreen == null && screen != null && this.mouseGrabbed) {
                 this.mouseGrabbed = false;
-                Mouse.setGrabbed(false);
             }
             if (this.currentScreen != null && screen == null && !this.mouseGrabbed) {
                 this.mouseGrabbed = true;
-                Mouse.setGrabbed(true);
             }
         }
 
@@ -237,6 +255,7 @@ public class SettlingClient extends Settling {
         if (Settings.fullscreen.getState()) {
             this.setFullscreen(true);
         }
+        this.updateGrab();
 
         // this.currentWorld = new WorldDemo(new File("./demo/"));
 
@@ -248,7 +267,7 @@ public class SettlingClient extends Settling {
 
         this.playerCamera = new PlayerCamera();
         this.overviewCamera = new OverviewCamera();
-        if (firstPerson) {
+        if (this.firstPerson) {
             this.camera = this.playerCamera;
         }
         else {
@@ -337,11 +356,29 @@ public class SettlingClient extends Settling {
 
         Display.destroy();
 
-        JTextArea text = new JTextArea();
+        TextArea text = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
         text.setEditable(false);
+        text.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        text.setBackground(Color.WHITE);
 
         CrashReport report = new CrashReport();
         report.addSection(new CrashReportSectionThrown(thrown));
+
+        if (this.currentWorld != null) {
+            if (this.camera == this.playerCamera) {
+                report.addSection(new CrashReportSectionCamera(this.playerCamera, "Active Camera / Player Camera"));
+                report.addSection(new CrashReportSectionCamera(this.overviewCamera, "Overview Camera"));
+            }
+            if (this.camera == this.overviewCamera) {
+                report.addSection(new CrashReportSectionCamera(this.overviewCamera, "Active Camera / Overview Camera"));
+                report.addSection(new CrashReportSectionCamera(this.playerCamera, "Player Camera"));
+            }
+            else {
+                report.addSection(new CrashReportSectionCamera(this.camera, "Active Camera"));
+                report.addSection(new CrashReportSectionCamera(this.playerCamera, "Player Camera"));
+                report.addSection(new CrashReportSectionCamera(this.overviewCamera, "Overview Camera"));
+            }
+        }
 
         text.setText(report.getData());
 
@@ -351,21 +388,12 @@ public class SettlingClient extends Settling {
     private void tick() {
         if (this.currentScreen == null && this.currentWorld != null) {
             this.camera.tick(this.currentWorld, this);
-
-            // if (Settings.forward.isPressed()) {
-            // this.screenLocation.motionX -= 2.0F;
-            // }
-            // if (Settings.back.isPressed()) {
-            // this.screenLocation.motionX += 2.0F;
-            // }
-            // if (Settings.left.isPressed()) {
-            // this.screenLocation.motionZ += 2.0F;
-            // }
-            // if (Settings.right.isPressed()) {
-            // this.screenLocation.motionZ -= 2.0F;
-            // }
-            // 
-            // this.screenLocation.update();
+        }
+        if (this.mouseGrabbed) {
+            Mouse.setCursorPosition(this.displayWidth / 2, this.displayHeight / 2);
+        }
+        else if (this.mouseLocked) {
+            Mouse.setCursorPosition(Mouse.getX(), Mouse.getY());
         }
 
         KeyBinding.escape.update();
@@ -378,13 +406,12 @@ public class SettlingClient extends Settling {
             this.displayScreen(null);
         }
         else if (this.currentWorld != null && escapeTapped) {
-            // this.displayScreen(new GuiScreenMenu());
-            this.swapCameras();
+            this.displayScreen(new GuiScreenMenu());
         }
     }
 
     private void render() {
-        if (!fullscreen && (this.displayWidth != this.canvas.getWidth() || this.displayHeight != this.canvas.getHeight())) {
+        if (!this.fullscreen && (this.displayWidth != this.canvas.getWidth() || this.displayHeight != this.canvas.getHeight())) {
             this.resize(this.canvas.getWidth(), this.canvas.getHeight());
         }
         float scale = 1F;
@@ -408,6 +435,7 @@ public class SettlingClient extends Settling {
         this.fontRenderer.renderStringWithShadow("FPS: " + this.fps + " TPS: " + this.tps, 0, 18, 0xFFFFFFFF);
         Location loc = this.camera.getLocation();
         this.fontRenderer.renderStringWithShadow("Yaw: " + loc.yaw + " Pitch: " + loc.pitch, 0, 34, 0xFFFFFFFF);
+        this.fontRenderer.renderStringWithShadow("X: " + loc.x + " Y: " + loc.y + " Z: " + loc.z, 0, 50, 0xFFFFFFFF);
 
         long maxMemory = Runtime.getRuntime().maxMemory();
         long totalMemory = Runtime.getRuntime().totalMemory();
@@ -417,6 +445,22 @@ public class SettlingClient extends Settling {
         String allocatedString = "Allocated memory: " + totalMemory * 100L / maxMemory + "% (" + totalMemory / 1024L / 1024L + "MB)";
         this.fontRenderer.renderStringWithShadow(usedString, this.displayWidth - this.fontRenderer.getStringWidth(usedString) - 1, 0, 0xFFFFFFFF);
         this.fontRenderer.renderStringWithShadow(allocatedString, this.displayWidth - this.fontRenderer.getStringWidth(allocatedString) - 1, 16, 0xFFFFFFFF);
+
+        if (!this.mouseGrabbed && this.mouseLocked) {
+            TextureRegistry.getTexture("/textures/gui/mouse.png").bindTexture();
+
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glBegin(GL11.GL_QUADS);
+            GL11.glTexCoord2f(0.0F, 0.0F);
+            GL11.glVertex2i(Mouse.getX(), this.displayHeight - 1 - Mouse.getY());
+            GL11.glTexCoord2f(0.25F, 0.0F);
+            GL11.glVertex2i(Mouse.getX() + 32, this.displayHeight - 1 - Mouse.getY());
+            GL11.glTexCoord2f(0.25F, 0.25F);
+            GL11.glVertex2i(Mouse.getX() + 32, this.displayHeight + 31 - Mouse.getY());
+            GL11.glTexCoord2f(0.0F, 0.25F);
+            GL11.glVertex2i(Mouse.getX(), this.displayHeight + 31 - Mouse.getY());
+            GL11.glEnd();
+        }
     }
 
     private void render3D() {
@@ -428,20 +472,6 @@ public class SettlingClient extends Settling {
         GL11.glPushMatrix();
 
         this.camera.lookThrough(this.timer.renderPartialTicks);
-
-        // GL11.glTranslatef((float) this.displayWidth / 2.0F, (float) this.displayHeight / 2.0F, 0.0F);
-        // 
-        // GL11.glRotatef(-45.0F, 0.0F, 0.0F, 1.0F);
-        // GL11.glRotatef(60.0F, 1.0F, 1.0F, 0.0F);
-        // 
-        // GL11.glScalef(zoom, zoom, zoom);
-        // 
-        // double posX = this.screenLocation.posZ * MathHelper.sin(0.5F) + this.screenLocation.posX * MathHelper.cos(0.5F);
-        // double posY = this.screenLocation.posZ * MathHelper.cos(0.5F) - this.screenLocation.posX * MathHelper.sin(0.5F);
-        // this.camera.getLocation().setX(posX);
-        // this.camera.getLocation().setZ(posY);
-        // 
-        // GL11.glTranslated(posX, posY, 0.0D);
 
         // This would go to the world/level class
 
@@ -568,10 +598,17 @@ public class SettlingClient extends Settling {
     public void swapCameras() {
         if (this.firstPerson) {
             this.camera = new LinearTransitionCamera(this.camera, this.overviewCamera);
+            this.mouseGrabbed = false;
         }
         else {
             this.camera = new LinearTransitionCamera(this.camera, this.playerCamera);
+            this.mouseGrabbed = true;
         }
+
+        this.updateGrab();
+
+        this.camera.tick(this.currentWorld, this);
+        this.camera.tick(this.currentWorld, this);
 
         this.firstPerson = !this.firstPerson;
     }

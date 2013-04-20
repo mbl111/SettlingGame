@@ -64,7 +64,7 @@ public class GuiList extends GuiElement {
 
     public void add(String string) {
         this.elements.add(string);
-        reCalculate();
+        this.reCalculate();
     }
 
     public void reCalculate() {

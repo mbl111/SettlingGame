@@ -31,12 +31,12 @@ public class BooleanSetting implements ISetting {
     public void update() {}
 
     public boolean getState() {
-        return value;
+        return this.value;
     }
 
     public boolean toggleState() {
-        value = !value;
-        return value;
+        this.value = !this.value;
+        return this.value;
     }
 
     public void setState(boolean value) {

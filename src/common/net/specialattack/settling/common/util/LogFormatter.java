@@ -11,14 +11,14 @@ public class LogFormatter extends Formatter {
     private SimpleDateFormat dateFormat;
 
     public LogFormatter() {
-        dateFormat = new SimpleDateFormat("WW/dd/yyyy HH:mm:ss");
+        this.dateFormat = new SimpleDateFormat("WW/dd/yyyy HH:mm:ss");
     }
 
     @Override
     public String format(LogRecord record) {
         StringBuilder builder = new StringBuilder();
 
-        builder.append("[").append(dateFormat.format(new Date(record.getMillis()))).append("] ");
+        builder.append("[").append(this.dateFormat.format(new Date(record.getMillis()))).append("] ");
         builder.append("[").append(record.getLevel().getName()).append("] ");
         builder.append(record.getMessage());
 

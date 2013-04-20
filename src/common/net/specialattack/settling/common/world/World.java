@@ -32,7 +32,7 @@ public abstract class World {
 
     public abstract Section getSectionAt(int chunkX, int chunkZ, int sectionY);
 
-    public Chunk getChunkAtTile(int tileX, int tileZ) {
+    public Chunk getChunkAtTile(int tileX, int tileZ, boolean generateIfMissing) {
         if (tileX < this.getMinXBorder() || tileX > this.getMaxXBorder()) {
             Settling.log.warning("Request for out of reach tile.");
             return null;
@@ -42,7 +42,7 @@ public abstract class World {
             return null;
         }
 
-        return this.getChunkAt(tileX >> 4, tileZ >> 4, false);
+        return this.getChunkAt(tileX >> 4, tileZ >> 4, generateIfMissing);
     }
 
     public Section getSectionAtTile(int tileX, int tileY, int tileZ) {
@@ -54,7 +54,7 @@ public abstract class World {
             System.err.println("Request for out of reach tile.");
             return null;
         }
-        if (tileY > this.getWorldHeight()) {
+        if (tileY > this.getWorldHeight() || tileY < 0) {
             System.err.println("Request for out of reach tile.");
             return null;
         }

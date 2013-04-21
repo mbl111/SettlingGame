@@ -17,7 +17,7 @@ public class WorldGenLayerZoom extends WorldGenLayer {
         int k1 = (width >> 1) + 3;
         int l1 = (height >> 1) + 3;
         int[] aint = this.parent.getInts(i1, j1, k1, l1);
-        int[] aint1 = ArrayCache.getInts(k1 * 2 * l1 * 2);
+        int[] aint1 = ArrayCache.getIntArray(k1 * 2 * l1 * 2);
         int i2 = k1 << 1;
         int j2;
 
@@ -40,7 +40,7 @@ public class WorldGenLayerZoom extends WorldGenLayer {
             }
         }
 
-        int[] aint2 = ArrayCache.getInts(width * height);
+        int[] aint2 = ArrayCache.getIntArray(width * height);
 
         for (j2 = 0; j2 < height; ++j2) {
             System.arraycopy(aint1, (j2 + (startZ & 1)) * (k1 << 1) + (startX & 1), aint2, j2 * width, width);

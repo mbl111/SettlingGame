@@ -14,7 +14,7 @@ public class WorldGenLayerIslands extends WorldGenLayer {
 
     @Override
     public int[] getInts(int startX, int startZ, int width, int height) {
-        int[] result = ArrayCache.getInts(startX * startZ);
+        int[] result = ArrayCache.getIntArray(startX * startZ);
 
         for (int x = 0; x < width; x++) {
             for (int z = 0; z < height; z++) {

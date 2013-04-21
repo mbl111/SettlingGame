@@ -17,7 +17,7 @@ public class WorldGenLayerFuzzyZoom extends WorldGenLayer {
         int extendedWidth = (width >> 1) + 3;
         int extendedHeight = (height >> 1) + 3;
         int[] parentInts = this.parent.getInts(extendedStartX, extendedStartZ, extendedWidth, extendedHeight);
-        int[] ints = ArrayCache.getInts(extendedWidth * 2 * extendedHeight * 2);
+        int[] ints = ArrayCache.getIntArray(extendedWidth * 2 * extendedHeight * 2);
 
         for (int z = 0; z < extendedHeight - 1; ++z) {
             int localIndex = (z << 1) * (extendedWidth << 1);
@@ -37,7 +37,7 @@ public class WorldGenLayerFuzzyZoom extends WorldGenLayer {
             }
         }
 
-        int[] result = ArrayCache.getInts(width * height);
+        int[] result = ArrayCache.getIntArray(width * height);
 
         for (int i = 0; i < height; ++i) {
             System.arraycopy(ints, (i + (startZ & 1)) * (extendedWidth << 1) + (startX & 1), result, i * width, width);

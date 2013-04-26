@@ -10,8 +10,6 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -28,14 +26,16 @@ public class StandaloneLauncherFrame extends Frame implements Runnable {
     public static StandaloneLauncherFrame instance;
     private LauncherStub launcher;
     private Applet applet;
+    private BufferedImage background;
     @SuppressWarnings("unused")
-    private BufferedImage menuImage;
     private BufferedImage globe;
     private BufferedImage playNormal;
     private BufferedImage playHover;
     private BufferedImage quitNormal;
     private BufferedImage quitHover;
+    @SuppressWarnings("unused")
     private BufferedImage title;
+    @SuppressWarnings("unused")
     private float rot = 0;
     private InputHandler input;
     private boolean running = true;
@@ -110,7 +110,7 @@ public class StandaloneLauncherFrame extends Frame implements Runnable {
     @Override
     public void run() {
         try {
-            this.menuImage = ImageIO.read(StandaloneLauncherFrame.class.getResource("/launcherbg.png"));
+            this.background = ImageIO.read(StandaloneLauncherFrame.class.getResource("/background.png"));
             this.globe = ImageIO.read(StandaloneLauncherFrame.class.getResource("/globe.png"));
             this.playNormal = ImageIO.read(StandaloneLauncherFrame.class.getResource("/Play_normal.png"));
             this.playHover = ImageIO.read(StandaloneLauncherFrame.class.getResource("/Play_hover.png"));
@@ -127,7 +127,7 @@ public class StandaloneLauncherFrame extends Frame implements Runnable {
 
         while (this.running) {
             try {
-                this.rot += 0.002F;
+                // this.rot += 0.02F;
                 returnCode = this.renderLauncher();
                 this.tickLauncher();
                 Thread.sleep(1L);
@@ -162,14 +162,15 @@ public class StandaloneLauncherFrame extends Frame implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        double rotationRequired = Math.toRadians(this.rot);
-        AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, this.globe.getWidth() / 2, this.globe.getHeight() / 2);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+        // double rotationRequired = Math.toRadians(this.rot);
+        // AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, this.globe.getWidth() / 2, this.globe.getHeight() / 2);
+        // AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 
         // Drawing the rotated image at the required drawing locations
-        g.drawImage(op.filter(this.globe, null), 30 - this.globe.getWidth() / 2, (this.getHeight() - this.globe.getHeight()) / 2, null);
+        g.drawImage(this.background, 0, 0, this.getWidth(), this.getHeight(), 0, 0, this.background.getWidth(), this.background.getHeight(), null);
+        // g.drawImage(op.filter(this.globe, null), 30 - this.globe.getWidth() / 2, (this.getHeight() - this.globe.getHeight()) / 2, null);
 
-        g.drawImage(this.title, (this.getWidth() - this.title.getWidth()) / 2 + 210, 100, null);
+        // g.drawImage(this.title, (this.getWidth() - this.title.getWidth()) / 2 + 210, 100, null);
 
         if (InputHandler.MouseX > 854 - 250 && InputHandler.MouseX < 854 - 250 + this.playNormal.getWidth() && InputHandler.MouseY > this.getHeight() / 2 - 20 && InputHandler.MouseY < this.playNormal.getHeight() + this.getHeight() / 2 - 20) {
             g.drawImage(this.playHover, 854 - 250, this.getHeight() / 2 - 20, null);

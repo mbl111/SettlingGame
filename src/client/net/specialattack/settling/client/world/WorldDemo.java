@@ -70,7 +70,7 @@ public class WorldDemo extends World {
 
         if (index < 0 || index >= this.chunks.length) {
             Settling.log.warning("Incorrect chunk location: (" + chunkX + "; " + chunkZ + ")");
-            Settling.log.warning("Relative: (" + (chunkX - this.getMinXBorder() >> 4) + "; " + (chunkZ - this.getMinZBorder() >> 4) + ")");
+            Settling.log.warning("Relative: (" + (chunkX - (this.getMinXBorder() >> 4)) + "; " + (chunkZ - (this.getMinZBorder() >> 4)) + ")");
             Settling.log.warning("Index: " + index + " Size: " + this.chunks.length);
 
             return null;

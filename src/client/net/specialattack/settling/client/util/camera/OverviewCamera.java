@@ -33,7 +33,7 @@ public class OverviewCamera implements ICamera {
     public void tick(World world, SettlingClient settling) {
         if (!this.setup) {
             this.setup = true;
-            this.location.y = world.getChunkAtTile((int) this.location.x, (int) this.location.z, false).getHighestBlock((int) this.location.x, (int) this.location.z) + 20.0F;
+            this.location.y = world.getChunkAtTile((int) this.location.x, (int) this.location.z, false).getHighestBlock((int) this.location.x, (int) this.location.z) + 50.0F;
         }
 
         this.prevLocation.clone(this.location);
@@ -61,17 +61,13 @@ public class OverviewCamera implements ICamera {
             this.motionZ += -Math.cos((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
         }
 
-        if (world.getChunkAtTile((int) this.location.x, (int) this.location.z, false) == null) {
-            this.getClass();
-        }
-
-        float highest = world.getChunkAtTile((int) this.location.x, (int) this.location.z, false).getHeight((int) this.location.x, (int) this.location.z) + 20;
+        float highest = world.getChunkAtTile((int) this.location.x, (int) this.location.z, false).getHeight((int) this.location.x, (int) this.location.z) + 50;
 
         if (this.location.y < highest) {
-            this.motionY = (highest - (float) this.location.y) / 2.0F;
+            this.motionY = (highest - (float) this.location.y) / 3.0F;
         }
         else if (this.location.y > highest) {
-            this.motionY = -((float) this.location.y - highest) / 2.0F;
+            this.motionY = -((float) this.location.y - highest) / 3.0F;
         }
         else {
             this.motionY = 0.0F;

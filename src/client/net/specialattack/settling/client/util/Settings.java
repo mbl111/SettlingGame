@@ -8,14 +8,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.logging.Level;
 
 import net.specialattack.settling.common.Settling;
 
 public final class Settings {
 
-    public static HashMap<String, ISetting> settings = new HashMap<String, ISetting>();
+    public static TreeMap<String, ISetting> settings = new TreeMap<String, ISetting>();
     public static ArrayList<KeyBinding> keys = new ArrayList<KeyBinding>();
     public static KeyBinding forward = new KeyBinding(17, "movement.forward");
     public static KeyBinding back = new KeyBinding(31, "movement.back");
@@ -24,6 +24,7 @@ public final class Settings {
     public static KeyBinding sneak = new KeyBinding(29, "movement.sneak");
     public static KeyBinding jump = new KeyBinding(57, "movement.jump");
     public static KeyBinding sprint = new KeyBinding(42, "movement.sprint");
+    public static KeyBinding switchCamera = new KeyBinding(40, "display.camera");
     public static LanguageSetting language = new LanguageSetting("en_US"); // language.current
     public static DisplayModeSetting displayMode = new DisplayModeSetting(); // display.mode
     public static BooleanSetting fullscreen = new BooleanSetting(false, "display.fullscreen");

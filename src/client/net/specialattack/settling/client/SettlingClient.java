@@ -379,6 +379,10 @@ public class SettlingClient extends Settling {
 
         Settings.update();
 
+        if (Settings.switchCamera.isTapped()) {
+            this.swapCameras();
+        }
+
         boolean escapeTapped = KeyBinding.escape.isTapped();
 
         if (this.currentScreen != null && this.currentWorld != null && escapeTapped) {

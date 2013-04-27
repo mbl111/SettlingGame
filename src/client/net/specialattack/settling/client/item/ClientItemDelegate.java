@@ -18,6 +18,11 @@ public class ClientItemDelegate extends CommonItemDelegate {
     }
 
     @Override
+    public Item getItem() {
+        return item;
+    }
+
+    @Override
     public void registerTextures(IStitchedTexture host) {
         BufferedImage image = TextureRegistry.openResource(this.item.fulltextureName);
 

@@ -8,9 +8,7 @@ import net.specialattack.settling.common.item.CommonItemDelegate;
 import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.util.ConsoleLogHandler;
 import net.specialattack.settling.common.util.LogFormatter;
-
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.OpenGLException;
+import net.specialattack.settling.common.util.TickTimer;
 
 public abstract class Settling implements Runnable {
 
@@ -18,6 +16,7 @@ public abstract class Settling implements Runnable {
     private boolean shuttingDown = false;
     private boolean crashing = false;
     protected static Settling instance;
+    public TickTimer timer = new TickTimer(20.0F);
     public static final Logger log = Logger.getLogger("Settling");
 
     public Settling() {
@@ -38,7 +37,7 @@ public abstract class Settling implements Runnable {
         this.running = false;
     }
 
-    protected abstract void runGameLoop() throws LWJGLException, OpenGLException;
+    protected abstract void runGameLoop() throws Exception;
 
     protected abstract boolean startup();
 
@@ -65,10 +64,32 @@ public abstract class Settling implements Runnable {
         log.setLevel(Level.ALL);
         handler.setLevel(Level.ALL);
 
-        this.startup();
+        this.running = true;
+
+        boolean started = this.startup();
+
+        if (!started) {
+            this.handleError(new SettlingException("Starting returned false"));
+
+            Thread idleThread = new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        while (Settling.this.running) {
+                            Thread.sleep(1L);
+                        }
+                    }
+                    catch (InterruptedException e) {}
+                }
+            }, "Idling thread");
+
+            idleThread.start();
+
+            return;
+        }
 
         try {
-            this.running = true;
             Items.class.getName();
         }
         catch (Exception e) {

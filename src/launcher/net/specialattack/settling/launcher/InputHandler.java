@@ -22,7 +22,6 @@ public class InputHandler implements MouseListener, MouseMotionListener {
     public void mouseDragged(MouseEvent e) {
         MouseDx = e.getX();
         MouseDy = e.getY();
-
     }
 
     @Override
@@ -32,9 +31,7 @@ public class InputHandler implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
+    public void mouseClicked(MouseEvent e) {}
 
     @Override
     public void mouseEntered(MouseEvent e) {}

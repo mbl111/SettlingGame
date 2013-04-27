@@ -7,5 +7,8 @@ public abstract class CommonItemDelegate {
 
     public abstract void createitem(Item item);
 
+    public abstract Item getItem();
+
     public abstract void registerTextures(IStitchedTexture host);
+
 }

@@ -36,7 +36,6 @@ import net.specialattack.settling.common.item.ItemTile;
 import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.lang.LanguageRegistry;
 import net.specialattack.settling.common.util.Location;
-import net.specialattack.settling.common.util.TickTimer;
 import net.specialattack.settling.common.world.Chunk;
 import net.specialattack.settling.common.world.World;
 
@@ -56,7 +55,6 @@ public class SettlingClient extends Settling {
     private Canvas canvas;
     private int displayWidth;
     private int displayHeight;
-    public TickTimer timer = new TickTimer(20.0F);
     private Shader shader;
     public boolean firstPerson = false;
     public World currentWorld = null;

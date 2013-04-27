@@ -17,6 +17,8 @@ public class TickTimer {
     public long timeCounter;
     public long totalTicks;
 
+    private static boolean noLWJGL = false;
+
     public TickTimer(float tps) {
         this.tps = tps;
 
@@ -25,47 +27,58 @@ public class TickTimer {
     }
 
     public static long getSystemTime() {
-        return Sys.getTime() * 1000L / Sys.getTimerResolution();
+        if (noLWJGL) {
+            return System.nanoTime() / 1000000L;
+        }
+        else {
+            try {
+                return Sys.getTime() * 1000L / Sys.getTimerResolution();
+            }
+            catch (UnsatisfiedLinkError ex) {
+                noLWJGL = true;
+                return getSystemTime();
+            }
+        }
     }
 
     public void update() {
-        long var1 = getSystemTime();
-        long var3 = var1 - this.lastSysTimeSync;
-        long var5 = System.nanoTime() / 1000000L;
-        double var7 = (double) var5 / 1000.0D;
+        long sysTime = getSystemTime();
+        long timeDifference = sysTime - this.lastSysTimeSync;
+        long microTime = System.nanoTime() / 1000000L;
+        double nanoTime = (double) microTime / 1000.0D;
 
-        if (var3 <= 1000L && var3 >= 0L) {
-            this.timeCounter += var3;
-            this.totalTicks += var3;
+        if (timeDifference <= 1000L && timeDifference >= 0L) {
+            this.timeCounter += timeDifference;
+            this.totalTicks += timeDifference;
             if (this.timeCounter > 1000L) {
-                long var9 = var5 - this.lastNanoTimeSync;
+                long var9 = microTime - this.lastNanoTimeSync;
                 double var11 = (double) this.timeCounter / (double) var9;
                 this.syncAdjustment += (var11 - this.syncAdjustment) * 0.20000000298023224D;
-                this.lastNanoTimeSync = var5;
+                this.lastNanoTimeSync = microTime;
                 this.timeCounter = 0L;
             }
 
             if (this.timeCounter < 0L) {
-                this.lastNanoTimeSync = var5;
+                this.lastNanoTimeSync = microTime;
             }
         }
         else {
-            this.lastNanoTime = var7;
+            this.lastNanoTime = nanoTime;
         }
 
-        this.lastSysTimeSync = var1;
-        double var13 = (var7 - this.lastNanoTime) * this.syncAdjustment;
-        this.lastNanoTime = var7;
+        this.lastSysTimeSync = sysTime;
+        double partials = (nanoTime - this.lastNanoTime) * this.syncAdjustment;
+        this.lastNanoTime = nanoTime;
 
-        if (var13 < 0.0D) {
-            var13 = 0.0D;
+        if (partials < 0.0D) {
+            partials = 0.0D;
         }
 
-        if (var13 > 1.0D) {
-            var13 = 1.0D;
+        if (partials > 1.0D) {
+            partials = 1.0D;
         }
 
-        this.partialTicks = (float) ((double) this.partialTicks + var13 * (double) this.speed * (double) this.tps);
+        this.partialTicks = (float) ((double) this.partialTicks + partials * (double) this.speed * (double) this.tps);
         this.remainingTicks = (int) this.partialTicks;
         this.partialTicks -= (float) this.remainingTicks;
 

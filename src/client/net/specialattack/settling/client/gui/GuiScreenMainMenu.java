@@ -1,8 +1,13 @@
 
 package net.specialattack.settling.client.gui;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+
 import net.specialattack.settling.client.SettlingClient;
 import net.specialattack.settling.client.gui.element.GuiButton;
+import net.specialattack.settling.client.gui.element.GuiButtonDonate;
 import net.specialattack.settling.client.gui.element.GuiElement;
 import net.specialattack.settling.client.texture.TextureRegistry;
 import net.specialattack.settling.client.world.WorldDemo;
@@ -14,6 +19,7 @@ public class GuiScreenMainMenu extends GuiScreen {
     private GuiButton buttonPlay;
     private GuiButton buttonOptions;
     private GuiButton buttonExit;
+    private GuiButtonDonate buttonDonate;
 
     //private GuiTextbox serverAddress;
 
@@ -22,6 +28,8 @@ public class GuiScreenMainMenu extends GuiScreen {
         this.buttonPlay.posX = newWidth / 2 - 200;
         this.buttonOptions.posX = newWidth / 2 - 200;
         this.buttonExit.posX = newWidth / 2 - 200;
+        this.buttonDonate.posX = newWidth - 200;
+        this.buttonDonate.posY = newHeight - 50;
     }
 
     @Override
@@ -29,11 +37,13 @@ public class GuiScreenMainMenu extends GuiScreen {
         this.buttonPlay = new GuiButton(LanguageRegistry.translate("gui.mainscreen.play"), this.width / 2 - 200, 300, 400, 50, this);
         this.buttonOptions = new GuiButton(LanguageRegistry.translate("gui.options"), this.width / 2 - 200, 360, 400, 50, this);
         this.buttonExit = new GuiButton(LanguageRegistry.translate("gui.mainscreen.exit"), this.width / 2 - 200, 420, 400, 50, this);
+        this.buttonDonate = new GuiButtonDonate(LanguageRegistry.translate("gui.mainscreen.donate"), this.width - 200, this.height - 50, 200, 50, this);
         //serverAddress = new GuiTextbox(this.width / 2 - 200, 200, 400, 50, this);
 
         this.elements.add(this.buttonPlay);
         this.elements.add(this.buttonOptions);
         this.elements.add(this.buttonExit);
+        this.elements.add(this.buttonDonate);
         //this.elements.add(serverAddress);
     }
 
@@ -62,6 +72,12 @@ public class GuiScreenMainMenu extends GuiScreen {
         }
         if (element == this.buttonExit) {
             Settling.getInstance().attemptShutdown();
+        }
+        if (element == this.buttonDonate) {
+            try {
+                Desktop.getDesktop().browse(URI.create("http://www.specialattack.net/donations"));
+            }
+            catch (IOException e) {}
         }
     }
 

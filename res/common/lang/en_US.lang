@@ -2,6 +2,7 @@
 gui.mainscreen.exit=Exit
 gui.mainscreen.play=Play offline
 gui.mainscreen.multiplayer=Connect to SpA server
+gui.mainscreen.donate=Donate
 
 #Menu screen
 gui.menu.resume=Resume

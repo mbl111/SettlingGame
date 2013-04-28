@@ -29,7 +29,7 @@ public class KeyBinding implements ISetting {
     }
 
     public boolean isTapped() {
-        if (!this.aknowledged) {
+        if (!this.aknowledged && this.pressed) {
             this.aknowledged = true;
 
             return true;

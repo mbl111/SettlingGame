@@ -61,6 +61,19 @@ public class OverviewCamera implements ICamera {
             this.motionZ += -Math.cos((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
         }
 
+        if (this.location.x >= world.getMaxXBorder()) {
+            this.location.x = world.getMaxXBorder() - 1;
+        }
+        if (this.location.z >= world.getMaxZBorder()) {
+            this.location.z = world.getMaxZBorder() - 1;
+        }
+        if (this.location.x < world.getMinXBorder()) {
+            this.location.x = world.getMinXBorder();
+        }
+        if (this.location.z < world.getMinZBorder()) {
+            this.location.z = world.getMinZBorder();
+        }
+        
         float highest = world.getChunkAtTile((int) this.location.x, (int) this.location.z, false).getHeight((int) this.location.x, (int) this.location.z) + 50;
 
         if (this.location.y < highest) {
@@ -89,19 +102,6 @@ public class OverviewCamera implements ICamera {
         }
         if (MathHelper.abs(this.motionZ) < 0.01F) {
             this.motionZ = 0.0F;
-        }
-
-        if (this.location.x > world.getMaxXBorder()) {
-            this.location.x = world.getMaxXBorder();
-        }
-        if (this.location.z > world.getMaxZBorder()) {
-            this.location.z = world.getMaxZBorder();
-        }
-        if (this.location.x < world.getMinXBorder()) {
-            this.location.x = world.getMinXBorder();
-        }
-        if (this.location.z < world.getMinZBorder()) {
-            this.location.z = world.getMinZBorder();
         }
     }
 

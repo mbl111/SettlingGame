@@ -562,28 +562,28 @@ public class SettlingClient extends Settling {
         long tickCount = this.timer.totalTicks;
         float timeRaw = (tickCount / 1) % 24000;
 
-        float time = 1.0f;
+        float time = 1.0F;
         if (timeRaw > 12000 && timeRaw <= 14000) {
-            time = 1.0f - ((timeRaw - 12000) / 2000.0f - 0.2f);
+            time = 1.0F - ((timeRaw - 12000.0F) / 2000.0F - 0.2F);
         }
         else if (timeRaw > 14000 && timeRaw <= 22000) {
-            time = 0.2f;
+            time = 0.2F;
         }
         else if (timeRaw > 22000) {
-            time = ((timeRaw - 22000) / 2000.0f) + 0.2f;
+            time = ((timeRaw - 22000.0F) / 2000.0F) + 0.2F;
         }
 
         this.matSpecular = BufferUtils.createFloatBuffer(4);
-        this.matSpecular.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+        this.matSpecular.put(1.0F).put(1.0F).put(1.0F).put(1.0F).flip();
 
         this.lightPosition = BufferUtils.createFloatBuffer(4);
-        this.lightPosition.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
+        this.lightPosition.put(1.0F).put(1.0F).put(1.0F).put(0.0F).flip();
 
         this.whiteLight = BufferUtils.createFloatBuffer(4);
-        this.whiteLight.put(time).put(time * 0.7f).put(time * 0.6f).put(1.0f).flip();
+        this.whiteLight.put(time).put(time * 0.7F).put(time * 0.6F).put(1.0F).flip();
 
         this.lModelAmbient = BufferUtils.createFloatBuffer(4);
-        this.lModelAmbient.put(time).put(time * 0.7f).put(time * 0.6f).put(1.0f).flip();
+        this.lModelAmbient.put(time).put(time * 0.7F).put(time * 0.6F).put(1.0F).flip();
     }
 
     private void levelRender() {
@@ -594,7 +594,7 @@ public class SettlingClient extends Settling {
         this.initLightArrays();
         GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, this.matSpecular);             // sets specular material color
-        GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);                 // sets shininess
+        GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0F);                 // sets shininess
 
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, this.lightPosition);             // sets light position
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, this.whiteLight);                // sets specular light to white

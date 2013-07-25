@@ -19,7 +19,7 @@ public class ClientItemDelegate extends CommonItemDelegate {
 
     @Override
     public Item getItem() {
-        return item;
+        return this.item;
     }
 
     @Override

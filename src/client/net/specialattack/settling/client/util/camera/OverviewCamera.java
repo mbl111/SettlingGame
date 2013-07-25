@@ -73,7 +73,7 @@ public class OverviewCamera implements ICamera {
         if (this.location.z < world.getMinZBorder()) {
             this.location.z = world.getMinZBorder();
         }
-        
+
         float highest = world.getChunkAtTile((int) this.location.x, (int) this.location.z, false).getHeight((int) this.location.x, (int) this.location.z) + 50;
 
         if (this.location.y < highest) {

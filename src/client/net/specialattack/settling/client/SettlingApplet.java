@@ -2,11 +2,12 @@
 package net.specialattack.settling.client;
 
 import java.applet.Applet;
-//Tesitng
 import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.JPanel;
+
+// Tesitng
 
 public class SettlingApplet extends Applet {
     private static final long serialVersionUID = -887417069382703883L;

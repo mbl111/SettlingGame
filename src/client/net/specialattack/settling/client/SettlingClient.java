@@ -421,9 +421,8 @@ public class SettlingClient extends Settling {
         this.fontRenderer.renderStringWithShadow("X: " + loc.x + " Y: " + loc.y + " Z: " + loc.z, 0, 50, 0xFFFFFFFF);
         this.fontRenderer.renderStringWithShadow("Dirty Chunks: " + this.dirtyChunks.size(), 0, 66, 0xFFFFFFFF);
         this.fontRenderer.renderStringWithShadow("Rendered Chunks: " + this.renderedChunks.size(), 0, 84, 0xFFFFFFFF);
-        
-        this.fontRenderer.renderStringWithShadow("Raw Time: " + (this.timer.totalTicks/1)%24000, 0, 100, 0xFFFFFFFF);
 
+        this.fontRenderer.renderStringWithShadow("Raw Time: " + (this.timer.totalTicks / 1) % 24000, 0, 100, 0xFFFFFFFF);
 
         long maxMemory = Runtime.getRuntime().maxMemory();
         long totalMemory = Runtime.getRuntime().totalMemory();
@@ -556,57 +555,58 @@ public class SettlingClient extends Settling {
     FloatBuffer lightPosition;
     FloatBuffer whiteLight;
     FloatBuffer lModelAmbient;
-    
+
     private void initLightArrays() {
-        
+
         //Brightness?
-        long tickCount = timer.totalTicks;
-        float timeRaw = (tickCount/1)%24000;
-        
+        long tickCount = this.timer.totalTicks;
+        float timeRaw = (tickCount / 1) % 24000;
+
         float time = 1.0f;
-        if (timeRaw > 12000 && timeRaw <= 14000){
-            time = 1.0f - ((timeRaw - 12000)/2000.0f - 0.2f);
-        }else if (timeRaw > 14000 && timeRaw <= 22000){
-            time = 0.2f;
-        }else if (timeRaw > 22000){
-            time = ((timeRaw - 22000)/2000.0f) + 0.2f;
+        if (timeRaw > 12000 && timeRaw <= 14000) {
+            time = 1.0f - ((timeRaw - 12000) / 2000.0f - 0.2f);
         }
-        
-        
-        matSpecular = BufferUtils.createFloatBuffer(4);
-        matSpecular.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
-        
-        lightPosition = BufferUtils.createFloatBuffer(4);
-        lightPosition.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
-        
-        whiteLight = BufferUtils.createFloatBuffer(4);
-        whiteLight.put(time).put(time*0.7f).put(time*0.6f).put(1.0f).flip();
-        
-        lModelAmbient = BufferUtils.createFloatBuffer(4);
-        lModelAmbient.put(time).put(time*0.7f).put(time*0.6f).put(1.0f).flip();
+        else if (timeRaw > 14000 && timeRaw <= 22000) {
+            time = 0.2f;
+        }
+        else if (timeRaw > 22000) {
+            time = ((timeRaw - 22000) / 2000.0f) + 0.2f;
+        }
+
+        this.matSpecular = BufferUtils.createFloatBuffer(4);
+        this.matSpecular.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+
+        this.lightPosition = BufferUtils.createFloatBuffer(4);
+        this.lightPosition.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
+
+        this.whiteLight = BufferUtils.createFloatBuffer(4);
+        this.whiteLight.put(time).put(time * 0.7f).put(time * 0.6f).put(1.0f).flip();
+
+        this.lModelAmbient = BufferUtils.createFloatBuffer(4);
+        this.lModelAmbient.put(time).put(time * 0.7f).put(time * 0.6f).put(1.0f).flip();
     }
-    
+
     private void levelRender() {
         TileRenderer.resetTexture();
 
         //Marshal, Lights!
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-        initLightArrays();
+        this.initLightArrays();
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, matSpecular);             // sets specular material color
+        GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, this.matSpecular);             // sets specular material color
         GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);                 // sets shininess
-        
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, lightPosition);             // sets light position
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, whiteLight);                // sets specular light to white
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, whiteLight);                 // sets diffuse light to white
-        GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, lModelAmbient);        // global ambient light 
-        
+
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, this.lightPosition);             // sets light position
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, this.whiteLight);                // sets specular light to white
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, this.whiteLight);                 // sets diffuse light to white
+        GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, this.lModelAmbient);        // global ambient light 
+
         GL11.glEnable(GL11.GL_LIGHTING);                                      // enables lighting
         GL11.glEnable(GL11.GL_LIGHT0);                                        // enables light0
-        
+
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);                                // enables opengl to use glColor3f to define material color
         GL11.glColorMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT_AND_DIFFUSE);
-        
+
         int renderChunkRadius = 16;
         for (ChunkRenderer chunkRenderer : this.renderedChunks) {
             double distance = (-this.camera.getLocation().x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX) * (-this.camera.getLocation().x / 16.0F + 0.5F - (float) chunkRenderer.chunk.chunkX);

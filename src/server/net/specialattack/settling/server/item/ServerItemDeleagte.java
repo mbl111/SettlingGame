@@ -16,7 +16,7 @@ public class ServerItemDeleagte extends CommonItemDelegate {
 
     @Override
     public Item getItem() {
-        return item;
+        return this.item;
     }
 
     @Override

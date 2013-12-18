@@ -303,6 +303,8 @@ public class SettlingClient extends Settling {
             Mouse.poll();
             Keyboard.poll();
 
+            
+
             while (Mouse.next()) {
                 int dWheel = Mouse.getDWheel();
                 dWheel = dWheel > 0 ? 1 : dWheel < 0 ? -1 : 0;

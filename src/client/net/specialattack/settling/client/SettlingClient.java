@@ -303,8 +303,6 @@ public class SettlingClient extends Settling {
             Mouse.poll();
             Keyboard.poll();
 
-            
-
             while (Mouse.next()) {
                 int dWheel = Mouse.getDWheel();
                 dWheel = dWheel > 0 ? 1 : dWheel < 0 ? -1 : 0;
@@ -566,13 +564,13 @@ public class SettlingClient extends Settling {
 
         float time = 1.0F;
         if (timeRaw > 12000 && timeRaw <= 14000) {
-            time = 1.0F - ((timeRaw - 12000.0F) / 2000.0F - 0.2F);
+            time = 1.0F - 0.8F * (timeRaw - 12000.0F) / 2000.0F;
         }
         else if (timeRaw > 14000 && timeRaw <= 22000) {
             time = 0.2F;
         }
         else if (timeRaw > 22000) {
-            time = ((timeRaw - 22000.0F) / 2000.0F) + 0.2F;
+            time = 0.2F + 0.8F * ((timeRaw - 22000.0F) / 2000.0F);
         }
 
         this.matSpecular = BufferUtils.createFloatBuffer(4);

@@ -49,23 +49,23 @@ public class OverviewCamera implements ICamera {
         boolean blockNZ = false;
         boolean blockPZ = false;
 
-        if (this.location.x >= world.getMaxChunkXBorder() * 16) {
-            this.location.x = world.getMaxChunkXBorder() * 16 - 1;
+        if (this.location.x >= world.getMaxChunkXBorder() * 16.0D - 1.0D) {
+            this.location.x = world.getMaxChunkXBorder() * 16.0D - 1.0D;
             this.motionX = 0.0F;
             blockPX = true;
         }
-        if (this.location.z >= world.getMaxChunkZBorder() * 16) {
-            this.location.z = world.getMaxChunkZBorder() * 16 - 1;
+        if (this.location.z >= world.getMaxChunkZBorder() * 16.0D - 1.0D) {
+            this.location.z = world.getMaxChunkZBorder() * 16.0D - 1.0D;
             this.motionZ = 0.0F;
             blockPZ = true;
         }
-        if (this.location.x < world.getMinChunkXBorder() * 16) {
-            this.location.x = world.getMinChunkXBorder() * 16;
+        if (this.location.x < world.getMinChunkXBorder() * 16.0D) {
+            this.location.x = world.getMinChunkXBorder() * 16.0D;
             this.motionX = 0.0F;
             blockNX = true;
         }
-        if (this.location.z < world.getMinChunkZBorder() * 16) {
-            this.location.z = world.getMinChunkZBorder() * 16;
+        if (this.location.z < world.getMinChunkZBorder() * 16.0D) {
+            this.location.z = world.getMinChunkZBorder() * 16.0D;
             this.motionZ = 0.0F;
             blockNZ = true;
         }
@@ -103,19 +103,6 @@ public class OverviewCamera implements ICamera {
             }
         }
 
-        if (this.location.x >= world.getMaxChunkXBorder() * 16) {
-            this.location.x = world.getMaxChunkXBorder() * 16 - 1;
-        }
-        if (this.location.z >= world.getMaxChunkZBorder() * 16) {
-            this.location.z = world.getMaxChunkZBorder() * 16 - 1;
-        }
-        if (this.location.x < world.getMinChunkXBorder() * 16) {
-            this.location.x = world.getMinChunkXBorder() * 16;
-        }
-        if (this.location.z < world.getMinChunkZBorder() * 16) {
-            this.location.z = world.getMinChunkZBorder() * 16;
-        }
-
         float highest = 50.0F;
 
         if (this.location.y < highest) {
@@ -144,6 +131,19 @@ public class OverviewCamera implements ICamera {
         }
         if (MathHelper.abs(this.motionZ) < 0.01F) {
             this.motionZ = 0.0F;
+        }
+
+        if (this.location.x >= world.getMaxChunkXBorder() * 16.0D - 1.0D) {
+            this.location.x = world.getMaxChunkXBorder() * 16.0D - 1.0D;
+        }
+        if (this.location.z >= world.getMaxChunkZBorder() * 16.0D - 1.0D) {
+            this.location.z = world.getMaxChunkZBorder() * 16.0D - 1.0D;
+        }
+        if (this.location.x < world.getMinChunkXBorder() * 16.0D) {
+            this.location.x = world.getMinChunkXBorder() * 16.0D;
+        }
+        if (this.location.z < world.getMinChunkZBorder() * 16.0D) {
+            this.location.z = world.getMinChunkZBorder() * 16.0D;
         }
     }
 

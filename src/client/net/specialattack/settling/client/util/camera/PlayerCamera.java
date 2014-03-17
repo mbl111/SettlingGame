@@ -79,17 +79,17 @@ public class PlayerCamera implements ICamera {
             this.location.y -= this.vSpeed * mod;
         }
 
-        if (this.location.x > world.getMaxXBorder()) {
-            this.location.x = world.getMaxXBorder();
+        if (this.location.x > world.getMaxChunkXBorder() * 16) {
+            this.location.x = world.getMaxChunkXBorder() * 16;
         }
-        if (this.location.z > world.getMaxZBorder()) {
-            this.location.z = world.getMaxZBorder();
+        if (this.location.z > world.getMaxChunkZBorder() * 16) {
+            this.location.z = world.getMaxChunkZBorder() * 16;
         }
-        if (this.location.x < world.getMinXBorder()) {
-            this.location.x = world.getMinXBorder();
+        if (this.location.x < world.getMinChunkXBorder() * 16) {
+            this.location.x = world.getMinChunkXBorder() * 16;
         }
-        if (this.location.z < world.getMinZBorder()) {
-            this.location.z = world.getMinZBorder();
+        if (this.location.z < world.getMinChunkZBorder() * 16) {
+            this.location.z = world.getMinChunkZBorder() * 16;
         }
 
     }

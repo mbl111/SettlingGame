@@ -1,9 +1,6 @@
 
 package net.specialattack.settling.client.rendering;
 
-import net.specialattack.settling.common.item.Item;
-import net.specialattack.settling.common.item.ItemTile;
-import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.world.Chunk;
 
 import org.lwjgl.opengl.GL11;
@@ -29,22 +26,9 @@ public class ChunkRenderer {
         GL11.glNewList(this.glCallList, GL11.GL_COMPILE);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = 0; y < this.chunk.getNumSections() * 16; y++) {
-                    //int rx = this.chunk.chunkX * 16 + x - 16;
-                    //int rz = this.chunk.chunkZ * 16 + z - 16;
-
-                    short tile = this.chunk.getTileAt(x, y, z);
-
-                    if (tile > 0) {
-                        Item item = Items.itemList[tile];
-
-                        if (item instanceof ItemTile) {
-                            if (this.chunk.getTileAt(x, y + 1, z) == 0) {
-                                TileRenderer.renderTileFloor((ItemTile) Items.itemList[tile], x, y, z);
-                            }
-                        }
-                    }
-                }
+                //if (this.chunk.getTileAt(x, z) == null) {
+                TileRenderer.renderTile(this.chunk.section.world, x, z);
+                //}
             }
         }
         GL11.glEndList();

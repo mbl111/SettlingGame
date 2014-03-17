@@ -101,4 +101,5 @@ public class SettlingApplet extends Applet {
         this.validate();
         this.repaint();
     }
+
 }

@@ -4,8 +4,6 @@ package net.specialattack.settling.server;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.crash.CrashReport;
 import net.specialattack.settling.common.crash.CrashReportSectionThrown;
-import net.specialattack.settling.common.item.CommonItemDelegate;
-import net.specialattack.settling.server.item.ServerItemDeleagte;
 
 public class SettlingServer extends Settling {
 
@@ -35,14 +33,6 @@ public class SettlingServer extends Settling {
     protected void shutdown() {
         System.exit(0);
     }
-
-    @Override
-    public CommonItemDelegate getItemDelegate() {
-        return new ServerItemDeleagte();
-    }
-
-    @Override
-    public void finishItems() {}
 
     @Override
     public void handleError(Throwable thrown) {

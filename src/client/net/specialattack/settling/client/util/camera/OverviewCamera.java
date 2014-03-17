@@ -33,7 +33,7 @@ public class OverviewCamera implements ICamera {
     public void tick(World world, SettlingClient settling) {
         if (!this.setup) {
             this.setup = true;
-            this.location.y = world.getChunkAtTile((int) this.location.x, (int) this.location.z, false).getHighestBlock((int) this.location.x, (int) this.location.z) + 50.0F;
+            this.location.y = 50.0F;
         }
 
         this.prevLocation.clone(this.location);
@@ -44,37 +44,71 @@ public class OverviewCamera implements ICamera {
             mod = 3.0F;
         }
 
+        boolean blockNX = false;
+        boolean blockPX = false;
+        boolean blockNZ = false;
+        boolean blockPZ = false;
+
+        if (this.location.x >= world.getMaxChunkXBorder() * 16) {
+            this.location.x = world.getMaxChunkXBorder() * 16 - 1;
+            this.motionX = 0.0F;
+            blockPX = true;
+        }
+        if (this.location.z >= world.getMaxChunkZBorder() * 16) {
+            this.location.z = world.getMaxChunkZBorder() * 16 - 1;
+            this.motionZ = 0.0F;
+            blockPZ = true;
+        }
+        if (this.location.x < world.getMinChunkXBorder() * 16) {
+            this.location.x = world.getMinChunkXBorder() * 16;
+            this.motionX = 0.0F;
+            blockNX = true;
+        }
+        if (this.location.z < world.getMinChunkZBorder() * 16) {
+            this.location.z = world.getMinChunkZBorder() * 16;
+            this.motionZ = 0.0F;
+            blockNZ = true;
+        }
+
         if (Settings.back.isPressed()) {
-            this.motionX += Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
-            this.motionZ += -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+            if (!blockPX)
+                this.motionX += Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+            if (!blockNZ)
+                this.motionZ += -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
         }
         if (Settings.forward.isPressed()) {
-            this.motionX -= Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
-            this.motionZ -= -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+            if (!blockNX)
+                this.motionX -= Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+            if (!blockPZ)
+                this.motionZ -= -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
         }
         if (Settings.right.isPressed()) {
-            this.motionX += Math.sin((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
-            this.motionZ += -Math.cos((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+            if (!blockNX)
+                this.motionX += Math.sin((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+            if (!blockNZ)
+                this.motionZ += -Math.cos((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
         }
         if (Settings.left.isPressed()) {
-            this.motionX += Math.sin((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
-            this.motionZ += -Math.cos((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+            if (!blockPX)
+                this.motionX += Math.sin((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+            if (!blockPZ)
+                this.motionZ += -Math.cos((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
         }
 
-        if (this.location.x >= world.getMaxXBorder()) {
-            this.location.x = world.getMaxXBorder() - 1;
+        if (this.location.x >= world.getMaxChunkXBorder() * 16) {
+            this.location.x = world.getMaxChunkXBorder() * 16 - 1;
         }
-        if (this.location.z >= world.getMaxZBorder()) {
-            this.location.z = world.getMaxZBorder() - 1;
+        if (this.location.z >= world.getMaxChunkZBorder() * 16) {
+            this.location.z = world.getMaxChunkZBorder() * 16 - 1;
         }
-        if (this.location.x < world.getMinXBorder()) {
-            this.location.x = world.getMinXBorder();
+        if (this.location.x < world.getMinChunkXBorder() * 16) {
+            this.location.x = world.getMinChunkXBorder() * 16;
         }
-        if (this.location.z < world.getMinZBorder()) {
-            this.location.z = world.getMinZBorder();
+        if (this.location.z < world.getMinChunkZBorder() * 16) {
+            this.location.z = world.getMinChunkZBorder() * 16;
         }
 
-        float highest = world.getChunkAtTile((int) this.location.x, (int) this.location.z, false).getHeight((int) this.location.x, (int) this.location.z) + 50;
+        float highest = 50.0F;
 
         if (this.location.y < highest) {
             this.motionY = (highest - (float) this.location.y) / 3.0F;

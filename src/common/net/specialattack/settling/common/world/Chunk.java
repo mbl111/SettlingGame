@@ -2,93 +2,34 @@
 package net.specialattack.settling.common.world;
 
 public class Chunk {
-    private Section[] sections;
-    private short[] heights; // Calculated once, stores the natural height of the chunk and used to determine how far up to generate terrain
-    public final int chunkX;
-    public final int chunkZ;
-    public final World world;
+
+    public int chunkX;
+    public int chunkZ;
+    public Section section;
     private boolean isGenerated = false;
+    private int[] tiles;
 
-    public Chunk(World world, int chunkX, int chunkZ) {
-        // 0 is the lowest
-        this.sections = new Section[world.getWorldHeight() >> 4];
-
-        for (int i = 0; i < this.sections.length; i++) {
-            this.sections[i] = new Section(this, i);
-        }
-
-        this.heights = new short[256];
-
+    public Chunk(Section section, int chunkX, int chunkZ) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
-        this.world = world;
+        this.section = section;
+
+        this.tiles = new int[256];
     }
 
-    public short getHighestBlock(int tileX, int tileZ) {
-        tileX = tileX % 16;
-        tileZ = tileZ % 16;
-
-        if (tileX < 0) {
-            tileX = tileX + 16;
+    // FIXME
+    public Object getTileAt(int x, int z) {
+        if (x < 0 || x > 15) {
+            return 0;
         }
-        if (tileZ < 0) {
-            tileZ = tileZ + 16;
+        if (z < 0 || z > 15) {
+            return 0;
         }
 
-        int y = this.sections.length << 4;
-
-        while (y > 0) {
-            short tile = this.sections[(y >> 4) - 1].tiles[tileX + tileZ * 16 + ((y % 16) << 8)];
-            if (tile != 0) {
-                return tile;
-            }
-
-            y--;
-        }
-
-        return 0;
+        return this.tiles[x + z * 16];
     }
 
-    public int getHeight(int tileX, int tileZ) {
-        tileX = tileX % 16;
-        tileZ = tileZ % 16;
-
-        if (tileX < 0) {
-            tileX = tileX + 16;
-        }
-        if (tileZ < 0) {
-            tileZ = tileZ + 16;
-        }
-
-        int y = this.sections.length << 4;
-
-        while (y > 0) {
-            short tile = this.sections[(y >> 4) - 1].tiles[tileX + tileZ * 16 + ((y % 16) << 8)];
-            if (tile != 0) {
-                return y;
-            }
-
-            y--;
-        }
-
-        return 0;
-    }
-
-    public int getGenerationHeight(int tileX, int tileZ) {
-        tileX = tileX % 16;
-        tileZ = tileZ % 16;
-
-        if (tileX < 0) {
-            tileX = tileX + 16;
-        }
-        if (tileZ < 0) {
-            tileZ = tileZ + 16;
-        }
-
-        return this.heights[tileX + tileZ * 16];
-    }
-
-    public short getTileAt(int x, int y, int z) {
+    public void setTileAt(int x, int z, String type) {
         x = x % 16;
         z = z % 16;
 
@@ -98,46 +39,8 @@ public class Chunk {
         if (z < 0) {
             z = z + 16;
         }
-        if (y < 0) {
-            y = 0;
-        }
-        if (y > this.sections.length * 16) {
-            y = this.sections.length * 16;
-        }
 
-        return this.sections[y >> 4].tiles[x + z * 16];
-    }
-
-    public void setTileAt(int x, int y, int z, short type) {
-        x = x % 16;
-        z = z % 16;
-
-        if (x < 0) {
-            x = x + 16;
-        }
-        if (z < 0) {
-            z = z + 16;
-        }
-        if (y < 0) {
-            y = 0;
-        }
-        if (y > this.sections.length * 16) {
-            y = this.sections.length * 16;
-        }
-
-        this.sections[(y - y & 0xF) >> 4].tiles[x + z * 16] = type;
-    }
-
-    public void populateHeight(short[] heights) {
-        this.heights = heights;
-    }
-
-    public Section getSection(int section) {
-        return null;
-    }
-
-    public int getNumSections() {
-        return this.sections.length;
+        this.tiles[x + z * 16] = 0; // TODO: Get type
     }
 
     public void tick() {
@@ -151,10 +54,10 @@ public class Chunk {
     public void generate() {
         this.isGenerated = true;
 
-        int[] ints = this.world.genLayer.getInts(this.chunkX * 16, this.chunkZ * 16, 16, 16);
+        int[] ints = this.section.world.genLayer.getInts(this.chunkX * 16, this.chunkZ * 16, 16, 16);
 
         for (int i = 0; i < 256; i++) {
-            this.sections[0].tiles[i] = (short) ints[i];
+            this.tiles[i] = (short) ints[i];
         }
     }
 

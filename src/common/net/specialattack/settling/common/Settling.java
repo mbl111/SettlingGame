@@ -4,8 +4,6 @@ package net.specialattack.settling.common;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.specialattack.settling.common.item.CommonItemDelegate;
-import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.util.ConsoleLogHandler;
 import net.specialattack.settling.common.util.LogFormatter;
 import net.specialattack.settling.common.util.TickTimer;
@@ -42,10 +40,6 @@ public abstract class Settling implements Runnable {
     protected abstract boolean startup();
 
     protected abstract void shutdown();
-
-    public abstract CommonItemDelegate getItemDelegate();
-
-    public abstract void finishItems();
 
     public abstract void handleError(Throwable thrown);
 
@@ -87,15 +81,6 @@ public abstract class Settling implements Runnable {
             idleThread.start();
 
             return;
-        }
-
-        try {
-            Items.class.getName();
-        }
-        catch (Exception e) {
-            Settling.log.log(Level.SEVERE, "Failed loading items, aborting", e);
-            this.attemptShutdown();
-            this.running = false;
         }
 
         try {

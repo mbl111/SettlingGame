@@ -1,23 +1,31 @@
 
 package net.specialattack.settling.client;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.TextArea;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import javax.swing.JPanel;
+
 import net.specialattack.settling.client.crash.CrashReportSectionCamera;
 import net.specialattack.settling.client.gui.GuiScreen;
 import net.specialattack.settling.client.gui.GuiScreenMainMenu;
 import net.specialattack.settling.client.gui.GuiScreenMenu;
-import net.specialattack.settling.client.item.ClientItemDelegate;
 import net.specialattack.settling.client.rendering.ChunkRenderer;
 import net.specialattack.settling.client.rendering.FontRenderer;
-import net.specialattack.settling.client.rendering.TileRenderer;
 import net.specialattack.settling.client.shaders.Shader;
 import net.specialattack.settling.client.shaders.ShaderLoader;
 import net.specialattack.settling.client.texture.TextureRegistry;
@@ -31,10 +39,6 @@ import net.specialattack.settling.client.util.camera.PlayerCamera;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.crash.CrashReport;
 import net.specialattack.settling.common.crash.CrashReportSectionThrown;
-import net.specialattack.settling.common.item.CommonItemDelegate;
-import net.specialattack.settling.common.item.Item;
-import net.specialattack.settling.common.item.ItemTile;
-import net.specialattack.settling.common.item.Items;
 import net.specialattack.settling.common.lang.LanguageRegistry;
 import net.specialattack.settling.common.util.Location;
 import net.specialattack.settling.common.world.Chunk;
@@ -143,25 +147,6 @@ public class SettlingClient extends Settling {
         GL11.glLoadIdentity();
         GL11.glOrtho(0.0D, this.displayWidth, this.displayHeight, 0.0D, 1000.0D, -1000.0D);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
-    }
-
-    @Override
-    public CommonItemDelegate getItemDelegate() {
-        return new ClientItemDelegate();
-    }
-
-    @Override
-    public void finishItems() {
-        for (Item item : Items.itemList) {
-            if (item != null) {
-                try {
-                    ((ItemTile) item).delegate.registerTextures(TextureRegistry.tiles);
-                }
-                catch (ClassCastException ex) {
-                    item.delegate.registerTextures(TextureRegistry.tiles);
-                }
-            }
-        }
     }
 
     public void displayScreen(GuiScreen screen) {
@@ -339,7 +324,26 @@ public class SettlingClient extends Settling {
     public void handleError(Throwable thrown) {
         this.attemptShutdownCrash();
 
+        GL11.glReadBuffer(GL11.GL_FRONT);
+        int bpp = 4; // Assuming a 32-bit display with a byte each for red, green, blue, and alpha.
+        ByteBuffer buffer = BufferUtils.createByteBuffer(displayWidth * displayHeight * bpp);
+        GL11.glReadPixels(0, 0, displayWidth, displayHeight, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+        final BufferedImage image = new BufferedImage(displayWidth, displayHeight, BufferedImage.TYPE_INT_RGB);
+
+        for (int x = 0; x < displayWidth; x++) {
+            for (int y = 0; y < displayHeight; y++) {
+                int i = (x + (displayWidth * y)) * bpp;
+                int r = buffer.get(i) & 0xFF;
+                int g = buffer.get(i + 1) & 0xFF;
+                int b = buffer.get(i + 2) & 0xFF;
+                image.setRGB(x, displayHeight - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
+            }
+        }
+
         Display.destroy();
+
+        Frame frame = new Frame("Settling Crash");
 
         TextArea text = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
         text.setEditable(false);
@@ -367,7 +371,34 @@ public class SettlingClient extends Settling {
 
         text.setText(report.getData());
 
-        SettlingApplet.instance.display(text);
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(854, 480));
+        panel.setLayout(new BorderLayout());
+        panel.add(text, "Center");
+        frame.setLayout(new BorderLayout());
+        frame.add(panel, "Center");
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent arg0) {
+                System.exit(0);
+            }
+        });
+        frame.setVisible(true);
+
+        JPanel imgPanel = new JPanel() {
+            private static final long serialVersionUID = -8793690198628860722L;
+
+            @Override
+            public void paint(Graphics g) {
+                super.paint(g);
+                g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), null);
+            }
+        };
+        imgPanel.setLayout(new BorderLayout());
+
+        SettlingApplet.instance.display(imgPanel);
     }
 
     private void tick() {
@@ -538,9 +569,9 @@ public class SettlingClient extends Settling {
         this.renderedChunks.clear();
 
         if (this.currentWorld != null) {
-            for (int x = this.currentWorld.getMinXBorder() / 16; x < this.currentWorld.getMaxXBorder() / 16; x++) {
-                for (int z = this.currentWorld.getMinZBorder() / 16; z < this.currentWorld.getMaxZBorder() / 16; z++) {
-                    Chunk chunk = this.currentWorld.getChunkAt(x, z, true);
+            for (int x = this.currentWorld.getMinChunkXBorder(); x < this.currentWorld.getMaxChunkXBorder(); x++) {
+                for (int z = this.currentWorld.getMinChunkZBorder(); z < this.currentWorld.getMaxChunkZBorder(); z++) {
+                    Chunk chunk = this.currentWorld.getChunk(x, z, true);
 
                     if (chunk != null) {
                         this.dirtyChunks.add(chunk);
@@ -587,24 +618,24 @@ public class SettlingClient extends Settling {
     }
 
     private void levelRender() {
-        TileRenderer.resetTexture();
+        TextureRegistry.getTexture("/textures/tiles/water.png").bindTexture();
 
         //Marshal, Lights!
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         this.initLightArrays();
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, this.matSpecular);             // sets specular material color
-        GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0F);                 // sets shininess
+        GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, this.matSpecular); // sets specular material color
+        GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0F); // sets shininess
 
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, this.lightPosition);             // sets light position
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, this.whiteLight);                // sets specular light to white
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, this.whiteLight);                 // sets diffuse light to white
-        GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, this.lModelAmbient);        // global ambient light 
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, this.lightPosition); // sets light position
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, this.whiteLight); // sets specular light to white
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, this.whiteLight); // sets diffuse light to white
+        GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, this.lModelAmbient); // global ambient light 
 
-        GL11.glEnable(GL11.GL_LIGHTING);                                      // enables lighting
-        GL11.glEnable(GL11.GL_LIGHT0);                                        // enables light0
+        //GL11.glEnable(GL11.GL_LIGHTING); // enables lighting
+        //GL11.glEnable(GL11.GL_LIGHT0); // enables light0
 
-        GL11.glEnable(GL11.GL_COLOR_MATERIAL);                                // enables opengl to use glColor3f to define material color
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL); // enables opengl to use glColor3f to define material color
         GL11.glColorMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT_AND_DIFFUSE);
 
         int renderChunkRadius = 16;
@@ -631,7 +662,6 @@ public class SettlingClient extends Settling {
             Mouse.setGrabbed(true);
         }
 
-        this.camera.tick(this.currentWorld, this);
         this.camera.tick(this.currentWorld, this);
 
         this.firstPerson = !this.firstPerson;

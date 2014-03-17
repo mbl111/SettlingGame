@@ -19,9 +19,10 @@ public class WorldDemo extends World {
     public WorldDemo(File saveFolder) {
         super(saveFolder);
 
-        this.genLayer = new WorldGenLayerIslands(1L, 20); // Island frequency
-        this.genLayer = WorldGenLayerFuzzyZoom.zoom(1000L, this.genLayer, 2); // Island randomness
-        this.genLayer = WorldGenLayerZoom.zoom(2000L, this.genLayer, 3); // Island size
+        this.genLayer = new WorldGenLayerIslands(1L, 10); // Island frequency
+        this.genLayer = WorldGenLayerZoom.zoom(2000L, this.genLayer, 1); // Island size
+        this.genLayer = WorldGenLayerFuzzyZoom.zoom(1000L, this.genLayer, 1); // Island randomness
+        this.genLayer = WorldGenLayerZoom.zoom(2000L, this.genLayer, 4); // Island size
 
         this.genLayer.initGlobalSeed(100L);
 

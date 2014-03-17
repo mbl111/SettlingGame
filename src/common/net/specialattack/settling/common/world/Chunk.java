@@ -7,44 +7,25 @@ public class Chunk {
     public int chunkZ;
     public Section section;
     private boolean isGenerated = false;
-    private int[] tiles;
+    private boolean[] isLand;
 
     public Chunk(Section section, int chunkX, int chunkZ) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.section = section;
 
-        this.tiles = new int[256];
+        this.isLand = new boolean[256];
     }
 
-    // FIXME
-    public Object getTileAt(int x, int z) {
+    public boolean isLandAt(int x, int z) {
         if (x < 0 || x > 15) {
-            return 0;
+            return false;
         }
         if (z < 0 || z > 15) {
-            return 0;
+            return false;
         }
 
-        return this.tiles[x + z * 16];
-    }
-
-    public void setTileAt(int x, int z, String type) {
-        x = x % 16;
-        z = z % 16;
-
-        if (x < 0) {
-            x = x + 16;
-        }
-        if (z < 0) {
-            z = z + 16;
-        }
-
-        this.tiles[x + z * 16] = 0; // TODO: Get type
-    }
-
-    public void tick() {
-
+        return this.isLand[x + z * 16];
     }
 
     public boolean hasBeenGenerated() {
@@ -57,7 +38,7 @@ public class Chunk {
         int[] ints = this.section.world.genLayer.getInts(this.chunkX * 16, this.chunkZ * 16, 16, 16);
 
         for (int i = 0; i < 256; i++) {
-            this.tiles[i] = (short) ints[i];
+            this.isLand[i] = ints[i] > 0;
         }
     }
 

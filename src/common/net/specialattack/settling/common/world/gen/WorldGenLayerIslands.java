@@ -19,7 +19,7 @@ public class WorldGenLayerIslands extends WorldGenLayer {
         for (int x = 0; x < width; x++) {
             for (int z = 0; z < height; z++) {
                 this.initLocalSeed((long) (startX + x), (long) (startZ + z));
-                result[x + z * width] = this.nextInt(this.frequency) == 0 ? 1 : 3;
+                result[x + z * width] = this.nextInt(this.frequency) == 0 ? 1 : 0;
             }
         }
 

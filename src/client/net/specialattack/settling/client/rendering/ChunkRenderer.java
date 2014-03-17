@@ -24,11 +24,10 @@ public class ChunkRenderer {
             this.glCallList = GL11.glGenLists(1);
         }
         GL11.glNewList(this.glCallList, GL11.GL_COMPILE);
+        GL11.glTranslated((float) -this.chunk.chunkX * 16.0F, 0.0F, (float) -this.chunk.chunkZ * 16.0F);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                //if (this.chunk.getTileAt(x, z) == null) {
-                TileRenderer.renderTile(this.chunk.section.world, x, z);
-                //}
+                TileRenderer.renderTile(this.chunk.section.world, x + chunk.chunkX * 16, z + chunk.chunkZ * 16);
             }
         }
         GL11.glEndList();

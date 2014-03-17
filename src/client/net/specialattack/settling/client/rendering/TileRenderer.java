@@ -10,7 +10,13 @@ import org.lwjgl.opengl.GL11;
 public class TileRenderer {
 
     public static void renderTile(World world, int posX, int posZ) {
-        SubTexture texture = TextureRegistry.getSubTexture("missingno");
+        SubTexture texture;
+        if (world.isLandAt(posX, posZ)) {
+            texture = TextureRegistry.getSubTexture("sand");
+        }
+        else {
+            texture = TextureRegistry.getSubTexture("water");
+        }
 
         GL11.glBegin(GL11.GL_QUADS);
 

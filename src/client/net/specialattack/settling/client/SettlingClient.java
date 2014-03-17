@@ -244,6 +244,14 @@ public class SettlingClient extends Settling {
             this.camera = this.overviewCamera;
         }
 
+        // TODO: move over
+        BufferedImage image = TextureRegistry.openResource("/textures/tiles/water.png");
+        TextureRegistry.tiles.loadTexture(image, "water", image.getWidth(), image.getHeight());
+        image = TextureRegistry.openResource("/textures/tiles/sand.png");
+        TextureRegistry.tiles.loadTexture(image, "sand", image.getWidth(), image.getHeight());
+        image = TextureRegistry.openResource("/textures/tiles/grass.png");
+        TextureRegistry.tiles.loadTexture(image, "grass", image.getWidth(), image.getHeight());
+
         this.displayScreen(new GuiScreenMainMenu());
 
         return true;
@@ -278,7 +286,10 @@ public class SettlingClient extends Settling {
             for (int i = 0; i < this.timer.remainingTicks; i++) {
                 ticks++;
                 this.tick();
-                this.updateChunks();
+            }
+
+            while (this.dirtyChunks.size() > 0) {
+                this.updateChunks(); // FIXME: debug code
             }
 
             frames++;
@@ -618,7 +629,7 @@ public class SettlingClient extends Settling {
     }
 
     private void levelRender() {
-        TextureRegistry.getTexture("/textures/tiles/water.png").bindTexture();
+        TextureRegistry.tiles.bindTexture();
 
         //Marshal, Lights!
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);

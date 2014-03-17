@@ -48,13 +48,12 @@ public abstract class World {
         Section section = this.getSectionAtChunk(chunkX, chunkZ);
 
         chunkX = chunkX % 16;
-        if (chunkX < 0) {
+        if (chunkX < 0)
             chunkX += 16;
-        }
+
         chunkZ = chunkZ % 16;
-        if (chunkZ < 0) {
+        if (chunkZ < 0)
             chunkZ += 16;
-        }
 
         return section.getChunk(chunkX, chunkZ, generateIfMissing);
     }
@@ -86,6 +85,23 @@ public abstract class World {
         }
 
         return this.getSection(chunkX >> 4, chunkZ >> 4);
+    }
+
+    public boolean isLandAt(int tileX, int tileZ) {
+        Chunk chunk = this.getChunkAtTile(tileX, tileZ, false);
+
+        if (chunk != null) {
+            int x = tileX % 16;
+            if (x < 0)
+                x += 16;
+            int z = tileZ % 16;
+            if (z < 0)
+                z += 16;
+
+            return chunk.isLandAt(x, z);
+        }
+
+        return false;
     }
 
 }

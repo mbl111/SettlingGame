@@ -106,7 +106,7 @@ public class OverviewCamera implements ICamera {
             }
         }
 
-        float highest = 50.0F;
+        float highest = 100.0F; // FIXME: Debug code, was 50
 
         if (this.location.y < highest) {
             this.motionY = (highest - (float) this.location.y) / 3.0F;

@@ -71,28 +71,36 @@ public class OverviewCamera implements ICamera {
         }
 
         if (Settings.back.isPressed()) {
-            if (!blockPX)
+            if (!blockPX) {
                 this.motionX += Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
-            if (!blockNZ)
+            }
+            if (!blockNZ) {
                 this.motionZ += -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+            }
         }
         if (Settings.forward.isPressed()) {
-            if (!blockNX)
+            if (!blockNX) {
                 this.motionX -= Math.sin(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
-            if (!blockPZ)
+            }
+            if (!blockPZ) {
                 this.motionZ -= -Math.cos(this.location.yaw * Math.PI / 180.0F) * this.hSpeed * mod;
+            }
         }
         if (Settings.right.isPressed()) {
-            if (!blockNX)
+            if (!blockNX) {
                 this.motionX += Math.sin((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
-            if (!blockNZ)
+            }
+            if (!blockNZ) {
                 this.motionZ += -Math.cos((this.location.yaw - 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+            }
         }
         if (Settings.left.isPressed()) {
-            if (!blockPX)
+            if (!blockPX) {
                 this.motionX += Math.sin((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
-            if (!blockPZ)
+            }
+            if (!blockPZ) {
                 this.motionZ += -Math.cos((this.location.yaw + 90.0F) * Math.PI / 180.0F) * this.hSpeed * mod;
+            }
         }
 
         if (this.location.x >= world.getMaxChunkXBorder() * 16) {

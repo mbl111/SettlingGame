@@ -22,7 +22,7 @@ public class Section {
         }
         Chunk chunk = this.chunks[chunkX + chunkZ * 16];
         if (chunk == null && generateIfMissing) {
-            chunk = this.chunks[chunkX + chunkZ * 16] = new Chunk(this, chunkX + sectionX * 16, chunkZ + sectionZ * 16);
+            chunk = this.chunks[chunkX + chunkZ * 16] = new Chunk(this, chunkX + this.sectionX * 16, chunkZ + this.sectionZ * 16);
         }
         return chunk;
     }
@@ -31,7 +31,7 @@ public class Section {
         for (int chunkX = 0; chunkX < 16; chunkX++) {
             for (int chunkZ = 0; chunkZ < 16; chunkZ++) {
                 if (this.chunks[chunkX + chunkZ * 16] == null) {
-                    Chunk chunk = this.chunks[chunkX + chunkZ * 16] = new Chunk(this, chunkX + sectionX * 16, chunkZ + sectionZ * 16);
+                    Chunk chunk = this.chunks[chunkX + chunkZ * 16] = new Chunk(this, chunkX + this.sectionX * 16, chunkZ + this.sectionZ * 16);
                     chunk.generate();
                 }
             }

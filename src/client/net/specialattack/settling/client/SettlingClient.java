@@ -326,18 +326,18 @@ public class SettlingClient extends Settling {
 
         GL11.glReadBuffer(GL11.GL_FRONT);
         int bpp = 4; // Assuming a 32-bit display with a byte each for red, green, blue, and alpha.
-        ByteBuffer buffer = BufferUtils.createByteBuffer(displayWidth * displayHeight * bpp);
-        GL11.glReadPixels(0, 0, displayWidth, displayHeight, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        ByteBuffer buffer = BufferUtils.createByteBuffer(this.displayWidth * this.displayHeight * bpp);
+        GL11.glReadPixels(0, 0, this.displayWidth, this.displayHeight, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
-        final BufferedImage image = new BufferedImage(displayWidth, displayHeight, BufferedImage.TYPE_INT_RGB);
+        final BufferedImage image = new BufferedImage(this.displayWidth, this.displayHeight, BufferedImage.TYPE_INT_RGB);
 
-        for (int x = 0; x < displayWidth; x++) {
-            for (int y = 0; y < displayHeight; y++) {
-                int i = (x + (displayWidth * y)) * bpp;
+        for (int x = 0; x < this.displayWidth; x++) {
+            for (int y = 0; y < this.displayHeight; y++) {
+                int i = (x + (this.displayWidth * y)) * bpp;
                 int r = buffer.get(i) & 0xFF;
                 int g = buffer.get(i + 1) & 0xFF;
                 int b = buffer.get(i + 2) & 0xFF;
-                image.setRGB(x, displayHeight - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
+                image.setRGB(x, this.displayHeight - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
             }
         }
 

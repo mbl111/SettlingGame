@@ -602,17 +602,23 @@ public class SettlingClient extends Settling {
 
         //Brightness?
         long tickCount = this.timer.totalTicks;
-        float timeRaw = (tickCount / 1) % 24000;
+        long timeRaw = (tickCount / 1) % 24000;
+        //timeRaw = 0;
 
-        float time = 1.0F;
+        float red = 1.0F;
+        float green = 1.0F;
+        float blue = 1.0F;
         if (timeRaw > 12000 && timeRaw <= 14000) {
-            time = 1.0F - 0.8F * (timeRaw - 12000.0F) / 2000.0F;
+            red = 1.0F - 0.8F * (timeRaw - 12000.0F) / 2000.0F;
+            green = 1.0F - 0.7F * (timeRaw - 12000.0F) / 2000.0F;
         }
         else if (timeRaw > 14000 && timeRaw <= 22000) {
-            time = 0.2F;
+            red = 0.2F;
+            green = 0.3F;
         }
         else if (timeRaw > 22000) {
-            time = 0.2F + 0.8F * ((timeRaw - 22000.0F) / 2000.0F);
+            red = 0.2F + 0.8F * (((float) timeRaw - 22000.0F) / 2000.0F);
+            green = 0.3F + 0.7F * (((float) timeRaw - 22000.0F) / 2000.0F);
         }
 
         this.matSpecular = BufferUtils.createFloatBuffer(4);
@@ -622,10 +628,10 @@ public class SettlingClient extends Settling {
         this.lightPosition.put(1.0F).put(1.0F).put(1.0F).put(0.0F).flip();
 
         this.whiteLight = BufferUtils.createFloatBuffer(4);
-        this.whiteLight.put(time).put(time * 0.7F).put(time * 0.6F).put(1.0F).flip();
+        this.whiteLight.put(red).put(green).put(blue).put(1.0F).flip();
 
         this.lModelAmbient = BufferUtils.createFloatBuffer(4);
-        this.lModelAmbient.put(time).put(time * 0.7F).put(time * 0.6F).put(1.0F).flip();
+        this.lModelAmbient.put(red).put(green).put(blue).put(1.0F).flip();
     }
 
     private void levelRender() {
@@ -643,8 +649,8 @@ public class SettlingClient extends Settling {
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, this.whiteLight); // sets diffuse light to white
         GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, this.lModelAmbient); // global ambient light 
 
-        //GL11.glEnable(GL11.GL_LIGHTING); // enables lighting
-        //GL11.glEnable(GL11.GL_LIGHT0); // enables light0
+        GL11.glEnable(GL11.GL_LIGHTING); // enables lighting
+        GL11.glEnable(GL11.GL_LIGHT0); // enables light0
 
         GL11.glEnable(GL11.GL_COLOR_MATERIAL); // enables opengl to use glColor3f to define material color
         GL11.glColorMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT_AND_DIFFUSE);
@@ -677,4 +683,5 @@ public class SettlingClient extends Settling {
 
         this.firstPerson = !this.firstPerson;
     }
+
 }

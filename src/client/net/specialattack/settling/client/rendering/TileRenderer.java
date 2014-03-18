@@ -13,9 +13,11 @@ public class TileRenderer {
         SubTexture texture;
         if (world.isLandAt(posX, posZ)) {
             texture = TextureRegistry.getSubTexture("sand");
+            GL11.glColor3f(1.0F, 1.0F, 1.0F);
         }
         else {
             texture = TextureRegistry.getSubTexture("water");
+            GL11.glColor3f(0.2F, 0.3F, 1.0F);
         }
 
         GL11.glBegin(GL11.GL_QUADS);

@@ -4,6 +4,7 @@ package net.specialattack.settling.client;
 import java.awt.Canvas;
 
 public class SettlingCanvas extends Canvas {
+
     private static final long serialVersionUID = -5922116182846025254L;
     private final SettlingApplet applet;
 
@@ -22,4 +23,5 @@ public class SettlingCanvas extends Canvas {
         this.applet.shutdown();
         super.removeNotify();
     }
+
 }

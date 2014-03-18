@@ -40,4 +40,5 @@ public class CrashReportSectionCamera extends CrashReportSection {
 
         return result.toString();
     }
+
 }

@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 public class Texture {
+
     protected int textureId;
     protected int width;
     protected int height;
@@ -79,4 +80,5 @@ public class Texture {
 
         return new float[] { u, v };
     }
+
 }

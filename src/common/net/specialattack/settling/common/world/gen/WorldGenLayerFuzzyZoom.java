@@ -54,4 +54,5 @@ public class WorldGenLayerFuzzyZoom extends WorldGenLayer {
 
         return (WorldGenLayerFuzzyZoom) genLayer;
     }
+
 }

@@ -2,6 +2,7 @@
 package net.specialattack.settling.common.texture;
 
 public interface ISubTexture {
+
     public abstract int getFullStartU();
 
     public abstract int getFullStartV();
@@ -25,4 +26,5 @@ public interface ISubTexture {
     public abstract IStitchedTexture getParent();
 
     public abstract int bindTexture();
+
 }

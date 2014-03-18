@@ -42,4 +42,5 @@ public abstract class LauncherStub extends Applet implements AppletStub {
     public void destroy() {
         this.applet.destroy();
     }
+
 }

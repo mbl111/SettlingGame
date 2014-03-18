@@ -88,4 +88,5 @@ public class TickTimer {
 
         this.renderPartialTicks = this.partialTicks;
     }
+
 }

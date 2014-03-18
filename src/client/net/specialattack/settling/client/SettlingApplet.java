@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 // Tesitng
 
 public class SettlingApplet extends Applet {
+
     private static final long serialVersionUID = -887417069382703883L;
     private SettlingCanvas canvas;
     private Thread instanceThread;

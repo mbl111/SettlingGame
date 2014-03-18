@@ -49,4 +49,5 @@ public class CrashReportSectionThrown extends CrashReportSection {
 
         return result.toString();
     }
+
 }

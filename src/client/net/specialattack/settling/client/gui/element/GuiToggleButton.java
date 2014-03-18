@@ -119,4 +119,5 @@ public class GuiToggleButton<T> extends GuiElement {
     public boolean mouseScrolled(int dir) {
         return false;
     }
+
 }

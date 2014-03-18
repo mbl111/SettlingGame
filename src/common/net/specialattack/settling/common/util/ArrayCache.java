@@ -3,8 +3,6 @@ package net.specialattack.settling.common.util;
 
 import java.util.ArrayList;
 
-import net.specialattack.settling.common.collision.AABB;
-
 public class ArrayCache {
 
     private static final int cacheSize = 256;
@@ -14,9 +12,6 @@ public class ArrayCache {
     private static ArrayList<int[]> usedInts = new ArrayList<int[]>();
     private static ArrayList<int[]> unusedBigInts = new ArrayList<int[]>();
     private static ArrayList<int[]> usedBigInts = new ArrayList<int[]>();
-
-    private static ArrayList<AABB> unusedCollisionBoxes = new ArrayList<AABB>();
-    private static ArrayList<AABB> usedCollisionBoxes = new ArrayList<AABB>();
 
     private static final Object lock = new Object();
 
@@ -68,29 +63,4 @@ public class ArrayCache {
         usedBigInts.clear();
     }
 
-    public static AABB getCollisionBox() {
-        if (unusedCollisionBoxes.size() > 0) {
-            AABB collisionBox = unusedCollisionBoxes.remove(0);
-
-            usedCollisionBoxes.add(collisionBox);
-
-            return collisionBox;
-        }
-        else {
-            AABB collisionBox = new AABB();
-
-            usedCollisionBoxes.add(collisionBox);
-
-            return collisionBox;
-        }
-    }
-
-    public static void freeCollisionBoxes() {
-        if (!unusedCollisionBoxes.isEmpty()) {
-            unusedCollisionBoxes.clear();
-        }
-
-        unusedCollisionBoxes.addAll(usedCollisionBoxes);
-        usedCollisionBoxes.clear();
-    }
 }

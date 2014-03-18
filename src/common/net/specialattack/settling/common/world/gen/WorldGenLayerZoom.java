@@ -121,4 +121,5 @@ public class WorldGenLayerZoom extends WorldGenLayer {
 
         return (WorldGenLayerZoom) genLayer;
     }
+
 }

@@ -104,6 +104,10 @@ public class ShaderLoader {
                 Settling.log.log(Level.WARNING, "Failed compiling vertex shader for " + name);
                 Settling.log.log(Level.WARNING, GL20.glGetShaderInfoLog(vertexId, 1024));
 
+                GL20.glDeleteProgram(programId);
+                GL20.glDeleteShader(vertexId);
+                GL20.glDeleteShader(fragmentId);
+
                 return null;
             }
         }
@@ -116,39 +120,42 @@ public class ShaderLoader {
                 Settling.log.log(Level.WARNING, "Failed compiling fragment shader for " + name);
                 Settling.log.log(Level.WARNING, GL20.glGetShaderInfoLog(fragmentId, 1024));
 
+                GL20.glDeleteProgram(programId);
+                GL20.glDeleteShader(vertexId);
+                GL20.glDeleteShader(fragmentId);
+
                 return null;
             }
         }
 
-        if (vertexData == null && fragmentData == null) {
+        if (vertexData == null || fragmentData == null) {
             Settling.log.log(Level.WARNING, "Shader did not load for both vertex and fragment for " + name);
+
+            GL20.glDeleteProgram(programId);
+            GL20.glDeleteShader(vertexId);
+            GL20.glDeleteShader(fragmentId);
 
             return null;
         }
 
-        if (vertexData != null) {
-            GL20.glAttachShader(programId, vertexId);
-        }
-        if (fragmentData != null) {
-            GL20.glAttachShader(programId, fragmentId);
-        }
+        GL20.glAttachShader(programId, vertexId);
+        GL20.glAttachShader(programId, fragmentId);
         GL20.glLinkProgram(programId);
 
         if (GL20.glGetProgrami(programId, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
             Settling.log.log(Level.WARNING, "Failed linking shader for " + name);
             Settling.log.log(Level.WARNING, GL20.glGetProgramInfoLog(programId, 1024));
 
+            GL20.glDetachShader(programId, vertexId);
+            GL20.glDetachShader(programId, fragmentId);
+            GL20.glDeleteProgram(programId);
+            GL20.glDeleteShader(vertexId);
+            GL20.glDeleteShader(fragmentId);
+
             return null;
         }
 
-        if (vertexData != null) {
-            GL20.glDeleteShader(vertexId);
-        }
-        if (fragmentData != null) {
-            GL20.glDeleteShader(fragmentId);
-        }
-
-        return new Shader(programId);
+        return new Shader(vertexId, fragmentId, programId);
     }
 
 }

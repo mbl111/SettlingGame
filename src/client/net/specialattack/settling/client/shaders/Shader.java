@@ -9,9 +9,13 @@ public class Shader {
     /**
      * The program ID of the shader
      */
+    public final int vertexId;
+    public final int fragmentId;
     public final int programId;
 
-    public Shader(int programId) {
+    public Shader(int vertexId, int fragmentId, int programId) {
+        this.vertexId = vertexId;
+        this.fragmentId = fragmentId;
         this.programId = programId;
     }
 
@@ -21,6 +25,14 @@ public class Shader {
     public void bindShader() {
         Shader.prevShader = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
         GL20.glUseProgram(this.programId);
+    }
+
+    public void deleteShader() {
+        GL20.glDetachShader(this.programId, this.vertexId);
+        GL20.glDetachShader(this.programId, this.fragmentId);
+        GL20.glDeleteProgram(this.programId);
+        GL20.glDeleteShader(this.vertexId);
+        GL20.glDeleteShader(this.fragmentId);
     }
 
     /**

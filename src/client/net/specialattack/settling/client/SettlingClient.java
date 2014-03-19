@@ -51,6 +51,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
 public class SettlingClient extends Settling {
@@ -155,20 +156,26 @@ public class SettlingClient extends Settling {
         }
     }
 
+    private void setupDisplay() throws LWJGLException {
+        PixelFormat format = new PixelFormat();
+        Display.setParent(this.canvas);
+        Display.create(format);
+        ScreenResolution.initialize();
+
+        this.displayWidth = Display.getWidth();
+        this.displayHeight = Display.getHeight();
+
+    }
+
     @Override
     protected boolean startup() {
         try {
-            Display.setParent(this.canvas);
-            Display.create();
-            ScreenResolution.initialize();
+            this.setupDisplay();
         }
         catch (LWJGLException e) {
             Settling.log.log(Level.SEVERE, "Failed starting Settling", e);
             return false;
         }
-
-        this.displayWidth = Display.getWidth();
-        this.displayHeight = Display.getHeight();
 
         // TODO: Move this stuff over
 

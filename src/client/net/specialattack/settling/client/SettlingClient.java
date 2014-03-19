@@ -33,9 +33,7 @@ import net.specialattack.settling.client.util.KeyBinding;
 import net.specialattack.settling.client.util.ScreenResolution;
 import net.specialattack.settling.client.util.Settings;
 import net.specialattack.settling.client.util.camera.ICamera;
-import net.specialattack.settling.client.util.camera.LinearTransitionCamera;
 import net.specialattack.settling.client.util.camera.OverviewCamera;
-import net.specialattack.settling.client.util.camera.PlayerCamera;
 import net.specialattack.settling.common.Settling;
 import net.specialattack.settling.common.crash.CrashReport;
 import net.specialattack.settling.common.crash.CrashReportSectionThrown;
@@ -62,7 +60,6 @@ public class SettlingClient extends Settling {
     private int displayWidth;
     private int displayHeight;
     private Shader shader;
-    public boolean firstPerson = false;
     public World currentWorld = null;
     public FontRenderer fontRenderer;
     private HashMap<Chunk, ChunkRenderer> chunkList;
@@ -71,11 +68,8 @@ public class SettlingClient extends Settling {
     private int fps;
     private int tps;
     private GuiScreen currentScreen = null;
-    private boolean mouseGrabbed = false;
     private boolean fullscreen = false;
     public ICamera camera;
-    private ICamera playerCamera;
-    private ICamera overviewCamera;
 
     public SettlingClient() {
         instance = this;
@@ -150,17 +144,6 @@ public class SettlingClient extends Settling {
     }
 
     public void displayScreen(GuiScreen screen) {
-        if (this.firstPerson) {
-            if (this.currentScreen == null && screen != null && this.mouseGrabbed) {
-                this.mouseGrabbed = false;
-                Mouse.setGrabbed(false);
-            }
-            if (this.currentScreen != null && screen == null && !this.mouseGrabbed) {
-                this.mouseGrabbed = true;
-                Mouse.setGrabbed(true);
-            }
-        }
-
         this.currentScreen = screen;
 
         if (this.currentScreen != null) {
@@ -235,14 +218,7 @@ public class SettlingClient extends Settling {
         this.dirtyChunks = new ArrayList<Chunk>();
         this.renderedChunks = new ArrayList<ChunkRenderer>();
 
-        this.playerCamera = new PlayerCamera();
-        this.overviewCamera = new OverviewCamera();
-        if (this.firstPerson) {
-            this.camera = this.playerCamera;
-        }
-        else {
-            this.camera = this.overviewCamera;
-        }
+        this.camera = new OverviewCamera();
 
         // TODO: move over
         BufferedImage image = TextureRegistry.openResource("/textures/tiles/water.png");
@@ -365,19 +341,7 @@ public class SettlingClient extends Settling {
         report.addSection(new CrashReportSectionThrown(thrown));
 
         if (this.currentWorld != null) {
-            if (this.camera == this.playerCamera) {
-                report.addSection(new CrashReportSectionCamera(this.playerCamera, "Active Camera / Player Camera"));
-                report.addSection(new CrashReportSectionCamera(this.overviewCamera, "Overview Camera"));
-            }
-            if (this.camera == this.overviewCamera) {
-                report.addSection(new CrashReportSectionCamera(this.overviewCamera, "Active Camera / Overview Camera"));
-                report.addSection(new CrashReportSectionCamera(this.playerCamera, "Player Camera"));
-            }
-            else {
-                report.addSection(new CrashReportSectionCamera(this.camera, "Active Camera"));
-                report.addSection(new CrashReportSectionCamera(this.playerCamera, "Player Camera"));
-                report.addSection(new CrashReportSectionCamera(this.overviewCamera, "Overview Camera"));
-            }
+            report.addSection(new CrashReportSectionCamera(this.camera, "Active Camera"));
         }
 
         text.setText(report.getData());
@@ -420,10 +384,6 @@ public class SettlingClient extends Settling {
         KeyBinding.escape.update();
 
         Settings.update();
-
-        if (Settings.switchCamera.isTapped()) {
-            this.swapCameras();
-        }
 
         boolean escapeTapped = KeyBinding.escape.isTapped();
 
@@ -665,23 +625,6 @@ public class SettlingClient extends Settling {
             }
         }
         GL11.glDisable(GL11.GL_LIGHTING);
-    }
-
-    public void swapCameras() {
-        if (this.firstPerson) {
-            this.camera = new LinearTransitionCamera(this.camera, this.overviewCamera);
-            this.mouseGrabbed = false;
-            Mouse.setGrabbed(false);
-        }
-        else {
-            this.camera = new LinearTransitionCamera(this.camera, this.playerCamera);
-            this.mouseGrabbed = true;
-            Mouse.setGrabbed(true);
-        }
-
-        this.camera.tick(this.currentWorld, this);
-
-        this.firstPerson = !this.firstPerson;
     }
 
 }
